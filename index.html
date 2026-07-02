@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Варвары Онлайн - Регистрация</title>
+    <title>Варвары Онлайн</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -13,27 +13,47 @@
             <p>Пройди путь от раба до конунга</p>
         </div>
         
+        <!-- Меню выбора действия -->
+        <div class="wap-nav">
+            <b style="color:#fff;">[ ВХОД В ИГРУ ]</b>
+        </div>
+
+        <!-- ФОРМА ВХОДА -->
+        <form action="php/login.php" method="POST" class="auth-form">
+            <div class="form-group">
+                <label>Имя воина:</label>
+                <input type="text" name="username" required>
+            </div>
+            <div class="form-group">
+                <label>Пароль:</label>
+                <input type="password" name="password" required>
+            </div>
+            <button type="submit" class="btn-submit">Войти во врата</button>
+        </form>
+
+        <div class="wap-nav" style="margin-top:15px;">
+            <b style="color:#fff;">[ НОВЫЙ ИГРОК ]</b>
+        </div>
+
+        <!-- ФОРМА РЕГИСТРАЦИИ -->
         <form action="php/register.php" method="POST" class="auth-form">
             <div class="form-group">
-                <label for="username">Имя воина (Логин):</label>
-                <input type="text" id="username" name="username" required placeholder="Злой_комарь">
+                <label>Имя воина:</label>
+                <input type="text" name="username" required placeholder="Злой_комарь">
             </div>
-
             <div class="form-group">
-                <label for="password">Пароль:</label>
-                <input type="password" id="password" name="password" required placeholder="******">
+                <label>Пароль:</label>
+                <input type="password" name="password" required placeholder="******">
             </div>
-
             <div class="form-group">
-                <label for="char_class">Каста (Класс):</label>
-                <select id="char_class" name="char_class">
-                    <option value="viking">🪓 Викинг (Высокая атака)</option>
-                    <option value="berserk">🐻 Берсерк (Критический урон)</option>
-                    <option value="shieldmaiden">🛡️ Страж (Высокая защита)</option>
+                <label>Каста (Класс):</label>
+                <select name="char_class">
+                    <option value="Викинг">🪓 Викинг (+Атака)</option>
+                    <option value="Берсерк">🐻 Берсерк (+Крит)</option>
+                    <option value="Страж">🛡️ Страж (+Защита)</option>
                 </select>
             </div>
-
-            <button type="submit" class="btn-submit">Создать персонажа</button>
+            <button type="submit" class="btn-submit" style="background-color:#8b3a16; color:#f4d0a3;">Создать персонажа</button>
         </form>
     </div>
 </body>
