@@ -1,8 +1,27 @@
 <?php
-// Подключаем настройки нашей базы данных
-require_once 'db.php';
+// 1. ВКЛЮЧАЕМ ОТОБРАЖЕНИЕ ОШИБОК ДЛЯ ОТЛАДКИ
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-// Принимаем данные, которые игрок ввел в форму на сайте
+// 2. ДАННЫЕ ПОДКЛЮЧЕНИЯ К БАЗЕ
+$host = '://infinityfree.com';
+$db_user = 'if0_42320957';
+$db_pass = 'QBfOnNvy5oq';
+$db_name = 'if0_42320957_game';
+
+// Создаем подключение
+$link = mysqli_connect($host, $db_user, $db_pass, $db_name);
+
+// Проверка на ошибку подключения
+if (!$link) {
+    die("Ошибка подключения к серверу магии: " . mysqli_connect_error());
+}
+
+// Настройка кодировки для русского языка
+mysqli_set_charset($link, "utf8");
+
+// 3. ОБРАБОТКА ДАННЫХ ИЗ ФОРМЫ РЕГИСТРАЦИИ
 $user = isset($_POST['username']) ? trim($_POST['username']) : '';
 $password = isset($_POST['password']) ? trim($_POST['password']) : '';
 $class = isset($_POST['char_class']) ? $_POST['char_class'] : 'viking';
@@ -11,7 +30,7 @@ if (empty($user) || empty($password)) {
     die("Имя воина и пароль не могут быть пустыми!");
 }
 
-// Автоматически создаем таблицу пользователей в базе данных, если её ещё нет
+// Автоматически создаем таблицу пользователей, если её нет
 $create_table = "CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
