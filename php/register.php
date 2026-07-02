@@ -3,9 +3,9 @@
 require_once 'db.php';
 
 // Принимаем данные, которые игрок ввел в форму на сайте
-$user = trim($_POST['username']);
-$password = trim($_POST['password']);
-$class = $_POST['char_class'];
+$user = isset($_POST['username']) ? trim($_POST['username']) : '';
+$password = isset($_POST['password']) ? trim($_POST['password']) : '';
+$class = isset($_POST['char_class']) ? $_POST['char_class'] : 'viking';
 
 if (empty($user) || empty($password)) {
     die("Имя воина и пароль не могут быть пустыми!");
@@ -24,7 +24,8 @@ $create_table = "CREATE TABLE IF NOT EXISTS users (
 mysqli_query($link, $create_table);
 
 // Проверяем, свободен ли логин воина
-$check_user = mysqli_query($link, "SELECT id FROM users WHERE username = '".mysqli_real_escape_string($link, $user)."'");
+$user_safe = mysqli_real_escape_string($link, $user);
+$check_user = mysqli_query($link, "SELECT id FROM users WHERE username = '$user_safe'");
 
 if (mysqli_num_rows($check_user) > 0) {
     echo "<body style='background:#2b1105; color:#f4d0a3; font-family:monospace; padding:20px; text-align:center;'>";
@@ -34,13 +35,10 @@ if (mysqli_num_rows($check_user) > 0) {
 } else {
     // Безопасно шифруем пароль
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+    $class_safe = mysqli_real_escape_string($link, $class);
     
     // Записываем нового персонажа в базу данных
-    $sql = "INSERT INTO users (username, password, char_class) VALUES (
-        '".mysqli_real_escape_string($link, $user)."', 
-        '$hashed_password', 
-        '".mysqli_real_escape_string($link, $class)."'"
-    . ")";
+    $sql = "INSERT INTO users (username, password, char_class) VALUES ('$user_safe', '$hashed_password', '$class_safe')";
     
     if (mysqli_query($link, $sql)) {
         echo "<body style='background:#2b1105; color:#f4d0a3; font-family:monospace; padding:20px; text-align:center;'>";
