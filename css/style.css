@@ -1,0 +1,25 @@
+body{
+    margin:0;
+    background:#4b2b1b;
+    color:white;
+    font-family:Arial, sans-serif;
+    text-align:center;
+}
+
+header{
+    background:#7d1f12;
+    padding:20px;
+}
+
+main{
+    margin-top:50px;
+}
+
+button{
+    padding:15px 30px;
+    font-size:20px;
+    background:#b77b2d;
+    color:white;
+    border:none;
+    border-radius:8px;
+}
