@@ -4,8 +4,8 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// 2. ДАННЫЕ ПОДКЛЮЧЕНИЯ К БАЗЕ (Используем прямой IP вместо sql203)
-$host = '185.27.134.10'; 
+// 2. ДАННЫЕ ПОДКЛЮЧЕНИЯ К БАЗЕ (Возвращаем стандартное имя хоста)
+$host = 'sql203.infinityfree.com'; 
 $db_user = 'if0_42320957';
 $db_pass = 'QBfOnNvy5oq';
 $db_name = 'if0_42320957_game';
