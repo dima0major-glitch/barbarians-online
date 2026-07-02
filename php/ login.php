@@ -1,11 +1,9 @@
 <?php
-// Включаем сессии (чтобы сайт помнил авторизацию) и вывод ошибок
 session_start();
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Настройки базы
 $host = '://infinityfree.com'; 
 $db_user = 'if0_42320957';
 $db_pass = 'QBfOnNvy5oq';
@@ -27,12 +25,9 @@ $result = mysqli_query($link, "SELECT * FROM users WHERE username = '$user_safe'
 if (mysqli_num_rows($result) == 1) {
     $player = mysqli_fetch_assoc($result);
     
-    // Проверяем, совпадает ли зашифрованный пароль
     if (password_verify($password, $player['password'])) {
-        // Запоминаем ID игрока в сессию
         $_SESSION['player_id'] = $player['id'];
-        
-        // Перенаправляем в главное меню игры
+        // Исправлено перенаправление без начального слэша
         header("Location: game.php");
         exit();
     } else {

@@ -13,12 +13,11 @@
             <p>Пройди путь от раба до конунга</p>
         </div>
         
-        <!-- Меню выбора действия -->
         <div class="wap-nav">
             <b style="color:#fff;">[ ВХОД В ИГРУ ]</b>
         </div>
 
-        <!-- ФОРМА ВХОДА -->
+        <!-- Убрали слэш перед php, теперь хостинг точно найдет файл -->
         <form action="php/login.php" method="POST" class="auth-form">
             <div class="form-group">
                 <label>Имя воина:</label>
@@ -35,7 +34,6 @@
             <b style="color:#fff;">[ НОВЫЙ ИГРОК ]</b>
         </div>
 
-        <!-- ФОРМА РЕГИСТРАЦИИ -->
         <form action="php/register.php" method="POST" class="auth-form">
             <div class="form-group">
                 <label>Имя воина:</label>
@@ -53,8 +51,7 @@
                     <option value="Страж">🛡️ Страж (+Защита)</option>
                 </select>
             </div>
-            <button type="submit" class="btn-submit" style="background-color:#8b3a16; color:#f4d0a3;">Создать персонажа</button> 
-            
+            <button type="submit" class="btn-submit" style="background-color:#8b3a16; color:#f4d0a3;">Создать персонажа</button>
         </form>
     </div>
 </body>

@@ -1,6 +1,5 @@
 <?php
 session_start();
-// Если игрок не вошел, выкидываем его на главную
 if (!isset($_SESSION['player_id'])) {
     header("Location: ../index.html");
     exit();
@@ -14,7 +13,6 @@ $db_name = 'if0_42320957_game';
 $link = mysqli_connect($host, $db_user, $db_pass, $db_name);
 mysqli_set_charset($link, "utf8");
 
-// Получаем свежие данные нашего персонажа из базы данных
 $player_id = $_SESSION['player_id'];
 $result = mysqli_query($link, "SELECT * FROM users WHERE id = '$player_id'");
 $player = mysqli_fetch_assoc($result);
