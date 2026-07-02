@@ -17,8 +17,8 @@
             <b style="color:#fff;">[ ВХОД В ИГРУ ]</b>
         </div>
 
-        <!-- Убрали слэш перед php, теперь хостинг точно найдет файл -->
-        <form action="php/login.php" method="POST" class="auth-form">
+        <!-- Теперь пути ведут прямо в корень, без папки php -->
+        <form action="login.php" method="POST" class="auth-form">
             <div class="form-group">
                 <label>Имя воина:</label>
                 <input type="text" name="username" required>
@@ -34,7 +34,7 @@
             <b style="color:#fff;">[ НОВЫЙ ИГРОК ]</b>
         </div>
 
-        <form action="php/register.php" method="POST" class="auth-form">
+        <form action="register.php" method="POST" class="auth-form">
             <div class="form-group">
                 <label>Имя воина:</label>
                 <input type="text" name="username" required placeholder="Злой_комарь">

@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['player_id'])) {
-    header("Location: ../index.html");
+    header("Location: index.html");
     exit();
 }
 
@@ -23,7 +23,7 @@ $player = mysqli_fetch_assoc($result);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Панель Воина</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="login-container">
