@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Варвары Онлайн - Регистрация</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <h1>👑 ВАРВАРЫ 👑</h1>
+            <p>Пройди путь от раба до конунга</p>
+        </div>
+        
+        <form action="php/register.php" method="POST" class="auth-form">
+            <div class="form-group">
+                <label for="username">Имя воина (Логин):</label>
+                <input type="text" id="username" name="username" required placeholder="Злой_комарь">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Пароль:</label>
+                <input type="password" id="password" name="password" required placeholder="******">
+            </div>
+
+            <div class="form-group">
+                <label for="char_class">Каста (Класс):</label>
+                <select id="char_class" name="char_class">
+                    <option value="viking">🪓 Викинг (Высокая атака)</option>
+                    <option value="berserk">🐻 Берсерк (Критический урон)</option>
+                    <option value="shieldmaiden">🛡️ Страж (Высокая защита)</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn-submit">Создать персонажа</button>
+        </form>
+    </div>
+</body>
+</html>
