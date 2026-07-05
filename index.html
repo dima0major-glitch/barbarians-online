@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Варвары Онлайн — Текстовая MMORPG</title>
+    <!-- Подключаем официальную библиотеку базы данных Supabase -->
+    <script src="https://jsdelivr.net"></script>
     <style>
         body { background-color: #0d1216; color: #d1d5db; font-family: sans-serif; margin: 0; padding: 0; display: flex; justify-content: center; }
         .game-container { width: 100%; max-width: 480px; background-color: #06090c; border-left: 1px solid #1f2937; border-right: 1px solid #1f2937; min-height: 100vh; box-sizing: border-box; }
@@ -20,7 +22,6 @@
         .form-group { width: 100%; max-width: 300px; margin-bottom: 15px; text-align: center; }
         .form-group label { display: block; margin-bottom: 8px; color: #e5e7eb; font-size: 15px; }
         .form-group input, .form-group select { width: 100%; padding: 12px; background-color: #374151; border: 1px solid #4b5563; color: #fff; font-size: 16px; box-sizing: border-box; text-align: center; border-radius: 4px; }
-        .form-group select { text-align-last: center; appearance: none; }
         .captcha-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 5px; }
         .captcha-img { background: #1e293b; padding: 8px 20px; font-size: 20px; font-weight: bold; color: #f43f5e; letter-spacing: 5px; font-style: italic; border: 1px dashed #475569; }
         .btn-refresh { background: #374151; border: 1px solid #4b5563; color: #fff; padding: 8px 12px; cursor: pointer; border-radius: 4px; }
@@ -33,7 +34,7 @@
     <div class="game-container">
         <div class="header">⚔️ Варвары Онлайн ⚔️</div>
 
-        <!-- ЭКРАН 1: ГЛАВНАЯ СТРАНИЦА -->
+        <!-- ГЛАВНАЯ СТРАНИЦА -->
         <div id="main-screen">
             <img class="banner" src="https://unsplash.com" alt="Варвары">
             <div class="description-box">
@@ -50,7 +51,7 @@
             </div>
         </div>
 
-        <!-- ЭКРАН 2: ФОРМА ВХОДА -->
+        <!-- ФОРМА ВХОДА -->
         <div id="auth-screen" class="hidden">
             <form class="form-screen" id="login-form" onsubmit="handleLogin(event)">
                 <div class="form-group">
@@ -73,17 +74,13 @@
                     <button type="submit" class="btn-fire">Войти</button>
                 </div>
             </form>
-            <div class="nav-bar" onclick="alert('Восстановление пароля будет доступно позже!')">
-                <span>🔄 Восстановить пароль</span>
-                <span class="arrow">»»</span>
-            </div>
             <div class="nav-bar" onclick="switchScreen('main-screen')">
                 <span>🏡 Главная</span>
                 <span class="arrow">»»</span>
             </div>
         </div>
 
-        <!-- ЭКРАН 3: СОЗДАНИЕ ПЕРСОНАЖА (РЕГИСТРАЦИЯ) -->
+        <!-- СОЗДАНИЕ ПЕРСОНАЖА -->
         <div id="reg-screen" class="hidden">
             <form class="form-screen" id="register-form" onsubmit="handleRegister(event)">
                 <div class="form-group">
@@ -91,15 +88,15 @@
                     <input type="text" id="reg-username" placeholder="Придумайте ник..." required autocomplete="off">
                 </div>
                 <div class="form-group">
-                    <label>Пароль</label>
+                    <label>Пароль для входа</label>
                     <input type="password" id="reg-password" placeholder="Придумайте пароль..." required>
                 </div>
                 <div class="form-group">
                     <label>Выберите класс</label>
                     <select id="reg-class" required>
-                        <option value="воин">⚔️ Воин (+10% к силе)</option>
-                        <option value="разбойник">🗡️ Разбойник (+10% к ловкости)</option>
-                        <option value="шаман">🔮 Шаман (+10% к магии)</option>
+                        <option value="Воин">⚔️ Воин (+10% к силе)</option>
+                        <option value="Разбойник">🗡️ Разбойник (+10% к ловкости)</option>
+                        <option value="Шаман">🔮 Шаман (+10% к магии)</option>
                     </select>
                 </div>
                 <div style="margin-top: 10px; margin-bottom: 25px;">
@@ -116,6 +113,13 @@
     </div>
 
     <script>
+        // ТВОИ КЛЮЧИ ПОДСТАВЛЕНЫ АВТОМАТИЧЕСКИ!
+        const SUPABASE_URL = "https://supabase.co";
+        const SUPABASE_KEY = "sb_publishable_OV9BDFENvvNtqENXKDB6YQ_Kxda-QZv";
+        
+        // Инициализируем клиент базы данных
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
         function switchScreen(screenId) {
             document.getElementById('main-screen').classList.add('hidden');
             document.getElementById('auth-screen').classList.add('hidden');
@@ -133,7 +137,30 @@
             document.getElementById('captcha-input').value = '';
         }
 
-        function handleLogin(event) {
+        // РЕГИСТРАЦИЯ ЧЕРЕЗ SUPABASE AUTH
+        async function handleRegister(event) {
+            event.preventDefault();
+            const username = document.getElementById('reg-username').value.trim();
+            const email = username + "@barbarians.game";
+            const password = document.getElementById('reg-password').value;
+            const heroClass = document.getElementById('reg-class').value;
+
+            const { data, error } = await _supabase.auth.signUp({
+                email: email,
+                password: password,
+                options: { data: { hero_class: heroClass } }
+            });
+
+            if (error) {
+                alert('Ошибка создания героя: ' + error.message);
+            } else {
+                alert('Герой ' + username + ' успешно создан! Теперь вы можете войти в игру.');
+                switchScreen('auth-screen');
+            }
+        }
+
+        // ВХОД ЧЕРЕЗ SUPABASE AUTH
+        async function handleLogin(event) {
             event.preventDefault();
             const userAnswer = parseInt(document.getElementById('captcha-input').value);
             if (userAnswer !== currentCaptchaResult) {
@@ -141,16 +168,3 @@
                 generateCaptcha();
                 return;
             }
-            alert('Успешный вход под ником: ' + document.getElementById('login-input').value);
-        }
-
-        function handleRegister(event) {
-            event.preventDefault();
-            const username = document.getElementById('reg-username').value;
-            const heroClass = document.getElementById('reg-class').value;
-            alert('Персонаж ' + username + ' (' + heroClass + ') успешно создан в мире Варваров!');
-            switchScreen('auth-screen');
-        }
-    </script>
-</body>
-</html>
