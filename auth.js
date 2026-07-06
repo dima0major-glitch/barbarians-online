@@ -1,66 +1,70 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. ЛОГИКА РЕГИСТРАЦИИ
+    
+    // ==========================================================================
+    // ЛОГИКА РЕГИСТРАЦИИ (БЕЗ СЕРВЕРА - ДЛЯ GITHUB PAGES)
+    // ==========================================================================
     const registerForm = document.getElementById('registerForm');
 
     if (registerForm) {
-        registerForm.addEventListener('submit', async (e) => {
+        registerForm.addEventListener('submit', (e) => {
             e.preventDefault(); // Запрещаем перезагрузку страницы
 
-            const username = document.getElementById('regUsername').value;
-            const email = document.getElementById('regEmail').value;
+            const username = document.getElementById('regUsername').value.trim();
+            const email = document.getElementById('regEmail').value.trim().toLowerCase();
             const password = document.getElementById('regPassword').value;
 
-            try {
-                const response = await fetch('/api/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, email, password })
-                });
+            // Достаем уже существующих пользователей из памяти (или создаем пустой массив)
+            let users = JSON.parse(localStorage.getItem('game_users')) || [];
 
-                const data = await response.json();
-
-                if (response.ok) {
-                    alert('Регистрация успешна! Теперь можно войти.');
-                    window.location.href = '/login'; // Переводим на страницу входа
-                } else {
-                    alert(`Ошибка: ${data.message}`);
-                }
-            } catch (error) {
-                console.error('Ошибка сети:', error);
-                alert('Не удалось связаться с сервером');
+            // Проверяем, нет ли уже пользователя с такой почтой или ником
+            const userExists = users.some(u => u.email === email || u.username === username);
+            
+            if (userExists) {
+                alert('Ошибка: Такой воин или email уже зарегистрирован!');
+                return;
             }
+
+            // Создаем нового варвара и добавляем в массив
+            const newWarrior = { username, email, password };
+            users.push(newWarrior);
+
+            // Сохраняем обновленный список обратно в память браузера
+            localStorage.setItem('game_users', JSON.stringify(users));
+
+            alert('Регистрация успешна! Твой воин готов к битвам.');
+            window.location.href = 'login.html'; // Перенаправляем на страницу входа напрямую
         });
     }
 
-    // 2. ЛОГИКА ВХОДА (АВТОРИЗАЦИИ)
+    // ==========================================================================
+    // ЛОГИКА ВХОДА (БЕЗ СЕРВЕРА - ДЛЯ GITHUB PAGES)
+    // ==========================================================================
     const loginForm = document.getElementById('loginForm');
 
     if (loginForm) {
-        loginForm.addEventListener('submit', async (e) => {
+        loginForm.addEventListener('submit', (e) => {
             e.preventDefault(); // Запрещаем перезагрузку страницы
 
-            const email = document.getElementById('loginEmail').value;
+            const email = document.getElementById('loginEmail').value.trim().toLowerCase();
             const password = document.getElementById('loginPassword').value;
 
-            try {
-                const response = await fetch('/api/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
+            // Достаем пользователей из памяти телефона
+            const users = JSON.parse(localStorage.getItem('game_users')) || [];
 
-                const data = await response.json();
+            // Ищем нужного пользователя по email
+            const foundUser = users.find(u => u.email === email);
 
-                if (response.ok) {
-                    alert(`Добро пожаловать в игру, ${data.username}!`);
-                    window.location.href = '/menu'; // Переводим в главное меню
-                } else {
-                    alert(`Ошибка: ${data.message}`);
-                }
-            } catch (error) {
-                console.error('Ошибка сети:', error);
-                alert('Не удалось связаться с сервером');
+            // Проверяем пароль
+            if (!foundUser || foundUser.password !== password) {
+                alert('Ошибка: Неверный email или пароль!');
+                return;
             }
+
+            // Запоминаем, какой именно персонаж сейчас залогинен (пригодится для меню)
+            localStorage.setItem('current_player', JSON.stringify(foundUser));
+
+            alert(`Добро пожаловать назад, ${foundUser.username}!`);
+            window.location.href = 'menu.html'; // Перенаправляем в главное меню напрямую
         });
     }
 });
