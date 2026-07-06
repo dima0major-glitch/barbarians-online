@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Варвары Онлайн - Арена</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .arena-title {
+            color: #00ffcc;
+            font-size: 22px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(0, 255, 210, 0.3);
+        }
+        .arena-banner {
+            width: 100%;
+            max-width: 400px;
+            height: 140px;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('https://unsplash.com');
+            background-size: cover;
+            background-position: center;
+            border: 2px solid #332211;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            padding-bottom: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        .arena-subtitle {
+            font-size: 15px;
+            color: #f5ebd9;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px #000;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" style="justify-content: flex-start; padding-top: 20px;">
+        <div class="arena-title">Арена</div>
+
+        <div class="arena-banner">
+            <div class="arena-subtitle">Покажи, на что ты способен!</div>
+        </div>
+
+        <div class="menu-list" style="margin-top: 20px;">
+            <button class="menu-item" onclick="startFight('equal')">
+                <div class="menu-item-content">⚔️ <span style="color: #00ffcc;">Ровня</span></div>
+                <div class="menu-arrow">»</div>
+            </button>
+
+            <button class="menu-item" onclick="startFight('junior')">
+                <div class="menu-item-content">📉 <span style="color: #ff4d4d;">Младшие</span></div>
+                <div class="menu-arrow">»</div>
+            </button>
+
+            <button class="menu-item" onclick="startFight('senior')">
+                <div class="menu-item-content">📈 <span style="color: #00ff00;">Старшие</span></div>
+                <div class="menu-arrow">»</div>
+            </button>
+
+            <button class="menu-item" onclick="startFight('mercenaries')">
+                <div class="menu-item-content">🪖 <span>Наёмники</span></div>
+                <div class="menu-arrow">»</div>
+            </button>
+
+            <button class="menu-item" onclick="startFight('boss')">
+                <div class="menu-item-content">👹 <span style="color: #ff3333; font-weight: bold;">Владыка Наемников</span></div>
+                <div class="menu-arrow">»</div>
+            </button>
+
+            <button class="menu-item" onclick="startFight('by_level')">
+                <div class="menu-item-content">🏅 <span>По уровню</span></div>
+                <div class="menu-arrow">»</div>
+            </button>
+
+            <button class="menu-item" onclick="location.href='menu.html'" style="background: #142d40 !important; margin-top: 15px; border-top: 1px solid #1c3f59 !important;">
+                <div class="menu-item-content">🏠 <span>В главное меню</span></div>
+                <div class="menu-arrow">»</div>
+            </button>
+        </div>
+
+        <div class="footer" style="margin-top: 30px;">Версия Alpha 0.0.1</div>
+    </div>
+
+    <script>
+        function startFight(category) {
+            localStorage.setItem('arena_category', category);
+            window.location.href = 'battle.html';
+        }
+    </script>
+</body>
+</html>
