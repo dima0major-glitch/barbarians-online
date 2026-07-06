@@ -138,3 +138,67 @@ button:active {
 .auth-box .link-text:hover {
     color: #FFD700;
 }
+/* --- ИГРОВОЙ ХЕДЕР ДЛЯ РЕСУРСОВ --- */
+.game-header {
+    width: 100%;
+    background: #04090e;
+    border-bottom: 2px solid #1a3245;
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    font-weight: bold;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+}
+
+.header-user { color: #FFD700; }
+.header-stats { display: flex; gap: 15px; }
+.header-stats span { display: flex; align-items: center; gap: 4px; }
+
+/* --- СПИСОК МЕНЮ ВО ВСЮ ШИРИНУ --- */
+.menu-list {
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 1px; /* Тонкая линия между кнопками */
+    background: #102535; /* Цвет разделителя */
+    border: 1px solid #1a3245;
+    margin-top: 20px;
+}
+
+/* Кнопка-строка */
+.menu-item {
+    width: 100% !important;
+    height: 48px !important;
+    margin: 0 !important;
+    padding: 0 15px !important;
+    border-radius: 0 !important;
+    background: #0a1824 !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    font-size: 16px !important;
+    text-align: left !important;
+    border-bottom: 1px solid #142d40 !important;
+}
+
+.menu-item:active {
+    background: #122e44 !important;
+}
+
+.menu-item-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.menu-arrow {
+    color: #00bfff;
+    font-weight: bold;
+    font-size: 14px;
+}

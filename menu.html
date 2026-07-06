@@ -8,19 +8,53 @@
 </head>
 <body>
 
-    <div class="container">
-        <!-- Упростили структуру, чтобы точно ничего не ломалось -->
-        <div class="logo" id="welcomeTitle">⚔️ Воин ⚔️</div>
-        
-        <div class="text">Ты готов заявить о себе в этом мире?</div>
+    <!-- Верхняя панель ресурсов (Хедер) -->
+    <div class="game-header">
+        <div class="header-user" id="hdrUser">🤠 Воин (левел)</div>
+        <div class="header-stats">
+            <span style="color: #ff4d4d;">❤️ <b id="hdrHp">100</b></span>
+            <span style="color: #ffd700;">💰 <b id="hdrGold">100</b></span>
+        </div>
+    </div>
 
-        <button onclick="location.href='character.html'">Мой Варвар</button>
-        <button onclick="alert('Арена в разработке!')">Арена</button>
-        <button onclick="alert('Кузница в разработке!')">Кузница</button>
+    <!-- Основной контейнер (добавили отступ сверху padding-top: 60px через инлайн, чтобы хедер не перекрывал контент) -->
+    <div class="container" style="padding-top: 60px; justify-content: flex-start;">
         
-        <button onclick="logout()" style="background: #721515; margin-top: 30px;">Выйти из игры</button>
+        <div class="text" style="margin-top: 20px; margin-bottom: 10px; font-size: 14px;" id="onlineStatus">
+            Добро пожаловать! Рядом с тобой воины онлайн.
+        </div>
 
-        <div class="footer">Версия Alpha 0.0.1</div>
+        <!-- Список меню как на скриншоте -->
+        <div class="menu-list">
+            
+            <button class="menu-item" onclick="location.href='character.html'">
+                <div class="menu-item-content">🛡️ <span>Мой Варвар</span></div>
+                <div class="menu-arrow">»</div>
+            </button>
+
+            <button class="menu-item" onclick="alert('Задания в разработке!')">
+                <div class="menu-item-content">📜 <span>Задания</span></div>
+                <div class="menu-arrow">»</div>
+            </button>
+
+            <button class="menu-item" onclick="alert('Дуэль в разработке!')">
+                <div class="menu-item-content">⚔️ <span>Дуэль</span></div>
+                <div class="menu-arrow">»</div>
+            </button>
+
+            <button class="menu-item" onclick="alert('Посёлок в разработке!')">
+                <div class="menu-item-content">🏰 <span>Посёлок</span></div>
+                <div class="menu-arrow">»</div>
+            </button>
+
+            <button class="menu-item" onclick="logout()" style="background: #240a0a !important; border-top: 2px solid #501010 !important;">
+                <div class="menu-item-content">🚪 <span>Выйти из игры</span></div>
+                <div class="menu-arrow">»</div>
+            </button>
+
+        </div>
+
+        <div class="footer" style="margin-top: 40px;">Версия Alpha 0.0.1</div>
     </div>
 
     <script src="menu.js"></script>
