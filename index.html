@@ -3,27 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Варвары Онлайн</title>
-    <!-- Исправленное подключение библиотеки для мобильных устройств -->
-    <script src="https://jsdelivr.net"></script>
+    <title>Варвары Онлайн — Текстовая MMORPG</title>
     <style>
         body { background-color: #0d1216; color: #d1d5db; font-family: sans-serif; margin: 0; padding: 0; display: flex; justify-content: center; }
         .game-container { width: 100%; max-width: 480px; background-color: #06090c; border-left: 1px solid #1f2937; border-right: 1px solid #1f2937; min-height: 100vh; box-sizing: border-box; }
-        .header { background: linear-gradient(180deg, #111827 0%, #030712 100%); border-bottom: 2px solid #1f2937; padding: 10px; text-align: center; font-weight: bold; color: #38bdf8; text-transform: uppercase; font-size: 16px; }
+        .header { background: linear-gradient(180deg, #111827 0%, #030712 100%); border-bottom: 2px solid #1f2937; padding: 10px; text-align: center; font-weight: bold; color: #38bdf8; text-transform: uppercase; font-size: 16px; letter-spacing: 1px; }
         .banner { width: 100%; height: auto; display: block; border-bottom: 3px solid #1f2937; max-height: 250px; object-fit: cover; }
         .description-box { padding: 20px; text-align: center; font-size: 14px; line-height: 1.6; color: #9ca3af; }
         .btn-register-container { display: flex; justify-content: center; padding: 15px 0; background: #030712; }
-        .btn-fire { background: linear-gradient(180deg, #b45309 0%, #78350f 100%); color: #fef08a; border: 2px solid #ea580c; padding: 12px 40px; font-size: 16px; font-weight: bold; cursor: pointer; text-transform: uppercase; border-radius: 4px; display: inline-block; }
-        .nav-bar { background: linear-gradient(90deg, #0f172a 0%, #1e3a8a 50%, #0f172a 100%); border-top: 1px solid #2563eb; border-bottom: 1px solid #2563eb; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; color: #60a5fa; font-weight: bold; font-size: 15px; }
+        .btn-fire { background: linear-gradient(180deg, #b45309 0%, #78350f 100%); color: #fef08a; border: 2px solid #ea580c; padding: 12px 40px; font-size: 16px; font-weight: bold; cursor: pointer; text-transform: uppercase; border-radius: 4px; box-shadow: inset 0 0 10px rgba(0,0,0,0.5), 0 0 15px rgba(234,88,12,0.3); text-decoration: none; display: inline-block; text-align: center; }
+        .nav-bar { background: linear-gradient(90deg, #0f172a 0%, #1e3a8a 50%, #0f172a 100%); border-top: 1px solid #2563eb; border-bottom: 1px solid #2563eb; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; color: #60a5fa; font-weight: bold; font-size: 15px; margin-bottom: -1px; }
+        .nav-bar:hover { background: linear-gradient(90deg, #1e293b 0%, #1d4ed8 50%, #1e293b 100%); }
         .form-screen { padding: 25px 20px; display: flex; flex-direction: column; align-items: center; }
         .form-group { width: 100%; max-width: 300px; margin-bottom: 15px; text-align: center; }
-        .form-group label { display: block; margin-bottom: 8px; color: #e5e7eb; }
+        .form-group label { display: block; margin-bottom: 8px; color: #e5e7eb; font-size: 15px; }
         .form-group input, .form-group select { width: 100%; padding: 12px; background-color: #374151; border: 1px solid #4b5563; color: #fff; font-size: 16px; box-sizing: border-box; text-align: center; border-radius: 4px; }
         .captcha-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 5px; }
         .captcha-img { background: #1e293b; padding: 8px 20px; font-size: 20px; font-weight: bold; color: #f43f5e; border: 1px dashed #475569; }
-        .btn-refresh { background: #374151; border: 1px solid #4b5563; color: #fff; padding: 8px 12px; }
+        .btn-refresh { background: #374151; border: 1px solid #4b5563; color: #fff; padding: 8px 12px; cursor: pointer; }
         .footer { padding: 20px; text-align: center; font-size: 11px; color: #4b5563; }
         .hidden { display: none !important; }
+        .stats-box { padding: 20px; background: #111827; border: 1px solid #1f2937; margin: 15px; border-radius: 6px; }
+        .stat-line { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #374151; }
+        .stat-val { color: #f59e0b; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -86,9 +88,9 @@
                 <div class="form-group">
                     <label>Выберите класс</label>
                     <select id="reg-class" required>
-                        <option value="Воин">⚔️ Воин</option>
-                        <option value="Разбойник">🗡️ Разбойник</option>
-                        <option value="Шаман">🔮 Шаман</option>
+                        <option value="Воин">⚔️ Воин (+10% Сила)</option>
+                        <option value="Разбойник">🗡️ Разбойник (+10% Ловкость)</option>
+                        <option value="Шаман">🔮 Шаман (+10% Магия)</option>
                     </select>
                 </div>
                 <button type="submit" class="btn-fire">Создать героя</button>
@@ -99,29 +101,35 @@
             </div>
         </div>
 
+        <!-- ЭКРАН ХАРАКТЕРИСТИК ПЕРСОНАЖА -->
+        <div id="player-screen" class="hidden">
+            <div class="stats-box">
+                <h3 style="color:#38bdf8; text-align:center; margin-top:0;" id="char-name">Герой</h3>
+                <div class="stat-line"><span>Класс:</span> <span class="stat-val" id="char-class">-</span></div>
+                <div class="stat-line"><span>Уровень:</span> <span class="stat-val">1</span></div>
+                <div class="stat-line"><span>Золото:</span> <span class="stat-val">100 💰</span></div>
+                <div class="stat-line"><span>Сила:</span> <span class="stat-val" id="char-str">10</span></div>
+                <div class="stat-line"><span>Ловкость:</span> <span class="stat-val" id="char-agl">10</span></div>
+                <div class="stat-line"><span>Магия:</span> <span class="stat-val" id="char-mag">10</span></div>
+            </div>
+            <div class="btn-register-container">
+                <button type="button" class="btn-fire" onclick="alert('Вы успешно вошли в мир силы и стали!')">⚔️ В бой!</button>
+            </div>
+            <div class="nav-bar" onclick="logout()">
+                <span>🚪 Выйти из персонажа</span>
+                <span>»»</span>
+            </div>
+        </div>
+
         <div class="footer">BARBARIANS ONLINE, 2026</div>
     </div>
 
     <script>
-        const SUPABASE_URL = "https://supabase.co";
-        const SUPABASE_KEY = "sb_publishable_OV9BDFENvvNtqENXKDB6YQ_Kxda-QZv";
-        
-        let _supabase;
-        
-        // Безопасное подключение к объекту window для мобильных браузеров
-        function initSupabase() {
-            if (window.supabase) {
-                _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-            } else {
-                setTimeout(initSupabase, 100);
-            }
-        }
-        initSupabase();
-
         function switchScreen(screenId) {
             document.getElementById('main-screen').classList.add('hidden');
             document.getElementById('auth-screen').classList.add('hidden');
             document.getElementById('reg-screen').classList.add('hidden');
+            document.getElementById('player-screen').classList.add('hidden');
             document.getElementById(screenId).classList.remove('hidden');
             if(screenId === 'auth-screen') { generateCaptcha(); }
         }
@@ -135,54 +143,43 @@
             document.getElementById('captcha-input').value = '';
         }
 
-        async function handleRegister(event) {
+        function handleRegister(event) {
             event.preventDefault();
-            if (!_supabase) { alert("База данных ещё загружается, подождите секунду..."); return; }
-            
-            const username = document.getElementById('reg-username').value.trim();
-            const email = username + "@barbarians.game";
+            const username = document.getElementById('reg-username').value.trim().toLowerCase();
             const password = document.getElementById('reg-password').value;
             const heroClass = document.getElementById('reg-class').value;
 
-            alert("Отправляем запрос регистрации для: " + username);
-
-            const { data, error } = await _supabase.auth.signUp({
-                email: email,
-                password: password,
-                options: { data: { hero_class: heroClass } }
-            });
-
-            if (error) {
-                alert('Ошибка от Supabase: ' + error.message);
-            } else {
-                alert('Успех! Герой создан. Переходим на вход.');
-                switchScreen('auth-screen');
-            }
-        }
-
-        async function handleLogin(event) {
-            event.preventDefault();
-            if (!_supabase) { alert("База данных ещё загружается, подождите секунду..."); return; }
-            
-            const userAnswer = parseInt(document.getElementById('captcha-input').value);
-            if (userAnswer !== currentCaptchaResult) {
-                alert('Капча неверна!');
+            if(localStorage.getItem('user_' + username)) {
+                alert('Этот ник варвара уже занят!');
                 return;
             }
-            const email = document.getElementById('login-input').value.trim() + "@barbarians.game";
-            const password = document.getElementById('password-input').value;
 
-            const { data, error } = await _supabase.auth.signInWithPassword({
-                email: email,
-                password: password
-            });
+            const accountData = { password: password, heroClass: heroClass };
+            localStorage.setItem('user_' + username, JSON.stringify(accountData));
 
-            if (error) {
-                alert('Ошибка входа: ' + error.message);
-            } else {
-                alert('Вы вошли! Класс: ' + (data.user.user_metadata.hero_class || "Варвар"));
-            }
+            alert('Славный воин ' + username + ' успешно создан!');
+            switchScreen('auth-screen');
         }
-    </script>
-</body>
-</html>
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const userAnswer = parseInt(document.getElementById('captcha-input').value);
+if (userAnswer !== currentCaptchaResult) { alert('Капча неверна!'); return; }
+const username = document.getElementById('login-input').value.trim().toLowerCase();
+const password = document.getElementById('password-input').value;
+const savedUser = localStorage.getItem('user_' + username);
+if (!savedUser) { alert('Персонаж не найден!'); return; }
+const account = JSON.parse(savedUser);
+if (account.password !== password) { alert('Неверный пароль!'); return; }
+document.getElementById('char-name').innerText = username.toUpperCase();
+document.getElementById('char-class').innerText = account.heroClass;
+document.getElementById('char-str').innerText = account.heroClass === 'Воин' ? '11' : '10';
+document.getElementById('char-agl').innerText = account.heroClass === 'Разбойник' ? '11' : '10';
+document.getElementById('char-mag').innerText = account.heroClass === 'Шаман' ? '11' : '10';
+switchScreen('player-screen');
+}
+function logout() {
+document.getElementById('login-input').value = '';
+document.getElementById('password-input').value = '';
+switchScreen('main-screen');
+}
