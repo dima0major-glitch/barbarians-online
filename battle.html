@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Варвары Онлайн - Сражение</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .battle-title { color: #00ffcc; font-size: 20px; font-weight: bold; margin-bottom: 15px; text-transform: uppercase; }
+        .vs-text { font-size: 16px; color: #ddd; margin: 15px 0; font-weight: bold; }
+        .avatars-container { display: flex; justify-content: space-around; width: 100%; max-width: 360px; margin-bottom: 20px; }
+        .avatar-box { width: 100px; height: 100px; background: #0a1824; border: 2px solid #154d72; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 45px; }
+        .stats-compare-list { width: 100%; max-width: 300px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 25px; }
+        .compare-row { display: flex; justify-content: space-between; align-items: center; font-size: 16px; font-weight: bold; background: rgba(5, 11, 18, 0.6); padding: 6px 12px; border-radius: 6px; }
+        
+        .btn-fight {
+            width: 100%; max-width: 260px; height: 48px; background: linear-gradient(to bottom, #d45d11, #801b00); 
+            border: 2px solid #ffcc00; border-radius: 8px; color: white; font-size: 18px; font-weight: bold;
+            cursor: pointer; text-transform: uppercase; margin-bottom: 20px;
+        }
+
+        .battle-report { width: 100%; max-width: 360px; background: #04090e; border: 1px solid #1a3245; border-radius: 8px; padding: 12px; text-align: left; font-size: 14px; line-height: 1.5; color: #ffffff; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="container" style="justify-content: flex-start; padding-top: 20px;">
+        <div class="battle-title">Сражения</div>
+        
+        <div class="vs-text"><span id="pName" style="color:#ff9900">Ты</span> против <span id="bName" style="color:#ff4d4d">Бота</span></div>
+
+        <div class="avatars-container">
+            <div class="avatar-box" id="pAvatar">🪰</div>
+            <div class="avatar-box" id="bAvatar">🧔</div>
+        </div>
+
+        <div class="stats-compare-list">
+            <div class="compare-row">
+                <span id="pStr">15</span>
+                <span>💪 Сила</span>
+                <span id="bStr">15</span>
+            </div>
+            <div class="compare-row">
+                <span id="pDef">15</span>
+                <span>🛡️ Защ</span>
+                <span id="bDef">15</span>
+            </div>
+            <div class="compare-row">
+                <span id="pHp">100</span>
+                <span>❤️ Жизнь</span>
+                <span id="bHp">100</span>
+            </div>
+        </div>
+
+        <button class="btn-fight" id="actionBtn" onclick="executeBattle()">Сражаться</button>
+
+        <div class="battle-report">
+            <b style="color: #00ffcc;">» Лог поединка:</b>
+            <div id="reportContent" style="margin-top: 8px; color: #a3907c;">Нажмите «Сражаться», чтобы начать поединок.</div>
+        </div>
+
+        <div class="menu-list">
+            <button class="menu-item" onclick="location.href='duel.html'">
+                <div class="menu-item-content">🪓 <span>Следующий</span></div>
+                <div class="menu-arrow">»</div>
+            </button>
+            <button class="menu-item" onclick="location.href='menu.html'">
+                <div class="menu-item-content">🏠 <span>Главная</span></div>
+                <div class="menu-arrow">»</div>
+            </button>
+        </div>
+    </div>
+
+    <!-- Заставим браузер принудительно обновить кэш через v=3 -->
+    <script src="battle.js?v=3"></script>
+</body>
+</html>
