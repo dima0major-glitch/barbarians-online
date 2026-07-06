@@ -6,6 +6,25 @@
     <title>Варвары Онлайн - Сражение</title>
     <link rel="stylesheet" href="style.css">
     <style>
+        /* Верхняя панель ресурсов */
+        .wap-header {
+            width: 100%;
+            background: #000000;
+            border-bottom: 2px solid #332211;
+            padding: 6px 10px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            color: #ffffff;
+        }
+        .header-row-1 { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 5px; }
+        .header-row-2 { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; color: #b0c4de; }
+        .stat-item { display: flex; align-items: center; gap: 3px; }
+        .nickname { color: #ff9900; font-weight: bold; }
+
         .battle-title { color: #00ffcc; font-size: 20px; font-weight: bold; margin-bottom: 15px; text-transform: uppercase; }
         .vs-text { font-size: 16px; color: #ddd; margin: 15px 0; font-weight: bold; }
         .avatars-container { display: flex; justify-content: space-around; width: 100%; max-width: 360px; margin-bottom: 20px; }
@@ -13,7 +32,6 @@
         .stats-compare-list { width: 100%; max-width: 300px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 25px; }
         .compare-row { display: flex; justify-content: space-between; align-items: center; font-size: 16px; font-weight: bold; background: rgba(5, 11, 18, 0.6); padding: 6px 12px; border-radius: 6px; }
         
-        /* Кнопка "Сражаться" */
         .btn-fight {
             width: 100%; max-width: 260px; height: 48px; background: linear-gradient(to bottom, #d45d11, #801b00); 
             border: 2px solid #ffcc00; border-radius: 8px; color: white; font-size: 18px; font-weight: bold;
@@ -21,36 +39,46 @@
         }
         .btn-fight:active { background: linear-gradient(to bottom, #ff7a22, #a62600); }
 
-        /* Окно результатов лога боя (как на скриншотах референса) */
         .battle-report {
-            width: 100%;
-            max-width: 360px;
-            background: #04090e;
-            border: 1px solid #1a3245;
-            border-radius: 8px;
-            padding: 12px;
-            text-align: left;
-            font-size: 14px;
-            line-height: 1.5;
-            color: #ffffff;
-            margin-bottom: 20px;
+            width: 100%; max-width: 360px; background: #04090e; border: 1px solid #1a3245;
+            border-radius: 8px; padding: 12px; text-align: left; font-size: 14px; line-height: 1.5; color: #ffffff; margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
 
-    <div class="container" style="justify-content: flex-start; padding-top: 20px;">
+    <!-- Двухстрочная панель ресурсов сверху экрана боя -->
+    <div class="wap-header">
+        <div class="header-row-1">
+            <div class="stat-item">✉️</div>
+            <div class="stat-item">🎖️ <span class="nickname" id="hdrUser">Варвар</span></div>
+            <div class="stat-item" style="color: #ffcc00;">🛡️ <b id="hdrLevel">1</b></div>
+            <div class="stat-item" style="color: #ff4d4d;">❤️ <b id="hdrHp">100</b></div>
+            <div class="stat-item" style="color: #00ffcc;">🌀 <b id="hdrMana">0</b></div>
+            <div class="stat-item" style="color: #ffffff;">🪙 <b id="hdrSilver">0</b></div>
+        </div>
+        <div class="header-row-2">
+            <div class="stat-item" style="color: #00bfff;">💎 <b id="hdrDiamonds">0</b></div>
+            <div class="stat-item" style="color: #ffd700;">🟡 <b id="hdrGold">0</b></div>
+            <div class="stat-item" style="color: #ff6600;">⚔️ <b id="hdrEnergy">3/3</b></div>
+            <div class="stat-item">⏳ <span id="hdrHourglass">00:00:00</span></div>
+            <div class="stat-item">🕒 <span id="hdrTime">00:00:00</span></div>
+            <div class="stat-item">🔍</div>
+            <div class="stat-item">📜</div>
+        </div>
+    </div>
+
+    <!-- Основной контент с отступом под панель ресурсов -->
+    <div class="container" style="justify-content: flex-start; padding-top: 80px;">
         <div class="battle-title">Сражения</div>
         
         <div class="vs-text"><span id="pName" style="color:#ff9900">Ты</span> против <span id="bName" style="color:#ff4d4d">Бота</span></div>
 
-        <!-- Аватарки -->
         <div class="avatars-container">
             <div class="avatar-box" id="pAvatar">🪰</div>
             <div class="avatar-box" id="bAvatar">🧔</div>
         </div>
 
-        <!-- Сравнение характеристик -->
         <div class="stats-compare-list">
             <div class="compare-row">
                 <span id="pStr" style="color: #ffcc00;">15</span>
@@ -69,16 +97,13 @@
             </div>
         </div>
 
-        <!-- Огненная кнопка -->
         <button class="btn-fight" id="actionBtn" onclick="executeBattle()">Сражаться</button>
 
-        <!-- Текстовое окно для вывода отчета боя -->
         <div class="battle-report" id="battleReportBlock">
             <b style="color: #00ffcc;">» Лог поединка:</b>
             <div id="reportContent" style="margin-top: 8px; color: #a3907c;">Нажмите «Сражаться», чтобы начать поединок.</div>
         </div>
 
-        <!-- Кнопки навигации -->
         <div class="menu-list">
             <button class="menu-item" onclick="location.href='duel.html'">
                 <div class="menu-item-content">🪓 <span>Следующий</span></div>

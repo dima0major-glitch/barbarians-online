@@ -19,13 +19,68 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('pAvatar').innerText = "🪰";
     }
 
+    // Отображаем статы на арене
     document.getElementById('pName').innerText = player.username;
     document.getElementById('pStr').innerText = pStats.strength || 15;
     document.getElementById('pDef').innerText = pStats.defense || 15;
     document.getElementById('pHp').innerText = pStats.health || 100;
 
+    // Функция отрисовки и обновления панели ресурсов
+    updateHeader();
+    
+    // Запускаем секундные тикающие часы и таймер энергии
+    setInterval(() => {
+        const nowTime = new Date();
+        document.getElementById('hdrTime').innerText = nowTime.toTimeString().split(' ');
+
+        // Проверяем и крутим таймер в песочных часах
+        let energyParts = (player.stats.energy || "3/3").split('/');
+        let currentEnergy = parseInt(energyParts[0]);
+        let maxEnergy = parseInt(energyParts[1] || 3);
+
+        if (currentEnergy < maxEnergy) {
+            let timerStart = localStorage.getItem('energy_timer_start');
+            if (timerStart) {
+                let diff = Date.now() - parseInt(timerStart);
+                let regenTime = 5 * 60 * 1000;
+                let timeLeft = regenTime - diff;
+
+                if (timeLeft <= 0) {
+                    // Время вышло, регенерируем 1 бой
+                    currentEnergy = Math.min(maxEnergy, currentEnergy + 1);
+                    player.stats.energy = `${currentEnergy}/${maxEnergy}`;
+                    if (currentEnergy >= maxEnergy) {
+                        localStorage.removeItem('energy_timer_start');
+                    } else {
+                        localStorage.setItem('energy_timer_start', Date.now());
+                    }
+                    savePlayerData();
+                    updateHeader();
+                } else {
+                    let minutes = Math.floor(timeLeft / 60000);
+                    let seconds = Math.floor((timeLeft % 60000) / 1000);
+                    document.getElementById('hdrHourglass').innerText = `00:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                }
+            }
+        } else {
+            document.getElementById('hdrHourglass').innerText = "00:00:00";
+        }
+    }, 1000);
+
     generateBot(category, pStats);
 });
+
+function updateHeader() {
+    if (!player) return;
+    document.getElementById('hdrUser').innerText = player.username;
+    document.getElementById('hdrLevel').innerText = player.stats.level || 15;
+    document.getElementById('hdrHp').innerText = player.stats.health || 172365;
+    document.getElementById('hdrMana').innerText = player.stats.mana || 1590;
+    document.getElementById('hdrSilver').innerText = player.stats.silver || 0;
+    document.getElementById('hdrDiamonds').innerText = player.stats.diamonds || 0;
+    document.getElementById('hdrGold').innerText = player.stats.gold || 0;
+    document.getElementById('hdrEnergy').innerText = player.stats.energy || "3/3";
+}
 
 function generateBot(category, pStats) {
     const randomName = botNames[Math.floor(Math.random() * botNames.length)];
@@ -68,39 +123,59 @@ function generateBot(category, pStats) {
 }
 
 function executeBattle() {
+    player = JSON.parse(localStorage.getItem('current_player'));
     const pStats = player.stats || { strength: 15, defense: 15, health: 100 };
+    
+    // ПРОВЕРКА ЭНЕРГИИ ПЕРЕД УДАРОМ
+    let energyParts = (player.stats.energy || "3/3").split('/');
+    let currentEnergy = parseInt(energyParts[0]);
+    let maxEnergy = parseInt(energyParts[1] || 3);
+
+    if (currentEnergy <= 0) {
+        alert("❌ Закончились бои! Подождите восстановления.");
+        return;
+    }
+
+    // Списываем 1 энергию
+    currentEnergy--;
+    player.stats.energy = `${currentEnergy}/${maxEnergy}`;
+
+    // Если запустили регенерацию
+    if (!localStorage.getItem('energy_timer_start')) {
+        localStorage.setItem('energy_timer_start', Date.now());
+    }
+    
+    savePlayerData();
+    updateHeader(); // Моментально обновляем панель на экране
+
     const report = document.getElementById('reportContent');
     const actionBtn = document.getElementById('actionBtn');
 
-    // Рассчитываем урон
     const playerDamage = Math.floor(Math.random() * 400) + (pStats.strength * 10);
     const botDamage = Math.floor(Math.random() * 300) + (currentBot.strength * 8);
 
-    // Рассчитываем остаток здоровья
     let pLeftHp = Math.max(0, pStats.health - botDamage);
     let bLeftHp = Math.max(0, currentBot.health - playerDamage);
 
     let htmlResult = "";
 
-    // Логика победы
     if (playerDamage >= botDamage) {
         htmlResult += `<span style="color:#00ff00; font-weight:bold; font-size:16px;">🏆 ТЫ ПОБЕДИЛ!</span><br>`;
         htmlResult += `<i>Причина: нанес больше суммарного урона.</i><br><br>`;
         
-        // Выдаем золото и серебро
         const goldWin = Math.floor(Math.random() * 8) + 4;
         const silverWin = Math.floor(Math.random() * 1200) + 400;
         
         player.stats.gold = (player.stats.gold || 0) + goldWin;
         player.stats.silver = (player.stats.silver || 0) + silverWin;
         savePlayerData();
+        updateHeader(); // Снова обновляем, чтобы показать выигранное золото
 
         htmlResult += `<b style="color:#ffcc00;">Награда:</b> 🟡 +${goldWin} золота, 🪙 +${silverWin} серебра.<br><br>`;
     } else {
         htmlResult += `<span style="color:#ff4d4d; font-weight:bold; font-size:16px;">💀 ТЫ ПРОИГРАЛ!</span><br><br>`;
     }
 
-    // Добавляем строчки урона и здоровья как на референсе
     htmlResult += `<b style="color:#fff;">Нанесенный урон:</b><br>`;
     htmlResult += `• ${player.username} нанес: ${playerDamage}<br>`;
     htmlResult += `• ${currentBot.name} нанес: ${botDamage}<br><br>`;
@@ -109,10 +184,8 @@ function executeBattle() {
     htmlResult += `• ${player.username}: ${pLeftHp}<br>`;
     htmlResult += `• ${currentBot.name}: ${bLeftHp}`;
 
-    // Выводим все прямо на страницу
     report.innerHTML = htmlResult;
 
-    // Превращаем кнопку в возврат
     actionBtn.innerText = "Назад к выбору лиг";
     actionBtn.style.background = "#142d40";
     actionBtn.onclick = () => { window.location.href = 'duel.html'; };
