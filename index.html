@@ -109,37 +109,7 @@
     </div>
 
     <script>
-        function switchScreen(screenId) {
-            document.getElementById('main-screen').classList.add('hidden');
-            document.getElementById('auth-screen').classList.add('hidden');
-            document.getElementById('reg-screen').classList.add('hidden');
-            document.getElementById('player-screen').classList.add('hidden');
-
-            document.getElementById(screenId).classList.remove('hidden');
-        }
-
-        function handleRegister(event) {
-            event.preventDefault();
-            const username = document.getElementById('reg-username').value;
-            const userClass = document.getElementById('reg-class').value;
-            
-            document.getElementById('char-name').innerText = username;
-            document.getElementById('char-class').innerText = userClass;
-            
-            switchScreen('player-screen');
-        }
-
-        function handleLogin(event) {
-            event.preventDefault();
-            document.getElementById('char-name').innerText = 'Странник';
-            document.getElementById('char-class').innerText = 'Воин';
-            
-            switchScreen('player-screen');
-        }
-
-        function logout() {
-            switchScreen('main-screen');
-        }
+       // Функция для переключения экранов function switchScreen(id) { document.getElementById('main-screen').classList.add('hidden'); document.getElementById('auth-screen').classList.add('hidden'); document.getElementById('reg-screen').classList.add('hidden'); document.getElementById('player-screen').classList.add('hidden'); document.getElementById(id).classList.remove('hidden'); } // ЭТАП 1: РЕГИСТРАЦИЯ (Сохраняем данные персонажа) function handleRegister(e) { e.preventDefault(); const username = document.getElementById('reg-username').value; const userClass = document.getElementById('reg-class').value; const userPassword = document.getElementById('reg-password').value; // Сохраняем в память браузера (вместо базы данных на первом этапе) localStorage.setItem('barbarians_name', username); localStorage.setItem('barbarians_class', userClass); localStorage.setItem('barbarians_pass', userPassword); // Отправляем на экран персонажа loadCharacterData(username, userClass); } // ЭТАП 1: ВХОД (Проверяем логин и пароль) function handleLogin(e) { e.preventDefault(); const loginInput = document.getElementById('login-input').value; const passInput = document.getElementById('password-input').value; // Достаем сохраненные данные const savedName = localStorage.getItem('barbarians_name'); const savedPass = localStorage.getItem('barbarians_pass'); const savedClass = localStorage.getItem('barbarians_class') || 'Воин'; // Проверяем, совпадают ли они if (loginInput === savedName && passInput === savedPass) { loadCharacterData(savedName, savedClass); } else { alert('Неверный логин или пароль! Или персонаж еще не создан.'); } } // Функция загрузки данных на экран function loadCharacterData(name, className) { document.getElementById('char-name').innerText = name; switchScreen('player-screen'); } // Выход из игры function logout() { switchScreen('main-screen'); } // Автоматическая проверка при старте страницы: если игрок уже входил, сразу пускаем window.onload = function() { const savedName = localStorage.getItem('barbarians_name'); if (savedName) { // Если персонаж есть, подставим его имя в логин для удобства document.getElementById('login-input').value = savedName; } }
     </script>
 </body>
 </html>
