@@ -3,9 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Варвары Онлайн - Сражение</title>
+    <title>Варвары</title>
     <link rel="stylesheet" href="style.css">
     <style>
+        .wap-header {
+            width: 100%; background: #000000; border-bottom: 2px solid #332211; padding: 6px 10px;
+            position: fixed; top: 0; left: 0; z-index: 1000; font-family: Arial, sans-serif; font-size: 13px; color: #ffffff;
+        }
+        .header-row-1 { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 5px; }
+        .header-row-2 { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; color: #b0c4de; }
+        .stat-item { display: flex; align-items: center; gap: 3px; }
+        .nickname { color: #ff9900; font-weight: bold; }
+        
         .battle-title { color: #00ffcc; font-size: 20px; font-weight: bold; margin-bottom: 15px; text-transform: uppercase; }
         .vs-text { font-size: 16px; color: #ddd; margin: 15px 0; font-weight: bold; }
         .avatars-container { display: flex; justify-content: space-around; width: 100%; max-width: 360px; margin-bottom: 20px; }
@@ -18,15 +27,35 @@
             border: 2px solid #ffcc00; border-radius: 8px; color: white; font-size: 18px; font-weight: bold;
             cursor: pointer; text-transform: uppercase; margin-bottom: 20px;
         }
-
         .battle-report { width: 100%; max-width: 360px; background: #04090e; border: 1px solid #1a3245; border-radius: 8px; padding: 12px; text-align: left; font-size: 14px; line-height: 1.5; color: #ffffff; margin-bottom: 20px; }
+        .main-content { padding-top: 75px; }
     </style>
 </head>
 <body>
 
-    <div class="container" style="justify-content: flex-start; padding-top: 20px;">
+    <!-- Таблица ресурсов на экране боя -->
+    <div class="wap-header">
+        <div class="header-row-1">
+            <div class="stat-item">✉️</div>
+            <div class="stat-item">🎖️ <span class="nickname" id="hdrUser">Варвар</span></div>
+            <div class="stat-item" style="color: #ffcc00;">🛡️ <b id="hdrLevel">1</b></div>
+            <div class="stat-item" style="color: #ff4d4d;">❤️ <b id="hdrHp">100</b></div>
+            <div class="stat-item" style="color: #00ffcc;">🌀 <b id="hdrMana">0</b></div>
+            <div class="stat-item" style="color: #ffffff;">🪙 <b id="hdrSilver">0</b></div>
+        </div>
+        <div class="header-row-2">
+            <div class="stat-item" style="color: #00bfff;">💎 <b id="hdrDiamonds">0</b></div>
+            <div class="stat-item" style="color: #ffd700;">🟡 <b id="hdrGold">0</b></div>
+            <div class="stat-item" style="color: #ff6600;">⚔️ <b id="hdrEnergy">3/3</b></div>
+            <div class="stat-item">⏳ <span id="hdrHourglass">00:00:00</span></div>
+            <div class="stat-item">🕒 <span id="hdrTime">00:00:00</span></div>
+            <div class="stat-item">🔍</div>
+            <div class="stat-item">📜</div>
+        </div>
+    </div>
+
+    <div class="container main-content" style="justify-content: flex-start;">
         <div class="battle-title">Сражения</div>
-        
         <div class="vs-text"><span id="pName" style="color:#ff9900">Ты</span> против <span id="bName" style="color:#ff4d4d">Бота</span></div>
 
         <div class="avatars-container">
@@ -71,7 +100,6 @@
         </div>
     </div>
 
-    <!-- Заставим браузер принудительно обновить кэш через v=3 -->
-    <script src="battle.js?v=3"></script>
+    <script src="battle.js"></script>
 </body>
 </html>

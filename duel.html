@@ -3,17 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Варвары Онлайн - Арена</title>
+    <title>Варвары</title>
     <link rel="stylesheet" href="style.css">
     <style>
+        .wap-header {
+            width: 100%; background: #000000; border-bottom: 2px solid #332211; padding: 6px 10px;
+            position: fixed; top: 0; left: 0; z-index: 1000; font-family: Arial, sans-serif; font-size: 13px; color: #ffffff;
+        }
+        .header-row-1 { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 5px; }
+        .header-row-2 { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; color: #b0c4de; }
+        .stat-item { display: flex; align-items: center; gap: 3px; }
+        .nickname { color: #ff9900; font-weight: bold; }
+        
         .arena-title { color: #00ffcc; font-size: 22px; font-weight: bold; text-transform: uppercase; margin-bottom: 15px; text-align: center; }
-        .arena-banner { width: 100%; max-width: 400px; height: 120px; background: #0a1824; border: 2px solid #332211; border-radius: 8px; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .arena-banner { width: 100%; max-width: 400px; height: 100px; background: #0a1824; border: 2px solid #332211; border-radius: 8px; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
         .arena-subtitle { font-size: 16px; color: #ffd700; font-weight: bold; }
+        .main-content { padding-top: 75px; }
     </style>
 </head>
 <body>
 
-    <div class="container" style="justify-content: flex-start; padding-top: 20px;">
+    <!-- Таблица всегда видна на Арене -->
+    <div class="wap-header">
+        <div class="header-row-1">
+            <div class="stat-item">✉️</div>
+            <div class="stat-item">🎖️ <span class="nickname" id="hdrUser">Варвар</span></div>
+            <div class="stat-item" style="color: #ffcc00;">🛡️ <b id="hdrLevel">1</b></div>
+            <div class="stat-item" style="color: #ff4d4d;">❤️ <b id="hdrHp">100</b></div>
+            <div class="stat-item" style="color: #00ffcc;">🌀 <b id="hdrMana">0</b></div>
+            <div class="stat-item" style="color: #ffffff;">🪙 <b id="hdrSilver">0</b></div>
+        </div>
+        <div class="header-row-2">
+            <div class="stat-item" style="color: #00bfff;">💎 <b id="hdrDiamonds">0</b></div>
+            <div class="stat-item" style="color: #ffd700;">🟡 <b id="hdrGold">0</b></div>
+            <div class="stat-item" style="color: #ff6600;">⚔️ <b id="hdrEnergy">3/3</b></div>
+            <div class="stat-item">⏳ <span id="hdrHourglass">00:00:00</span></div>
+            <div class="stat-item">🕒 <span id="hdrTime">00:00:00</span></div>
+            <div class="stat-item">🔍</div>
+            <div class="stat-item">📜</div>
+        </div>
+    </div>
+
+    <div class="container main-content" style="justify-content: flex-start;">
         <div class="arena-title">Арена</div>
 
         <div class="arena-banner">
@@ -25,32 +56,26 @@
                 <div class="menu-item-content">⚔️ <span style="color: #00ffcc;">Ровня</span></div>
                 <div class="menu-arrow">»</div>
             </button>
-
             <button class="menu-item" onclick="startFight('junior')">
                 <div class="menu-item-content">📉 <span style="color: #ff4d4d;">Младшие</span></div>
                 <div class="menu-arrow">»</div>
             </button>
-
             <button class="menu-item" onclick="startFight('senior')">
                 <div class="menu-item-content">📈 <span style="color: #00ff00;">Старшие</span></div>
                 <div class="menu-arrow">»</div>
             </button>
-
             <button class="menu-item" onclick="startFight('mercenaries')">
                 <div class="menu-item-content">🪖 <span>Наёмники</span></div>
                 <div class="menu-arrow">»</div>
             </button>
-
             <button class="menu-item" onclick="startFight('boss')">
                 <div class="menu-item-content">👹 <span style="color: #ff3333; font-weight: bold;">Владыка Наемников</span></div>
                 <div class="menu-arrow">»</div>
             </button>
-
             <button class="menu-item" onclick="startFight('by_level')">
                 <div class="menu-item-content">🏅 <span>По уровню</span></div>
                 <div class="menu-arrow">»</div>
             </button>
-
             <button class="menu-item" onclick="location.href='menu.html'" style="background: #142d40 !important; margin-top: 15px;">
                 <div class="menu-item-content">🏠 <span>В главное меню</span></div>
                 <div class="menu-arrow">»</div>
@@ -58,6 +83,8 @@
         </div>
     </div>
 
+    <!-- Общий скрипт для обновления таблицы ресурсов -->
+    <script src="menu.js"></script>
     <script>
         function startFight(category) {
             localStorage.setItem('arena_category', category);
