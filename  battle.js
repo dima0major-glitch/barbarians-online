@@ -76,11 +76,34 @@ function generateBot(category, pStats) {
 }
 
 function executeBattle() {
-    const actionBtn = document.getElementById('actionBtn');
-    const pPower = (player.stats.strength || 15) + (player.stats.defense || 15);
+    const pStats = player.stats || { strength: 15, defense: 15, health: 100 };
+    
+    // Скрываем блок старой подготовки, если он есть, или просто выводим под кнопкой
+    const prepareBlock = document.getElementById('battlePrepareBlock');
+    if (prepareBlock) prepareBlock.style.display = 'none';
+
+    // Показываем блок результатов
+    const resultBlock = document.getElementById('battleResultBlock');
+    if (resultBlock) resultBlock.style.display = 'block';
+
+    // Рассчитываем случайный урон сторон на основе силы
+    const playerDamage = Math.floor(Math.random() * 500) + (pStats.strength * 100);
+    const botDamage = Math.floor(Math.random() * 400) + (currentBot.strength * 80);
+
+    let playerRemainingHp = Math.max(0, pStats.health - botDamage);
+    let botRemainingHp = Math.max(0, currentBot.health - playerDamage);
+
+    const resStatus = document.getElementById('resStatus');
+    const pPower = (pStats.strength || 15) + (pStats.defense || 15);
     const bPower = currentBot.strength + currentBot.defense;
 
+    // Условие победы по суммарной мощи
     if (pPower >= bPower) {
+        if (resStatus) {
+            resStatus.innerText = "🏆 ТЫ ПОБЕДИЛ!";
+            resStatus.className = "win-text";
+        }
+        
         const goldWin = Math.floor(Math.random() * 10) + 5;
         const silverWin = Math.floor(Math.random() * 1500) + 500;
         
@@ -88,14 +111,25 @@ function executeBattle() {
         player.stats.silver = (player.stats.silver || 0) + silverWin;
         savePlayerData();
 
-        alert(`🏆 ПОБЕДА!\nВы сокрушили воина ${currentBot.name}!\n\nНаграда:\n🟡 +${goldWin} золота\n🪙 +${silverWin} серебра`);
+        if (document.getElementById('resSilver')) {
+            document.getElementById('resSilver').innerHTML = `🟡 +${goldWin} золота, 🪙 +${silverWin} серебра`;
+        }
     } else {
-        alert(`💀 ПОРАЖЕНИЕ!\nВоин ${currentBot.name} оказался сильнее и одолел вас на арене.`);
+        if (resStatus) {
+            resStatus.innerText = "💀 ТЫ ПРОИГРАЛ!";
+            resStatus.className = "lose-text";
+        }
+        if (document.getElementById('resSilver')) {
+            document.getElementById('resSilver').innerText = "Награда отсутствует";
+        }
     }
 
-    actionBtn.innerText = "Назад к арене";
-    actionBtn.style.background = "#142d40";
-    actionBtn.onclick = () => { window.location.href = 'duel.html'; };
+    // Заполняем строчки с уроном и остатком ХП на экране
+    if (document.getElementById('resPlayerDmg')) document.getElementById('resPlayerDmg').innerText = `${player.username} нанес: ${playerDamage} урона`;
+    if (document.getElementById('resBotDmg')) document.getElementById('resBotDmg').innerText = `${currentBot.name} нанес: ${botDamage} урона`;
+    
+    if (document.getElementById('resPlayerHp')) document.getElementById('resPlayerHp').innerText = `У тебя осталось здоровья: ${playerRemainingHp}`;
+    if (document.getElementById('resBotHp')) document.getElementById('resBotHp').innerText = `У ${currentBot.name} осталось здоровья: ${botRemainingHp}`;
 }
 
 function savePlayerData() {
