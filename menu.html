@@ -5,28 +5,91 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Варвары Онлайн - Главное Меню</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Стили для верхней двухстрочной панели */
+        .wap-header {
+            width: 100%;
+            background: #000000; /* Глубокий черный цвет панели */
+            border-bottom: 2px solid #332211; /* Коричневая кайма снизу */
+            padding: 6px 10px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            color: #ffffff;
+        }
+
+        /* Первая строчка: Письмо, Ник, Уровень, ХП, Слава, Серебро */
+        .header-row-1 {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+
+        /* Вторая строчка: Кристаллы, Золото, Бои, Песочные часы, Время, Лупа, Свиток */
+        .header-row-2 {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            color: #b0c4de; /* Чуть приглушенный цвет для второй строки */
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .nickname {
+            color: #ff9900; /* Оранжевый ник */
+            font-weight: bold;
+        }
+
+        /* Корректировка основного контейнера под новую высоту панели */
+        .main-content {
+            padding-top: 65px;
+        }
+    </style>
 </head>
 <body>
 
-    <!-- Верхняя панель ресурсов (Хедер) -->
-    <div class="game-header">
-        <div class="header-user" id="hdrUser">🤠 Воин (левел)</div>
-        <div class="header-stats">
-            <span style="color: #ff4d4d;">❤️ <b id="hdrHp">100</b></span>
-            <span style="color: #ffd700;">💰 <b id="hdrGold">100</b></span>
+    <!-- Наша новая продвинутая панель -->
+    <div class="wap-header">
+        <!-- СТРОКА 1 -->
+        <div class="header-row-1">
+            <div class="stat-item">✉️</div>
+            <div class="stat-item">🎖️ <span class="nickname" id="hdrUser">Злой_комарь</span></div>
+            <div class="stat-item" style="color: #ffcc00;">🛡️ <b id="hdrLevel">15</b></div>
+            <div class="stat-item" style="color: #ff4d4d;">❤️ <b id="hdrHp">172365</b></div>
+            <div class="stat-item" style="color: #00ffcc;">🌀 <b id="hdrMana">1590</b></div>
+            <div class="stat-item" style="color: #ffffff;">🪙 <b id="hdrSilver">184491</b></div>
+        </div>
+        
+        <!-- СТРОКА 2 -->
+        <div class="header-row-2">
+            <div class="stat-item" style="color: #00bfff;">💎 <b id="hdrDiamonds">0</b></div>
+            <div class="stat-item" style="color: #ffd700;">🟡 <b id="hdrGold">98</b></div>
+            <div class="stat-item" style="color: #ff6600;">⚔️ <b id="hdrEnergy">3/3</b></div>
+            <div class="stat-item">⏳ <span>00:00:00</span></div>
+            <div class="stat-item">🕒 <span id="hdrTime">20:55:09</span></div>
+            <div class="stat-item">🔍</div>
+            <div class="stat-item">📜</div>
         </div>
     </div>
 
-    <!-- Основной контейнер (добавили отступ сверху padding-top: 60px через инлайн, чтобы хедер не перекрывал контент) -->
-    <div class="container" style="padding-top: 60px; justify-content: flex-start;">
+    <!-- Основной контент игры -->
+    <div class="container main-content" style="justify-content: flex-start;">
         
-        <div class="text" style="margin-top: 20px; margin-bottom: 10px; font-size: 14px;" id="onlineStatus">
-            Добро пожаловать! Рядом с тобой воины онлайн.
+        <div class="text" style="margin-top: 20px; margin-bottom: 10px; font-size: 16px; font-weight: bold;" id="onlineStatus">
+            Добро пожаловать!
         </div>
 
-        <!-- Список меню как на скриншоте -->
         <div class="menu-list">
-            
             <button class="menu-item" onclick="location.href='character.html'">
                 <div class="menu-item-content">🛡️ <span>Мой Варвар</span></div>
                 <div class="menu-arrow">»</div>
@@ -51,7 +114,6 @@
                 <div class="menu-item-content">🚪 <span>Выйти из игры</span></div>
                 <div class="menu-arrow">»</div>
             </button>
-
         </div>
 
         <div class="footer" style="margin-top: 40px;">Версия Alpha 0.0.1</div>
