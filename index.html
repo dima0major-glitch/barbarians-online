@@ -99,11 +99,8 @@
                 <div class="stat-line"><span>Уровень:</span> <span class="stat-val">1</span></div>
                 <div class="stat-line"><span>Золото:</span> <span class="stat-val">100 💰</span></div>
             </div>
-            <div class="btn-register-container">
-                <button type="button" class="btn-fire" onclick="alert('Вы успешно вошли в мир силы и стали!')">⚔️ В бой!</button>
-            </div>
             <div class="nav-bar" onclick="logout()">
-                <span>🚪 Выйти из персонажа</span>
+                <span>🚪 Выйти в главное меню</span>
                 <span>»»</span>
             </div>
         </div>
@@ -112,7 +109,6 @@
     </div>
 
     <script>
-        // Функция переключения экранов игры
         function switchScreen(screenId) {
             document.getElementById('main-screen').classList.add('hidden');
             document.getElementById('auth-screen').classList.add('hidden');
@@ -122,7 +118,6 @@
             document.getElementById(screenId).classList.remove('hidden');
         }
 
-        // Функция создания нового персонажа
         function handleRegister(event) {
             event.preventDefault();
             const username = document.getElementById('reg-username').value;
@@ -134,7 +129,6 @@
             switchScreen('player-screen');
         }
 
-        // Функция входа
         function handleLogin(event) {
             event.preventDefault();
             document.getElementById('char-name').innerText = 'Странник';
@@ -143,7 +137,6 @@
             switchScreen('player-screen');
         }
 
-        // Выход на главную
         function logout() {
             switchScreen('main-screen');
         }
