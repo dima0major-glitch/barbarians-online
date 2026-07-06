@@ -1,193 +1,161 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Варвары Онлайн — Текстовая MMORPG</title>
+    <title>Варвары — Браузерная игра</title>
     <style>
-        body { background-color: #0d1216; color: #d1d5db; font-family: sans-serif; margin: 0; padding: 0; display: flex; justify-content: center; }
-        .game-container { width: 100%; max-width: 480px; background-color: #06090c; border-left: 1px solid #1f2937; border-right: 1px solid #1f2937; min-height: 100vh; box-sizing: border-box; display: flex; flex-direction: column; }
-        .header { background: linear-gradient(180deg, #0f172a 0%, #020617 100%); border-bottom: 2px solid #1e293b; padding: 12px; text-align: center; font-weight: bold; color: #38bdf8; text-transform: uppercase; font-size: 16px; letter-spacing: 1px; }
-        .banner { width: 100%; height: auto; display: block; border-bottom: 3px solid #1f2937; max-height: 250px; object-fit: cover; }
-        .description-box { padding: 20px; text-align: center; font-size: 14px; line-height: 1.6; color: #9ca3af; }
-        .btn-register-container { display: flex; justify-content: center; padding: 15px 0; background: #030712; }
-        .btn-fire { background: linear-gradient(180deg, #b45309 0%, #78350f 100%); color: #fef08a; border: 2px solid #ea580c; padding: 12px 40px; font-size: 16px; font-weight: bold; cursor: pointer; text-transform: uppercase; border-radius: 4px; display: inline-block; text-decoration: none; }
-        .nav-bar-main { background: linear-gradient(90deg, #0f172a 0%, #1e3a8a 50%, #0f172a 100%); border-top: 1px solid #2563eb; border-bottom: 1px solid #2563eb; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; color: #60a5fa; font-weight: bold; font-size: 15px; }
-        .form-screen { padding: 25px 20px; display: flex; flex-direction: column; align-items: center; }
-        .form-group { width: 100%; max-width: 300px; margin-bottom: 15px; text-align: center; }
-        .form-group label { display: block; margin-bottom: 8px; color: #e5e7eb; font-size: 15px; }
-        .form-group input, .form-group select { width: 100%; padding: 12px; background-color: #374151; border: 1px solid #4b5563; color: #fff; font-size: 16px; box-sizing: border-box; text-align: center; border-radius: 4px; }
-        
-        /* СТАТУС-БАР ИЗ НОРМАННОВ */
-        .status-panel { background-color: #080f14; border-bottom: 1px solid #101f2c; padding: 8px 12px; font-size: 13px; color: #e2e8f0; display: flex; flex-wrap: wrap; gap: 8px 14px; justify-content: center; align-items: center; }
-        .status-item { display: flex; align-items: center; gap: 4px; font-weight: bold; }
-        .status-item.name { color: #f59e0b; }
-        .status-item.lvl { color: #f43f5e; }
-        .status-item.hp { color: #ef4444; }
-        .status-item.gold { color: #eab308; }
-        .status-item.gems { color: #06b6d4; }
-        
-        .welcome-box { text-align: center; padding: 12px; font-size: 15px; background-color: #030712; border-bottom: 1px solid #111827; }
-        .welcome-title { font-size: 18px; color: #fff; margin-bottom: 4px; font-weight: bold; }
-        .welcome-online { font-size: 13px; color: #9ca3af; }
-        
-        /* МЕНЮ ИЗ НОРМАННОВ */
-        .menu-list { display: flex; flex-direction: column; background-color: #04070a; }
-        .menu-item { background: linear-gradient(180deg, #09151f 0%, #050d14 100%); border-bottom: 1px solid #102335; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; color: #93c5fd; font-size: 14px; font-weight: 500; }
-        .menu-item:hover { background: linear-gradient(180deg, #0d2233 0%, #081622 100%); color: #fff; }
-        .menu-item-left { display: flex; align-items: center; gap: 10px; }
-        .menu-item-arrow { color: #38bdf8; font-weight: bold; font-size: 12px; }
-        
-        .footer { padding: 20px; text-align: center; font-size: 11px; color: #4b5563; margin-top: auto; }
-        .hidden { display: none !important; }
+        /* Общие настройки стиля в темных тонах */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+        }
+
+        /* Шапка сайта */
+        header {
+            background-color: #0b1116;
+            padding: 10px 0;
+            border-bottom: 2px solid #3a2212;
+            font-weight: bold;
+            font-size: 20px;
+            color: #4da6ff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Контейнер для главного контента */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        /* Промо-картинка (заглушка с фоном) */
+        .promo-banner {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url('https://unsplash.com') center/cover no-repeat;
+            border: 1px solid #333;
+            box-shadow: inset 0 0 20px #000;
+        }
+
+        /* Описание игры */
+        .description {
+            font-size: 16px;
+            line-height: 1.5;
+            margin: 25px 10px;
+            color: #b0c4de;
+        }
+
+        /* Интерактивные формы / кнопки */
+        .auth-box {
+            background: #11161b;
+            border: 1px solid #24333f;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        h2 {
+            font-size: 18px;
+            margin-top: 0;
+            color: #ff9933;
+            text-transform: uppercase;
+        }
+
+        /* Поля ввода */
+        input[type="text"], input[type="password"] {
+            width: 80%;
+            padding: 10px;
+            margin: 8px 0;
+            background-color: #0d1114;
+            border: 1px solid #3a4f5e;
+            color: #fff;
+            border-radius: 3px;
+        }
+
+        /* Огненная кнопка в стиле "Начать игру" */
+        .btn-action {
+            display: inline-block;
+            background: linear-gradient(135deg, #8a2be2 0%, #4a0e4e 100%);
+            border: 2px solid #ff6600;
+            color: #fff;
+            padding: 12px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-decoration: none;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(255, 102, 0, 0.5);
+            text-shadow: 1px 1px 2px #000;
+            margin-top: 10px;
+            width: 85%;
+        }
+
+        .btn-action:hover {
+            background: linear-gradient(135deg, #ff6600 0%, #990000 100%);
+            box-shadow: 0 0 15px #ff6600;
+        }
+
+        /* Подвал (Футер) */
+        footer {
+            background-color: #0b1116;
+            padding: 15px;
+            font-size: 12px;
+            color: #666;
+            border-top: 1px solid #222;
+            margin-top: 40px;
+        }
     </style>
 </head>
 <body>
-    <div class="game-container">
-        <div class="header">⚔️ Варвары Онлайн ⚔️</div>
 
-        <!-- ГЛАВНАЯ СТРАНИЦА -->
-        <div id="main-screen">
-            <img class="banner" src="https://unsplash.com" alt="Варвары">
-            <div class="description-box">
-                Новая историческая игра Варвары!<br>
-                Массовые сражения, приключения, общение в реальном времени прямо со страниц браузера!
-            </div>
-            <div class="btn-register-container">
-                <button type="button" class="btn-fire" onclick="switchScreen('reg-screen')">Начать новую игру</button>
-            </div>
-            <div class="nav-bar-main" onclick="switchScreen('auth-screen')">
-                <span>🔹 Войти</span>
-                <span>»»</span>
-            </div>
+    <!-- Шапка игры -->
+    <header>
+        ⚔️ Варвары ⚔️
+    </header>
+
+    <div class="container">
+        <!-- Главный баннер -->
+        <div class="promo-banner"></div>
+
+        <!-- Текст-завлекалочка -->
+        <div class="description">
+            Новая историческая игра Варвары!<br>
+            Массовые сражения, приключения, общение в реальном времени прямо со страниц браузера!<br>
+            Прокачай своего героя так, как хочешь этого ты!
         </div>
 
-        <!-- ФОРМА ВХОДА -->
-        <div id="auth-screen" class="hidden">
-            <form class="form-screen" onsubmit="handleLogin(event)">
-                <div class="form-group">
-                    <label>Введите логин</label>
-                    <input type="text" id="login-input" required autocomplete="off">
-                </div>
-                <div class="form-group">
-                    <label>Введите пароль</label>
-                    <input type="password" id="password-input" required>
-                </div>
-                <button type="submit" class="btn-fire">Войти</button>
+        <!-- Блок регистрации -->
+        <div class="auth-box">
+            <h2>Создать героя</h2>
+            <form action="#" method="POST">
+                <input type="text" name="reg_username" placeholder="Придумайте имя (Ник)" required><br>
+                <input type="password" name="reg_password" placeholder="Пароль" required><br>
+                <button type="submit" class="btn-action">Начать новую игру</button>
             </form>
-            <div class="nav-bar-main" onclick="switchScreen('main-screen')">
-                <span>🏡 Главная</span>
-                <span>»»</span>
-            </div>
         </div>
 
-        <!-- СОЗДАНИЕ ПЕРСОНАЖА -->
-        <div id="reg-screen" class="hidden">
-            <form class="form-screen" onsubmit="handleRegister(event)">
-                <div class="form-group">
-                    <label>Имя твоего героя</label>
-                    <input type="text" id="reg-username" placeholder="Ник..." required autocomplete="off">
-                </div>
-                <div class="form-group">
-                    <label>Пароль для входа</label>
-                    <input type="password" id="reg-password" placeholder="Пароль..." required>
-                </div>
-                <div class="form-group">
-                    <label>Выберите класс</label>
-                    <select id="reg-class" required>
-                        <option value="Воин">⚔️ Воин (+10% Сила)</option>
-                        <option value="Разбойник">🗡️ Разбойник (+10% Ловкость)</option>
-                        <option value="Шаман">🔮 Шаман (+10% Магия)</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn-fire">Создать героя</button>
+        <!-- Блок входа для существующих игроков -->
+        <div class="auth-box">
+            <h2>Вернуться в бой</h2>
+            <form action="#" method="POST">
+                <input type="text" name="login_username" placeholder="Имя героя" required><br>
+                <input type="password" name="login_password" placeholder="Пароль" required><br>
+                <button type="submit" class="btn-action" style="background: linear-gradient(135deg, #2c3e50 0%, #0f171e 100%); border-color: #34495e;">Войти</button>
             </form>
-            <div class="nav-bar-main" onclick="switchScreen('main-screen')">
-                <span>🏡 На главную</span>
-                <span>»»</span>
-            </div>
         </div>
-
-        <!-- ЭКРАН ИГРОВОГО МЕНЮ -->
-        <div id="player-screen" class="hidden">
-            <div class="status-panel">
-                <div class="status-item name">👑 <span id="char-name">Герой</span></div>
-                <div class="status-item lvl">🔆 <span id="char-lvl">1</span></div>
-                <div class="status-item hp">❤️ <span id="char-hp">100</span></div>
-                <div class="status-item gold">💰 <span id="char-gold">100</span></div>
-                <div class="status-item gems">💎 <span id="char-gems">10</span></div>
-            </div>
-
-            <div class="welcome-box">
-                <div class="welcome-title">Добро пожаловать!</div>
-                <div class="welcome-online">Рядом с тобой 1020 норманнов (онлайн)</div>
-            </div>
-
-            <div class="menu-list">
-                <div class="menu-item" onclick="alert('Раздел События скоро откроется!')"><span class="menu-item-left">⭐ События</span><span class="menu-item-arrow">»»</span></div>
-                <div class="menu-item" onclick="alert('Раздел Задания скоро откроется!')"><span class="menu-item-left">📜 Задания</span><span class="menu-item-arrow">»»</span></div>
-                <div class="menu-item" onclick="alert('Арена Дуэлей в разработке!')"><span class="menu-item-left">⚔️ Дуэль</span><span class="menu-item-arrow">»»</span></div>
-                <div class="menu-item" onclick="alert('Поселок строится!')"><span class="menu-item-left">🏰 Поселок</span><span class="menu-item-arrow">»»</span></div>
-                <div class="menu-item" onclick="alert('Походы недоступны!')"><span class="menu-item-left">🛡️ Поход</span><span class="menu-item-arrow">»»</span></div>
-                <div class="menu-item" onclick="logout()" style="background: #1e1b4b;"><span class="menu-item-left" style="color: #fda4af;">🚪 Выйти из игры</span><span class="menu-item-arrow" style="color: #fda4af;">»»</span></div>
-            </div>
-        </div>
-
-        <div class="footer">BARBARIANS ONLINE, 2026</div>
     </div>
 
-    <script>
-        function switchScreen(id) {
-            document.getElementById('main-screen').classList.add('hidden');
-            document.getElementById('auth-screen').classList.add('hidden');
-            document.getElementById('reg-screen').classList.add('hidden');
-            document.getElementById('player-screen').classList.add('hidden');
-            document.getElementById(id).classList.remove('hidden');
-        }
+    <!-- Информация внизу страницы -->
+    <footer>
+        Об игре<br>
+        WARBARIANS GAMES LTD, ALL RIGHTS RESERVED
+    </footer>
 
-        function handleRegister(e) {
-            e.preventDefault();
-            const username = document.getElementById('reg-username').value;
-            const userClass = document.getElementById('reg-class').value;
-            const userPassword = document.getElementById('reg-password').value;
-            
-            localStorage.setItem('barbarians_name', username);
-            localStorage.setItem('barbarians_class', userClass);
-localStorage.setItem('barbarians_pass', userPassword);
-localStorage.setItem('barbarians_lvl', '1');
-localStorage.setItem('barbarians_gold', '150');
-localStorage.setItem('barbarians_gems', '15');
-loadCharacterData();
-}
-function handleLogin(e) {
-e.preventDefault();
-const loginInput = document.getElementById('login-input').value;
-const passInput = document.getElementById('password-input').value;
-const savedName = localStorage.getItem('barbarians_name');
-const savedPass = localStorage.getItem('barbarians_pass');
-if (loginInput === savedName && passInput === savedPass) {
-loadCharacterData();
-} else {
-alert('Неверный логин или пароль!');
-}
-}
-function loadCharacterData() {
-const name = localStorage.getItem('barbarians_name') || 'Странник';
-const userClass = localStorage.getItem('barbarians_class') || 'Воин';
-const lvl = localStorage.getItem('barbarians_lvl') || '1';
-const gold = localStorage.getItem('barbarians_gold') || '150';
-const gems = localStorage.getItem('barbarians_gems') || '15';
-let hp = 100;
-if (userClass === 'Воин') hp = 150;
-document.getElementById('char-name').innerText = name;
-document.getElementById('char-lvl').innerText = lvl;
-document.getElementById('char-hp').innerText = hp;
-document.getElementById('char-gold').innerText = gold;
-document.getElementById('char-gems').innerText = gems;
-switchScreen('player-screen');
-}
-window.onload = function() {
-const savedName = localStorage.getItem('barbarians_name');
-if (savedName) document.getElementById('login-input').value = savedName;
-}
+</body>
+</html>
