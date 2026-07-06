@@ -9,8 +9,8 @@
         /* Стили для верхней двухстрочной панели */
         .wap-header {
             width: 100%;
-            background: #000000; /* Глубокий черный цвет панели */
-            border-bottom: 2px solid #332211; /* Коричневая кайма снизу */
+            background: #000000;
+            border-bottom: 2px solid #332211;
             padding: 6px 10px;
             position: fixed;
             top: 0;
@@ -21,7 +21,6 @@
             color: #ffffff;
         }
 
-        /* Первая строчка: Письмо, Ник, Уровень, ХП, Слава, Серебро */
         .header-row-1 {
             display: flex;
             align-items: center;
@@ -30,13 +29,12 @@
             margin-bottom: 5px;
         }
 
-        /* Вторая строчка: Кристаллы, Золото, Бои, Песочные часы, Время, Лупа, Свиток */
         .header-row-2 {
             display: flex;
             align-items: center;
             flex-wrap: wrap;
             gap: 12px;
-            color: #b0c4de; /* Чуть приглушенный цвет для второй строки */
+            color: #b0c4de;
         }
 
         .stat-item {
@@ -46,11 +44,10 @@
         }
 
         .nickname {
-            color: #ff9900; /* Оранжевый ник */
+            color: #ff9900;
             font-weight: bold;
         }
 
-        /* Корректировка основного контейнера под новую высоту панели */
         .main-content {
             padding-top: 65px;
         }
@@ -58,25 +55,25 @@
 </head>
 <body>
 
-    <!-- Наша новая продвинутая панель -->
+    <!-- Наша двухстрочная панель ресурсов -->
     <div class="wap-header">
         <!-- СТРОКА 1 -->
         <div class="header-row-1">
             <div class="stat-item">✉️</div>
-            <div class="stat-item">🎖️ <span class="nickname" id="hdrUser">Злой_комарь</span></div>
-            <div class="stat-item" style="color: #ffcc00;">🛡️ <b id="hdrLevel">15</b></div>
-            <div class="stat-item" style="color: #ff4d4d;">❤️ <b id="hdrHp">172365</b></div>
-            <div class="stat-item" style="color: #00ffcc;">🌀 <b id="hdrMana">1590</b></div>
-            <div class="stat-item" style="color: #ffffff;">🪙 <b id="hdrSilver">184491</b></div>
+            <div class="stat-item">🎖️ <span class="nickname" id="hdrUser">Варвар</span></div>
+            <div class="stat-item" style="color: #ffcc00;">🛡️ <b id="hdrLevel">1</b></div>
+            <div class="stat-item" style="color: #ff4d4d;">❤️ <b id="hdrHp">100</b></div>
+            <div class="stat-item" style="color: #00ffcc;">🌀 <b id="hdrMana">0</b></div>
+            <div class="stat-item" style="color: #ffffff;">🪙 <b id="hdrSilver">0</b></div>
         </div>
         
         <!-- СТРОКА 2 -->
         <div class="header-row-2">
             <div class="stat-item" style="color: #00bfff;">💎 <b id="hdrDiamonds">0</b></div>
-            <div class="stat-item" style="color: #ffd700;">🟡 <b id="hdrGold">98</b></div>
+            <div class="stat-item" style="color: #ffd700;">🟡 <b id="hdrGold">0</b></div>
             <div class="stat-item" style="color: #ff6600;">⚔️ <b id="hdrEnergy">3/3</b></div>
             <div class="stat-item">⏳ <span>00:00:00</span></div>
-            <div class="stat-item">🕒 <span id="hdrTime">20:55:09</span></div>
+            <div class="stat-item">🕒 <span id="hdrTime">00:00:00</span></div>
             <div class="stat-item">🔍</div>
             <div class="stat-item">📜</div>
         </div>
@@ -89,6 +86,7 @@
             Добро пожаловать!
         </div>
 
+        <!-- Готовый список меню с рабочей кнопкой Дуэли -->
         <div class="menu-list">
             <button class="menu-item" onclick="location.href='character.html'">
                 <div class="menu-item-content">🛡️ <span>Мой Варвар</span></div>
@@ -100,7 +98,8 @@
                 <div class="menu-arrow">»</div>
             </button>
 
-            <button class="menu-item" onclick="alert('Дуэль в разработке!')">
+            <!-- Кнопка теперь железно ведёт на файл Арены -->
+            <button class="menu-item" onclick="location.href='duel.html'">
                 <div class="menu-item-content">⚔️ <span>Дуэль</span></div>
                 <div class="menu-arrow">»</div>
             </button>
