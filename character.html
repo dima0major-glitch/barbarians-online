@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Варвары Онлайн - Персонаж</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <div class="auth-box" style="max-width: 360px;">
+            <h2 id="charName">Варвар</h2>
+            <p class="text" style="font-size: 16px; margin-bottom: 20px;">Характеристики воина:</p>
+            
+            <!-- Выстраиваем статы строго друг под другом -->
+            <form style="gap: 12px; text-align: left;">
+                <div style="display: flex; justify-content: space-between; align-items: center; background: #050b12; padding: 10px; border-radius: 8px; border: 1px solid #154d72;">
+                    <span>💪 Сила: <b id="statStrength">10</b></span>
+                    <button type="button" onclick="upgradeStat('strength')" style="width: 40px; height: 35px; margin: 0; font-size: 16px; border-radius: 6px;">+</button>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; background: #050b12; padding: 10px; border-radius: 8px; border: 1px solid #154d72;">
+                    <span>🛡️ Защита: <b id="statDefense">10</b></span>
+                    <button type="button" onclick="upgradeStat('defense')" style="width: 40px; height: 35px; margin: 0; font-size: 16px; border-radius: 6px;">+</button>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; background: #050b12; padding: 10px; border-radius: 8px; border: 1px solid #154d72;">
+                    <span>❤️ Жизнь: <b id="statHealth">100</b></span>
+                    <button type="button" onclick="upgradeStat('health')" style="width: 40px; height: 35px; margin: 0; font-size: 16px; border-radius: 6px;">+</button>
+                </div>
+            </form>
+
+            <button onclick="location.href='menu.html'" class="btn-submit" style="background: #154d72; margin-top: 25px;">В меню</button>
+        </div>
+    </div>
+
+    <script src="character.js"></script>
+</body>
+</html>
