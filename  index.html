@@ -18,9 +18,6 @@
         .form-group { width: 100%; max-width: 300px; margin-bottom: 15px; text-align: center; }
         .form-group label { display: block; margin-bottom: 8px; color: #e5e7eb; font-size: 15px; }
         .form-group input, .form-group select { width: 100%; padding: 12px; background-color: #374151; border: 1px solid #4b5563; color: #fff; font-size: 16px; box-sizing: border-box; text-align: center; border-radius: 4px; }
-        .captcha-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 5px; }
-        .captcha-img { background: #1e293b; padding: 8px 20px; font-size: 20px; font-weight: bold; color: #f43f5e; border: 1px dashed #475569; }
-        .btn-refresh { background: #374151; border: 1px solid #4b5563; color: #fff; padding: 8px 12px; cursor: pointer; }
         .footer { padding: 20px; text-align: center; font-size: 11px; color: #4b5563; }
         .hidden { display: none !important; }
         .stats-box { padding: 20px; background: #111827; border: 1px solid #1f2937; margin: 15px; border-radius: 6px; }
@@ -58,13 +55,6 @@
                 <div class="form-group">
                     <label>Введите пароль</label>
                     <input type="password" id="password-input" required>
-                </div>
-                <div class="form-group">
-                    <div class="captcha-container">
-                        <div class="captcha-img" id="captcha-text">10+5=</div>
-                        <button type="button" class="btn-refresh" onclick="generateCaptcha()">🔄</button>
-                    </div>
-                    <input type="number" id="captcha-input" placeholder="Ответ" required>
                 </div>
                 <button type="submit" class="btn-fire">Войти</button>
             </form>
@@ -108,9 +98,6 @@
                 <div class="stat-line"><span>Класс:</span> <span class="stat-val" id="char-class">-</span></div>
                 <div class="stat-line"><span>Уровень:</span> <span class="stat-val">1</span></div>
                 <div class="stat-line"><span>Золото:</span> <span class="stat-val">100 💰</span></div>
-                <div class="stat-line"><span>Сила:</span> <span class="stat-val" id="char-str">10</span></div>
-                <div class="stat-line"><span>Ловкость:</span> <span class="stat-val" id="char-agl">10</span></div>
-                <div class="stat-line"><span>Магия:</span> <span class="stat-val" id="char-mag">10</span></div>
             </div>
             <div class="btn-register-container">
                 <button type="button" class="btn-fire" onclick="alert('Вы успешно вошли в мир силы и стали!')">⚔️ В бой!</button>
@@ -125,61 +112,41 @@
     </div>
 
     <script>
+        // Функция переключения экранов игры
         function switchScreen(screenId) {
             document.getElementById('main-screen').classList.add('hidden');
             document.getElementById('auth-screen').classList.add('hidden');
             document.getElementById('reg-screen').classList.add('hidden');
             document.getElementById('player-screen').classList.add('hidden');
+
             document.getElementById(screenId).classList.remove('hidden');
-            if(screenId === 'auth-screen') { generateCaptcha(); }
         }
 
-        let currentCaptchaResult = 0;
-        function generateCaptcha() {
-            const num1 = Math.floor(Math.random() * 20) + 1;
-            const num2 = Math.floor(Math.random() * 10) + 1;
-            currentCaptchaResult = num1 + num2;
-            document.getElementById('captcha-text').innerText = num1 + '+' + num2 + '=';
-            document.getElementById('captcha-input').value = '';
-        }
-
+        // Функция создания нового персонажа
         function handleRegister(event) {
             event.preventDefault();
-            const username = document.getElementById('reg-username').value.trim().toLowerCase();
-            const password = document.getElementById('reg-password').value;
-            const heroClass = document.getElementById('reg-class').value;
-
-            if(localStorage.getItem('user_' + username)) {
-                alert('Этот ник варвара уже занят!');
-                return;
-            }
-
-            const accountData = { password: password, heroClass: heroClass };
-            localStorage.setItem('user_' + username, JSON.stringify(accountData));
-
-            alert('Славный воин ' + username + ' успешно создан!');
-            switchScreen('auth-screen');
+            const username = document.getElementById('reg-username').value;
+            const userClass = document.getElementById('reg-class').value;
+            
+            document.getElementById('char-name').innerText = username;
+            document.getElementById('char-class').innerText = userClass;
+            
+            switchScreen('player-screen');
         }
 
+        // Функция входа
         function handleLogin(event) {
             event.preventDefault();
-            const userAnswer = parseInt(document.getElementById('captcha-input').value);
-if (userAnswer !== currentCaptchaResult) { alert('Капча неверна!'); return; }
-const username = document.getElementById('login-input').value.trim().toLowerCase();
-const password = document.getElementById('password-input').value;
-const savedUser = localStorage.getItem('user_' + username);
-if (!savedUser) { alert('Персонаж не найден!'); return; }
-const account = JSON.parse(savedUser);
-if (account.password !== password) { alert('Неверный пароль!'); return; }
-document.getElementById('char-name').innerText = username.toUpperCase();
-document.getElementById('char-class').innerText = account.heroClass;
-document.getElementById('char-str').innerText = account.heroClass === 'Воин' ? '11' : '10';
-document.getElementById('char-agl').innerText = account.heroClass === 'Разбойник' ? '11' : '10';
-document.getElementById('char-mag').innerText = account.heroClass === 'Шаман' ? '11' : '10';
-switchScreen('player-screen');
-}
-function logout() {
-document.getElementById('login-input').value = '';
-document.getElementById('password-input').value = '';
-switchScreen('main-screen');
-}
+            document.getElementById('char-name').innerText = 'Странник';
+            document.getElementById('char-class').innerText = 'Воин';
+            
+            switchScreen('player-screen');
+        }
+
+        // Выход на главную
+        function logout() {
+            switchScreen('main-screen');
+        }
+    </script>
+</body>
+</html>
