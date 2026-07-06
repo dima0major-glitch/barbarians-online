@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Варвары Онлайн - Главное Меню</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <!-- Упростили структуру, чтобы точно ничего не ломалось -->
+        <div class="logo" id="welcomeTitle">⚔️ Воин ⚔️</div>
+        
+        <div class="text">Ты готов заявить о себе в этом мире?</div>
+
+        <button onclick="location.href='character.html'">Мой Варвар</button>
+        <button onclick="alert('Арена в разработке!')">Арена</button>
+        <button onclick="alert('Кузница в разработке!')">Кузница</button>
+        
+        <button onclick="logout()" style="background: #721515; margin-top: 30px;">Выйти из игры</button>
+
+        <div class="footer">Версия Alpha 0.0.1</div>
+    </div>
+
+    <script src="menu.js"></script>
+</body>
+</html>
