@@ -19,51 +19,18 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('pAvatar').innerText = "🪰";
     }
 
-    // Отображаем статы на арене
     document.getElementById('pName').innerText = player.username;
     document.getElementById('pStr').innerText = pStats.strength || 15;
     document.getElementById('pDef').innerText = pStats.defense || 15;
     document.getElementById('pHp').innerText = pStats.health || 100;
 
-    // Функция отрисовки и обновления панели ресурсов
     updateHeader();
     
-    // Запускаем секундные тикающие часы и таймер энергии
+    // Часы
     setInterval(() => {
         const nowTime = new Date();
-        document.getElementById('hdrTime').innerText = nowTime.toTimeString().split(' ');
-
-        // Проверяем и крутим таймер в песочных часах
-        let energyParts = (player.stats.energy || "3/3").split('/');
-        let currentEnergy = parseInt(energyParts[0]);
-        let maxEnergy = parseInt(energyParts[1] || 3);
-
-        if (currentEnergy < maxEnergy) {
-            let timerStart = localStorage.getItem('energy_timer_start');
-            if (timerStart) {
-                let diff = Date.now() - parseInt(timerStart);
-                let regenTime = 5 * 60 * 1000;
-                let timeLeft = regenTime - diff;
-
-                if (timeLeft <= 0) {
-                    // Время вышло, регенерируем 1 бой
-                    currentEnergy = Math.min(maxEnergy, currentEnergy + 1);
-                    player.stats.energy = `${currentEnergy}/${maxEnergy}`;
-                    if (currentEnergy >= maxEnergy) {
-                        localStorage.removeItem('energy_timer_start');
-                    } else {
-                        localStorage.setItem('energy_timer_start', Date.now());
-                    }
-                    savePlayerData();
-                    updateHeader();
-                } else {
-                    let minutes = Math.floor(timeLeft / 60000);
-                    let seconds = Math.floor((timeLeft % 60000) / 1000);
-                    document.getElementById('hdrHourglass').innerText = `00:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-                }
-            }
-        } else {
-            document.getElementById('hdrHourglass').innerText = "00:00:00";
+        if (document.getElementById('hdrTime')) {
+            document.getElementById('hdrTime').innerText = nowTime.toTimeString().split(' ')[0];
         }
     }, 1000);
 
@@ -71,15 +38,15 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function updateHeader() {
-    if (!player) return;
-    document.getElementById('hdrUser').innerText = player.username;
-    document.getElementById('hdrLevel').innerText = player.stats.level || 15;
-    document.getElementById('hdrHp').innerText = player.stats.health || 172365;
-    document.getElementById('hdrMana').innerText = player.stats.mana || 1590;
-    document.getElementById('hdrSilver').innerText = player.stats.silver || 0;
-    document.getElementById('hdrDiamonds').innerText = player.stats.diamonds || 0;
-    document.getElementById('hdrGold').innerText = player.stats.gold || 0;
-    document.getElementById('hdrEnergy').innerText = player.stats.energy || "3/3";
+    if (!player || !player.stats) return;
+    if (document.getElementById('hdrUser')) document.getElementById('hdrUser').innerText = player.username;
+    if (document.getElementById('hdrLevel')) document.getElementById('hdrLevel').innerText = player.stats.level || 15;
+    if (document.getElementById('hdrHp')) document.getElementById('hdrHp').innerText = player.stats.health || 100;
+    if (document.getElementById('hdrMana')) document.getElementById('hdrMana').innerText = player.stats.mana || 0;
+    if (document.getElementById('hdrSilver')) document.getElementById('hdrSilver').innerText = player.stats.silver || 0;
+    if (document.getElementById('hdrDiamonds')) document.getElementById('hdrDiamonds').innerText = player.stats.diamonds || 0;
+    if (document.getElementById('hdrGold')) document.getElementById('hdrGold').innerText = player.stats.gold || 0;
+    if (document.getElementById('hdrEnergy')) document.getElementById('hdrEnergy').innerText = player.stats.energy || "3/3";
 }
 
 function generateBot(category, pStats) {
@@ -99,11 +66,19 @@ function generateBot(category, pStats) {
         bLevel += 3;
         bStr = Math.floor(bStr * 1.3);
         bDef = Math.floor(bDef * 1.3);
+    } else if (category === 'mercenaries') {
+        bLevel = bLevel;
+        bStr = Math.floor(bStr * 1.1);
+        bDef = Math.floor(bDef * 0.9);
+        bHp = Math.floor(bHp * 1.5);
     } else if (category === 'boss') {
         bLevel += 10;
         bStr = Math.floor(bStr * 2.5);
         bDef = Math.floor(bDef * 2.5);
         bHp = Math.floor(bHp * 2);
+    } else {
+        bStr = Math.floor(bStr * (0.9 + Math.random() * 0.2));
+        bDef = Math.floor(bDef * (0.9 + Math.random() * 0.2));
     }
 
     currentBot = {
@@ -124,37 +99,36 @@ function generateBot(category, pStats) {
 
 function executeBattle() {
     player = JSON.parse(localStorage.getItem('current_player'));
-    const pStats = player.stats || { strength: 15, defense: 15, health: 100 };
-    
-    // ПРОВЕРКА ЭНЕРГИИ ПЕРЕД УДАРОМ
-    let energyParts = (player.stats.energy || "3/3").split('/');
-    let currentEnergy = parseInt(energyParts[0]);
-    let maxEnergy = parseInt(energyParts[1] || 3);
+    if (!player.stats.energy) player.stats.energy = "3/3";
+
+    // Безопасное чтение энергии
+    let currentEnergy = parseInt(player.stats.energy);
+    if (isNaN(currentEnergy)) currentEnergy = 3;
 
     if (currentEnergy <= 0) {
         alert("❌ Закончились бои! Подождите восстановления.");
         return;
     }
 
-    // Списываем 1 энергию
+    // Тратим 1 бой
     currentEnergy--;
-    player.stats.energy = `${currentEnergy}/${maxEnergy}`;
+    player.stats.energy = currentEnergy + "/3";
 
-    // Если запустили регенерацию
-    if (!localStorage.getItem('energy_timer_start')) {
+    // Включаем таймер регенерации в памяти, если потратили первый бой
+    if (currentEnergy === 2 && !localStorage.getItem('energy_timer_start')) {
         localStorage.setItem('energy_timer_start', Date.now());
     }
     
     savePlayerData();
-    updateHeader(); // Моментально обновляем панель на экране
+    updateHeader();
 
     const report = document.getElementById('reportContent');
     const actionBtn = document.getElementById('actionBtn');
 
-    const playerDamage = Math.floor(Math.random() * 400) + (pStats.strength * 10);
+    const playerDamage = Math.floor(Math.random() * 400) + (player.stats.strength * 10);
     const botDamage = Math.floor(Math.random() * 300) + (currentBot.strength * 8);
 
-    let pLeftHp = Math.max(0, pStats.health - botDamage);
+    let pLeftHp = Math.max(0, player.stats.health - botDamage);
     let bLeftHp = Math.max(0, currentBot.health - playerDamage);
 
     let htmlResult = "";
@@ -169,7 +143,7 @@ function executeBattle() {
         player.stats.gold = (player.stats.gold || 0) + goldWin;
         player.stats.silver = (player.stats.silver || 0) + silverWin;
         savePlayerData();
-        updateHeader(); // Снова обновляем, чтобы показать выигранное золото
+        updateHeader();
 
         htmlResult += `<b style="color:#ffcc00;">Награда:</b> 🟡 +${goldWin} золота, 🪙 +${silverWin} серебра.<br><br>`;
     } else {
