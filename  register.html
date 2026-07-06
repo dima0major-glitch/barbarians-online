@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Варвары Онлайн - Вход</title>
+    <title>Варвары Онлайн - Регистрация</title>
     <!-- Подключаем общий файл стилей, который лежит в папке css -->
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -14,15 +14,16 @@
         
         <!-- Синяя карточка формы по центру -->
         <div class="auth-box">
-            <h2>Вход в игру</h2>
+            <h2>Регистрация воина</h2>
             
-            <form id="loginForm">
-                <input type="email" id="loginEmail" placeholder="Email" required>
-                <input type="password" id="loginPassword" placeholder="Пароль" required>
-                <button type="submit" class="btn-submit">Войти</button>
+            <form id="registerForm">
+                <input type="text" id="regUsername" placeholder="Имя варвара" required>
+                <input type="email" id="regEmail" placeholder="Email" required>
+                <input type="password" id="regPassword" placeholder="Пароль" required>
+                <button type="submit" class="btn-submit">Создать аккаунт</button>
             </form>
             
-            <a href="register.html" class="link-text">Нет аккаунта? Создать воина</a>
+            <a href="login.html" class="link-text">Уже есть аккаунт? Войти</a>
         </div>
 
     </div>
