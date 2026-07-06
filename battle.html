@@ -12,14 +12,29 @@
         .avatar-box { width: 100px; height: 100px; background: #0a1824; border: 2px solid #154d72; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 45px; }
         .stats-compare-list { width: 100%; max-width: 300px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 25px; }
         .compare-row { display: flex; justify-content: space-between; align-items: center; font-size: 16px; font-weight: bold; background: rgba(5, 11, 18, 0.6); padding: 6px 12px; border-radius: 6px; }
+        
+        /* Кнопка "Сражаться" */
         .btn-fight {
             width: 100%; max-width: 260px; height: 48px; background: linear-gradient(to bottom, #d45d11, #801b00); 
             border: 2px solid #ffcc00; border-radius: 8px; color: white; font-size: 18px; font-weight: bold;
             cursor: pointer; box-shadow: 0 0 15px rgba(212, 93, 17, 0.4); text-transform: uppercase; margin-bottom: 20px;
         }
         .btn-fight:active { background: linear-gradient(to bottom, #ff7a22, #a62600); }
-        .bot-dossier { width: 100%; max-width: 360px; text-align: left; font-size: 14px; color: #b0c4de; line-height: 1.6; border-top: 1px solid #142d40; padding-top: 15px; }
-        .dossier-line { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+
+        /* Окно результатов лога боя (как на скриншотах референса) */
+        .battle-report {
+            width: 100%;
+            max-width: 360px;
+            background: #04090e;
+            border: 1px solid #1a3245;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: left;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
@@ -29,21 +44,23 @@
         
         <div class="vs-text"><span id="pName" style="color:#ff9900">Ты</span> против <span id="bName" style="color:#ff4d4d">Бота</span></div>
 
+        <!-- Аватарки -->
         <div class="avatars-container">
             <div class="avatar-box" id="pAvatar">🪰</div>
             <div class="avatar-box" id="bAvatar">🧔</div>
         </div>
 
+        <!-- Сравнение характеристик -->
         <div class="stats-compare-list">
             <div class="compare-row">
-                <span id="pStr" style="color: #ffcc00;">10</span>
+                <span id="pStr" style="color: #ffcc00;">15</span>
                 <span>💪 Сила</span>
-                <span id="bStr" style="color: #ffcc00;">10</span>
+                <span id="bStr" style="color: #ffcc00;">15</span>
             </div>
             <div class="compare-row">
-                <span id="pDef" style="color: #00ffcc;">10</span>
+                <span id="pDef" style="color: #00ffcc;">15</span>
                 <span>🛡️ Защ</span>
-                <span id="bDef" style="color: #00ffcc;">10</span>
+                <span id="bDef" style="color: #00ffcc;">15</span>
             </div>
             <div class="compare-row">
                 <span id="pHp" style="color: #ff4d4d;">100</span>
@@ -52,17 +69,17 @@
             </div>
         </div>
 
+        <!-- Огненная кнопка -->
         <button class="btn-fight" id="actionBtn" onclick="executeBattle()">Сражаться</button>
 
-        <div class="bot-dossier" id="botDossierBlock">
-            <div style="font-weight: bold; color: #00ffcc; margin-bottom: 8px; font-size: 15px;">» Параметры противника:</div>
-            <div class="dossier-line">🏅 Уровень: <b id="dLevel" style="color: #fff;">1</b></div>
-            <div class="dossier-line">⭐ Опыт: <b id="dExp" style="color: #fff;">0</b></div>
-            <div class="dossier-line">🏆 Побед: <b id="dWins" style="color: #fff;">0</b></div>
-            <div class="dossier-line">🔱 Слава: <b id="dFame" style="color: #fff;">0</b></div>
+        <!-- Текстовое окно для вывода отчета боя -->
+        <div class="battle-report" id="battleReportBlock">
+            <b style="color: #00ffcc;">» Лог поединка:</b>
+            <div id="reportContent" style="margin-top: 8px; color: #a3907c;">Нажмите «Сражаться», чтобы начать поединок.</div>
         </div>
 
-        <div class="menu-list" style="margin-top: 25px;">
+        <!-- Кнопки навигации -->
+        <div class="menu-list">
             <button class="menu-item" onclick="location.href='duel.html'">
                 <div class="menu-item-content">🪓 <span>Следующий</span></div>
                 <div class="menu-arrow">»</div>
