@@ -6,7 +6,6 @@
     <title>Варвары Онлайн - Главное Меню</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Стили для верхней двухстрочной панели */
         .wap-header {
             width: 100%;
             background: #000000;
@@ -20,44 +19,16 @@
             font-size: 13px;
             color: #ffffff;
         }
-
-        .header-row-1 {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 5px;
-        }
-
-        .header-row-2 {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            color: #b0c4de;
-        }
-
-        .stat-item {
-            display: flex;
-            align-items: center;
-            gap: 3px;
-        }
-
-        .nickname {
-            color: #ff9900;
-            font-weight: bold;
-        }
-
-        .main-content {
-            padding-top: 65px;
-        }
+        .header-row-1 { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 5px; }
+        .header-row-2 { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; color: #b0c4de; }
+        .stat-item { display: flex; align-items: center; gap: 3px; }
+        .nickname { color: #ff9900; font-weight: bold; }
+        .main-content { padding-top: 65px; }
     </style>
 </head>
 <body>
 
-    <!-- Наша двухстрочная панель ресурсов -->
     <div class="wap-header">
-        <!-- СТРОКА 1 -->
         <div class="header-row-1">
             <div class="stat-item">✉️</div>
             <div class="stat-item">🎖️ <span class="nickname" id="hdrUser">Варвар</span></div>
@@ -66,8 +37,6 @@
             <div class="stat-item" style="color: #00ffcc;">🌀 <b id="hdrMana">0</b></div>
             <div class="stat-item" style="color: #ffffff;">🪙 <b id="hdrSilver">0</b></div>
         </div>
-        
-        <!-- СТРОКА 2 -->
         <div class="header-row-2">
             <div class="stat-item" style="color: #00bfff;">💎 <b id="hdrDiamonds">0</b></div>
             <div class="stat-item" style="color: #ffd700;">🟡 <b id="hdrGold">0</b></div>
@@ -79,14 +48,11 @@
         </div>
     </div>
 
-    <!-- Основной контент игры -->
     <div class="container main-content" style="justify-content: flex-start;">
-        
         <div class="text" style="margin-top: 20px; margin-bottom: 10px; font-size: 16px; font-weight: bold;" id="onlineStatus">
             Добро пожаловать!
         </div>
 
-        <!-- Готовый список меню с рабочей кнопкой Дуэли -->
         <div class="menu-list">
             <button class="menu-item" onclick="location.href='character.html'">
                 <div class="menu-item-content">🛡️ <span>Мой Варвар</span></div>
@@ -98,8 +64,8 @@
                 <div class="menu-arrow">»</div>
             </button>
 
-            <!-- Кнопка теперь железно ведёт на файл Арены -->
-            <button class="menu-item" onclick="location.href='duel.html'">
+            <!-- ВЕРНУЛИ НАЗАД: кнопка просто показывает сообщение и не ломает игру -->
+            <button class="menu-item" onclick="alert('Арена временно на техобслуживании!')">
                 <div class="menu-item-content">⚔️ <span>Дуэль</span></div>
                 <div class="menu-arrow">»</div>
             </button>
