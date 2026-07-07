@@ -14,16 +14,14 @@ const BattleSystem = {
     enemy: null,
 
     init: function() {
-        // Проверяем наличие GameStateManager, если его нет — создаем безопасный объект
         if (window.GameStateManager && typeof window.GameStateManager.getPlayerStats === 'function') {
             this.player = window.GameStateManager.getPlayerStats();
         } else {
             this.player = JSON.parse(localStorage.getItem('player_stats')) || {
-                name: "Варвар", avatar: "🪰", str: 15, def: 15, hp: 100, maxHp: 100, silver: 100, gold: 0
+                name: "Варвар", avatar: "🪰", str: 15, def: 15, hp: 100, maxHp: 100, silver: 100, gold: 0, energy: 3, maxEnergy: 3
             };
         }
 
-        // Если имя в локалсторадже пустое или сбросилось, берем текст прямо из хедера (там у тебя Admin)
         const headerUser = document.getElementById('hdrUser');
         if (headerUser && (!this.player.name || this.player.name === "Варвар")) {
             this.player.name = headerUser.innerText.trim();
@@ -34,6 +32,21 @@ const BattleSystem = {
         
         this.enemy = { ...template, maxHp: template.hp };
         this.renderStats();
+
+        // ПРОВЕРКА ЭНЕРГИИ ПЕРЕД БОЕМ: если 0, отключаем кнопку сразу
+        if (Number(this.player.energy) <= 0) {
+            const actionBtn = document.getElementById('actionBtn');
+            if (actionBtn) {
+                actionBtn.disabled = true;
+                actionBtn.innerText = "НЕТ ЭНЕРГИИ";
+                actionBtn.style.background = "#333";
+                actionBtn.style.border = "2px solid #555";
+            }
+            const report = document.getElementById('reportContent');
+            if (report) {
+                report.innerHTML = `<span style="color:#ff3333; font-weight:bold;">У вас закончилась энергия для боев! Подождите восстановления (1 ед. каждые 5 минут).</span>`;
+            }
+        }
     },
 
     renderStats: function() {
@@ -59,7 +72,20 @@ const BattleSystem = {
     },
 
     startCombatSimulation: function() {
-        // Принудительно страхуем жизни от пустых значений, чтобы цикл не зависал
+        // Дополнительная проверка на всякий случай
+        if (Number(this.player.energy) <= 0) return;
+
+        // СПИСЫВАЕМ 1 ЭНЕРГИЮ ЗА БОЙ
+        let currentEnergy = Number(this.player.energy);
+        let maxEnergy = Number(this.player.maxEnergy || 3);
+        
+        // Если это первый бой при полной энергии, ставим временную метку старта регена
+        if (currentEnergy === maxEnergy) {
+            this.player.lastEnergyTime = Date.now();
+        }
+        
+        this.player.energy = currentEnergy - 1;
+
         let pCurrentHp = Number(this.player.hp) || 100;
         let bCurrentHp = Number(this.enemy.hp) || 100;
         
@@ -76,7 +102,6 @@ const BattleSystem = {
         while (pCurrentHp > 0 && bCurrentHp > 0 && round <= 30) {
             logHtml += `<div style="color: #ffd700; margin-top: 5px; font-weight: bold;">📜 Раунд ${round}</div>`;
 
-            // Удар игрока
             let pDmg = this.calculateDamage(this.player.str, this.enemy.def);
             bCurrentHp = Math.max(0, bCurrentHp - pDmg);
             totalPlayerDamage += pDmg;
@@ -88,7 +113,6 @@ const BattleSystem = {
                 break;
             }
 
-            // Удар бота
             let bDmg = this.calculateDamage(this.enemy.str, this.player.def);
             pCurrentHp = Math.max(0, pCurrentHp - bDmg);
             totalEnemyDamage += bDmg;
@@ -96,14 +120,17 @@ const BattleSystem = {
 
             if (pCurrentHp <= 0) {
                 isWin = false;
-                let currentSilver = window.GameStateManager ? Number(this.player.silver) : Number(localStorage.getItem('hdrSilver'));
-                let silverPenalty = Math.round((currentSilver || 0) * 0.10);
+                let currentSilver = Number(this.player.silver) || 0;
+                let silverPenalty = Math.round(currentSilver * 0.10);
                 this.penalizePlayer(silverPenalty);
                 break;
             }
 
             round++;
         }
+
+        // Если мы не выиграли и не проиграли досрочно (просто сохраняем трату энергии)
+        this.saveAndSync();
 
         document.getElementById('setupScreen').style.display = 'none';
         document.getElementById('screenTitle').innerText = "Итог боя";
@@ -149,13 +176,11 @@ const BattleSystem = {
     rewardPlayer: function(silverReward, goldReward) {
         this.player.silver = (Number(this.player.silver) || 0) + silverReward;
         this.player.gold = (Number(this.player.gold) || 0) + goldReward;
-        this.saveAndSync();
     },
 
     penalizePlayer: function(silverPenalty) {
         let currentSilver = Number(this.player.silver) || 0;
         this.player.silver = Math.max(0, currentSilver - silverPenalty);
-        this.saveAndSync();
     },
 
     saveAndSync: function() {
@@ -166,7 +191,6 @@ const BattleSystem = {
     }
 };
 
-// Привязываем глобальный вызов для HTML кнопки
 window.executeBattle = function() {
     BattleSystem.startCombatSimulation();
 };

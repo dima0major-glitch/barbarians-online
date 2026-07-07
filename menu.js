@@ -1,107 +1,142 @@
-document.addEventListener('DOMContentLoaded', () => {
-    let currentPlayer = JSON.parse(localStorage.getItem('current_player'));
+// Глобальный менеджер состояния персонажа для игры "Варвары"
 
-    if (!currentPlayer) {
-        window.location.href = 'index.html';
-        return;
-    }
+const GameStateManager = {
+    defaultStats: {
+        name: "Варвар",
+        level: 1,
+        hp: 100,
+        maxHp: 100,
+        mana: 1590,
+        silver: 3759,
+        diamonds: 0,
+        gold: 100,
+        energy: 3,       // Теперь это число для расчетов
+        maxEnergy: 3,    // Максимум энергии
+        lastEnergyTime: Date.now(), // Время последнего обновления энергии
+        str: 15,
+        def: 15,
+        avatar: "🧔"
+    },
 
-    if (!currentPlayer.stats) currentPlayer.stats = {};
-    
-    if (currentPlayer.stats.level === undefined) currentPlayer.stats.level = 1;
-    if (currentPlayer.stats.health === undefined) currentPlayer.stats.health = 100;
-    if (currentPlayer.stats.mana === undefined) currentPlayer.stats.mana = 1590;
-    if (currentPlayer.stats.silver === undefined) currentPlayer.stats.silver = 3759;
-    if (currentPlayer.stats.diamonds === undefined) currentPlayer.stats.diamonds = 0;
-    if (currentPlayer.stats.gold === undefined) currentPlayer.stats.gold = 141;
-    if (currentPlayer.stats.energy === undefined) currentPlayer.stats.energy = "3/3";
-
-    // Логика восстановления боев (каждые 5 минут)
-    function checkEnergyRegen() {
-        let currentEnergy = parseInt(currentPlayer.stats.energy);
-        if (isNaN(currentEnergy)) currentEnergy = 3;
-
-        if (currentEnergy < 3) {
-            let timerStart = localStorage.getItem('energy_timer_start');
-            if (timerStart) {
-                let now = Date.now();
-                let timePassed = now - parseInt(timerStart);
-                let regenTime = 5 * 60 * 1000; // 5 минут
-
-                if (timePassed >= regenTime) {
-                    let restored = Math.floor(timePassed / regenTime);
-                    currentEnergy = Math.min(3, currentEnergy + restored);
-                    currentPlayer.stats.energy = currentEnergy + "/3";
-                    
-                    if (currentEnergy >= 3) {
-                        localStorage.removeItem('energy_timer_start');
-                    } else {
-                        let remainder = timePassed % regenTime;
-                        localStorage.setItem('energy_timer_start', now - remainder);
-                    }
-                    
-                    localStorage.setItem('current_player', JSON.stringify(currentPlayer));
-                    let allUsers = JSON.parse(localStorage.getItem('game_users')) || [];
-                    const idx = allUsers.findIndex(u => u.email === currentPlayer.email);
-                    if (idx !== -1) {
-                        allUsers[idx] = currentPlayer;
-                        localStorage.setItem('game_users', JSON.stringify(allUsers));
-                    }
-                }
-            }
+    getPlayerStats: function() {
+        let stats = localStorage.getItem('player_stats');
+        if (!stats) {
+            stats = this.defaultStats;
+            localStorage.setItem('player_stats', JSON.stringify(stats));
+            return stats;
         }
-    }
+        let parsed = JSON.parse(stats);
+        return { ...this.defaultStats, ...parsed };
+    },
 
-    checkEnergyRegen();
+    // Логика восстановления энергии (1 единица раз в 5 минут)
+    checkEnergyRegen: function(player) {
+        let now = Date.now();
+        let currentEnergy = Number(player.energy);
+        let maxEnergy = Number(player.maxEnergy || 3);
 
-    // Заполнение хедера
-    document.getElementById('hdrUser').innerText = currentPlayer.username;
-    document.getElementById('hdrLevel').innerText = currentPlayer.stats.level;
-    document.getElementById('hdrHp').innerText = currentPlayer.stats.health;
-    document.getElementById('hdrMana').innerText = currentPlayer.stats.mana;
-    document.getElementById('hdrSilver').innerText = currentPlayer.stats.silver;
-    document.getElementById('hdrDiamonds').innerText = currentPlayer.stats.diamonds;
-    document.getElementById('hdrGold').innerText = currentPlayer.stats.gold;
-    document.getElementById('hdrEnergy').innerText = currentPlayer.stats.energy;
+        if (currentEnergy >= maxEnergy) {
+            player.lastEnergyTime = now;
+            localStorage.setItem('player_stats', JSON.stringify(player));
+            return 0; // Восстанавливать не нужно, уже макс
+        }
 
-    const randomOnline = Math.floor(Math.random() * 50) + 1050;
-    document.getElementById('onlineStatus').innerHTML = `Добро пожаловать!<br><span style="font-size:14px; color:#ddd; font-weight:normal;">Рядом с тобой ${randomOnline} норманнов (онлайн)</span>`;
+        let timePassed = now - (player.lastEnergyTime || now);
+        let regenInterval = 5 * 60 * 1000; // 5 минут в миллисекундах
 
-    // Секундный таймер для тиканья песочных часов
-    setInterval(() => {
-        const nowTime = new Date();
-        document.getElementById('hdrTime').innerText = nowTime.toTimeString().split(' ')[0];
+        if (timePassed >= regenInterval) {
+            let energyToAdd = Math.floor(timePassed / regenInterval);
+            player.energy = Math.min(maxEnergy, currentEnergy + energyToAdd);
+            // Сдвигаем точку отсчета на остаток времени
+            player.lastEnergyTime = now - (timePassed % regenInterval);
+            localStorage.setItem('player_stats', JSON.stringify(player));
+        }
 
-        let currentEnergy = parseInt(currentPlayer.stats.energy);
-        // Ищем ячейку рядом со значком песочных часов ⏳
-        const hourglass = document.getElementById('hdrTime').previousElementSibling; 
+        // Возвращаем, сколько миллисекунд осталось до следующего восстановления
+        return regenInterval - (Date.now() - player.lastEnergyTime);
+    },
 
-        if (currentEnergy < 3) {
-            let timerStart = localStorage.getItem('energy_timer_start');
-            if (timerStart) {
-                let diff = Date.now() - parseInt(timerStart);
-                let regenTime = 5 * 60 * 1000;
-                let timeLeft = regenTime - diff;
+    updateHeaderUI: function() {
+        const player = this.getPlayerStats();
+        
+        // Считаем реген энергии перед выводом на экран
+        let msLeft = this.checkEnergyRegen(player);
 
-                if (timeLeft <= 0) {
-                    checkEnergyRegen();
-                    document.getElementById('hdrEnergy').innerText = currentPlayer.stats.energy;
+        const fields = {
+            'hdrUser': player.name,
+            'hdrLevel': player.level,
+            'hdrHp': player.hp,
+            'hdrMana': player.mana,
+            'hdrSilver': player.silver,
+            'hdrDiamonds': player.diamonds,
+            'hdrGold': player.gold,
+            'hdrEnergy': `${player.energy}/${player.maxEnergy || 3}`
+        };
+
+        for (const [id, value] of Object.entries(fields)) {
+            const element = document.getElementById(id);
+            if (element) element.innerText = value;
+        }
+
+        // Запуск часов реального времени и таймера энергии в песочных часах
+        this.startHeaderClocks(msLeft, player.energy < (player.maxEnergy || 3));
+    },
+
+    startHeaderClocks: function(msLeft, needsRegen) {
+        // Очистим старые интервалы, чтобы не двоились
+        if (window.headerClockInterval) clearInterval(window.headerClockInterval);
+
+        const updateClock = () => {
+            // 1. Обычные системные часы (🕒)
+            const timeElement = document.getElementById('hdrTime');
+            if (timeElement) {
+                const now = new Date();
+                const hrs = String(now.getHours()).padStart(2, '0');
+                const mins = String(now.getMinutes()).padStart(2, '0');
+                const secs = String(now.getSeconds()).padStart(2, '0');
+                timeElement.innerText = `${hrs}:${mins}:${secs}`;
+            }
+
+            // 2. Таймер песочных часов (⏳)
+            const hourglassElement = document.getElementById('hdrHourglass');
+            if (hourglassElement) {
+                if (!needsRegen) {
+                    hourglassElement.innerText = "00:00:00";
                 } else {
-                    let minutes = Math.floor(timeLeft / 60000);
-                    let seconds = Math.floor((timeLeft % 60000) / 1000);
-                    let displayStr = `00:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-                    if (hourglass && hourglass.tagName === 'SPAN') {
-                        hourglass.innerText = displayStr;
+                    // Уменьшаем оставшееся время на 1 секунду (1000мс)
+                    msLeft -= 1000;
+                    if (msLeft <= 0) {
+                        // Если время вышло, перезапускаем всю страницу для начисления энергии
+                        clearInterval(window.headerClockInterval);
+                        window.location.reload();
+                        return;
                     }
+                    
+                    let totalSecs = Math.floor(msLeft / 1000);
+                    let m = String(Math.floor(totalSecs / 60)).padStart(2, '0');
+                    let s = String(totalSecs % 60).padStart(2, '0');
+                    hourglassElement.innerText = `00:${m}:${s}`;
                 }
             }
-        } else {
-            if (hourglass && hourglass.tagName === 'SPAN') hourglass.innerText = "00:00:00";
-        }
-    }, 1000);
-});
+        };
 
-function logout() {
-    localStorage.removeItem('current_player');
-    window.location.href = 'index.html';
-}
+        updateClock();
+        window.headerClockInterval = setInterval(updateClock, 1000);
+    },
+
+    logout: function() {
+        if (confirm("Вы действительно хотите сбросить игровой прогресс персонажа?")) {
+            localStorage.removeItem('player_stats');
+            localStorage.removeItem('arena_category');
+            window.location.href = 'menu.html';
+        }
+    }
+};
+
+window.logout = function() {
+    GameStateManager.logout();
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+    GameStateManager.updateHeaderUI();
+});
