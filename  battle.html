@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Варвары</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .wap-header {
+            width: 100%; background: #000000; border-bottom: 2px solid #332211; padding: 6px 10px;
+            position: fixed; top: 0; left: 0; z-index: 1000; font-family: Arial, sans-serif; font-size: 13px; color: #ffffff;
+        }
+        .header-row-1 { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 5px; }
+        .header-row-2 { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; color: #b0c4de; }
+        .stat-item { display: flex; align-items: center; gap: 3px; }
+        .nickname { color: #ff9900; font-weight: bold; }
+        
+        .battle-title { color: #00ffcc; font-size: 20px; font-weight: bold; margin-bottom: 15px; text-transform: uppercase; text-align: center; border-bottom: 1px solid #1a3245; padding-bottom: 5px; }
+        .vs-text { font-size: 16px; color: #ddd; margin: 15px 0; font-weight: bold; }
+        .avatars-container { display: flex; justify-content: space-around; width: 100%; max-width: 360px; margin-bottom: 20px; }
+        .avatar-box { width: 100px; height: 100px; background: #0a1824; border: 2px solid #154d72; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 45px; }
+        .stats-compare-list { width: 100%; max-width: 300px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 25px; }
+        .compare-row { display: flex; justify-content: space-between; align-items: center; font-size: 16px; font-weight: bold; background: rgba(5, 11, 18, 0.6); padding: 6px 12px; border-radius: 6px; }
+        
+        .btn-fight {
+            width: 100%; max-width: 260px; height: 48px; background: linear-gradient(to bottom, #d45d11, #801b00); 
+            border: 2px solid #ffcc00; border-radius: 8px; color: white; font-size: 18px; font-weight: bold;
+            cursor: pointer; text-transform: uppercase; margin-bottom: 20px;
+        }
+        
+        /* Новый блок итогов боя в wap-стиле */
+        .battle-result-screen { width: 100%; max-width: 380px; text-align: left; font-size: 15px; line-height: 1.6; color: #ffffff; padding: 10px; display: none; }
+        .result-status-win { color: #00ff00; font-weight: bold; font-size: 17px; }
+        .result-status-lose { color: #ff3333; font-weight: bold; font-size: 17px; }
+        .silver-icon { display: inline-block; width: 14px; height: 14px; background: #ccc; border-radius: 50%; box-shadow: inset -2px -2px 4px #666; margin-right: 3px; vertical-align: middle; }
+        
+        .battle-report { width: 100%; max-width: 360px; background: #04090e; border: 1px solid #1a3245; border-radius: 8px; padding: 12px; text-align: left; font-size: 14px; line-height: 1.5; color: #ffffff; margin-top: 15px; display: none; }
+        .main-content { padding-top: 75px; }
+    </style>
+</head>
+<body>
+
+    <!-- Таблица ресурсов на экране боя -->
+    <div class="wap-header">
+        <div class="header-row-1">
+            <div class="stat-item">✉️</div>
+            <div class="stat-item">🎖️ <span class="nickname" id="hdrUser">Варвар</span></div>
+            <div class="stat-item" style="color: #ffcc00;">🛡️ <b id="hdrLevel">1</b></div>
+            <div class="stat-item" style="color: #ff4d4d;">❤️ <b id="hdrHp">100</b></div>
+            <div class="stat-item" style="color: #00ffcc;">🌀 <b id="hdrMana">0</b></div>
+            <div class="stat-item" style="color: #ffffff;">🪙 <b id="hdrSilver">0</b></div>
+        </div>
+        <div class="header-row-2">
+            <div class="stat-item" style="color: #00bfff;">💎 <b id="hdrDiamonds">0</b></div>
+            <div class="stat-item" style="color: #ffd700;">🟡 <b id="hdrGold">0</b></div>
+            <div class="stat-item" style="color: #ff6600;">⚔️ <b id="hdrEnergy">3/3</b></div>
+            <div class="stat-item">⏳ <span id="hdrHourglass">00:00:00</span></div>
+            <div class="stat-item">🕒 <span id="hdrTime">00:00:00</span></div>
+            <div class="stat-item">🔍</div>
+            <div class="stat-item">📜</div>
+        </div>
+    </div>
+
+    <div class="container main-content" style="justify-content: flex-start;">
+        
+        <!-- Заголовок меняется скриптом на "Итог боя" -->
+        <div class="battle-title" id="screenTitle">Сражения</div>
+
+        <!-- Экран подготовки к бою (скрывается после нажатия) -->
+        <div id="setupScreen" style="width:100%; display:flex; flex-direction:column; align-items:center;">
+            <div class="vs-text"><span id="pName" style="color:#ff9900">Ты</span> против <span id="bName" style="color:#ff4d4d">Бота</span></div>
+
+            <div class="avatars-container">
+                <div class="avatar-box" id="pAvatar">🪰</div>
+                <div class="avatar-box" id="bAvatar">🧔</div>
+            </div>
+
+            <div class="stats-compare-list">
+                <div class="compare-row">
+                    <span id="pStr">15</span>
+                    <span>💪 Сила</span>
+                    <span id="bStr">15</span>
+                </div>
+                <div class="compare-row">
+                    <span id="pDef">15</span>
+                    <span>🛡️ Защ</span>
+                    <span id="bDef">15</span>
+                </div>
+                <div class="compare-row">
+                    <span id="pHp">100</span>
+                    <span>❤️ Жизнь</span>
+                    <span id="bHp">100</span>
+                </div>
+            </div>
+
+            <button class="btn-fight" id="actionBtn" onclick="executeBattle()">Сражаться</button>
+        </div>
+
+        <!-- ЭКРАН ИТОГОВ БОЯ (Показывается вместо верхнего) -->
+        <div class="battle-result-screen" id="resultScreen">
+            <!-- Сюда сгенерируется сводка как на скрине -->
+        </div>
+
+        <!-- Нижнее WAP-меню навигации -->
+        <div class="menu-list" style="margin-top: 15px; width: 100%;">
+            <button class="menu-item" onclick="location.href='duel.html'">
+                <div class="menu-item-content">🪓 <span>Следующий</span></div>
+                <div class="menu-arrow">»</div>
+            </button>
+            <button class="menu-item" onclick="location.href='duel.html'">
+                <div class="menu-item-content">⚔️ <span>Дуэль</span></div>
+                <div class="menu-arrow">»</div>
+            </button>
+            <button class="menu-item" onclick="location.href='character.html'">
+                <div class="menu-item-content">📊 <span>Характеристики</span></div>
+                <div class="menu-arrow">»</div>
+            </button>
+            <button class="menu-item" onclick="alert('Экипировка в разработке!')">
+                <div class="menu-item-content">🛡️ <span>Экипировка (В разработке)</span></div>
+                <div class="menu-arrow">»</div>
+            </button>
+            <button class="menu-item" onclick="alert('Бонусы в разработке!')">
+                <div class="menu-item-content">👑 <span>Бонусы (В разработке)</span></div>
+                <div class="menu-arrow">»</div>
+            </button>
+            <button class="menu-item" onclick="toggleDetails()">
+                <div class="menu-item-content">📝 <span>Детали (Посмотреть раунды)</span></div>
+                <div class="menu-arrow">»</div>
+            </button>
+            <button class="menu-item" onclick="location.href='menu.html'" style="background: #142d40 !important; margin-top: 10px;">
+                <div class="menu-item-content">🏠 <span>Главная</span></div>
+                <div class="menu-arrow">»</div>
+            </button>
+        </div>
+
+        <!-- Скрытый блок подробных раундов (разворачивается по кнопке Детали) -->
+        <div class="battle-report" id="battleReport">
+            <b style="color: #00ffcc;">» Пораундовый лог урона:</b>
+            <div id="reportContent" style="margin-top: 8px; color: #a3907c;"></div>
+        </div>
+
+    </div>
+
+    <script src="menu.js"></script>
+    <script src="battle.js"></script>
+    <script>
+        // Функция открытия/закрытия подробных раундов
+        function toggleDetails() {
+            const report = document.getElementById('battleReport');
+            if (report.style.display === 'block') {
+                report.style.display = 'none';
+            } else {
+                report.style.display = 'block';
+                report.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    </script>
+</body>
+</html>
