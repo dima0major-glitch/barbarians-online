@@ -33,12 +33,12 @@ const BattleSystem = {
         this.enemy = { ...template, maxHp: template.hp };
         this.renderStats();
 
-        // ПРОВЕРКА ЭНЕРГИИ ПЕРЕД БОЕМ: если 0, отключаем кнопку сразу
+        // Проверка энергии перед боем: если 0, выводим твою надпись "НЕТУ БОЕВ"
         if (Number(this.player.energy) <= 0) {
             const actionBtn = document.getElementById('actionBtn');
             if (actionBtn) {
                 actionBtn.disabled = true;
-                actionBtn.innerText = "НЕТ ЭНЕРГИИ";
+                actionBtn.innerText = "НЕТУ БОЕВ";
                 actionBtn.style.background = "#333";
                 actionBtn.style.border = "2px solid #555";
             }
@@ -72,14 +72,11 @@ const BattleSystem = {
     },
 
     startCombatSimulation: function() {
-        // Дополнительная проверка на всякий случай
         if (Number(this.player.energy) <= 0) return;
 
-        // СПИСЫВАЕМ 1 ЭНЕРГИЮ ЗА БОЙ
         let currentEnergy = Number(this.player.energy);
         let maxEnergy = Number(this.player.maxEnergy || 3);
         
-        // Если это первый бой при полной энергии, ставим временную метку старта регена
         if (currentEnergy === maxEnergy) {
             this.player.lastEnergyTime = Date.now();
         }
@@ -129,7 +126,6 @@ const BattleSystem = {
             round++;
         }
 
-        // Если мы не выиграли и не проиграли досрочно (просто сохраняем трату энергии)
         this.saveAndSync();
 
         document.getElementById('setupScreen').style.display = 'none';
