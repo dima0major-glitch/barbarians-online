@@ -87,8 +87,11 @@
     <script src="menu.js"></script>
     <script>
         function startFight(category) {
+            // Сохраняем выбранную категорию в локальную память браузера
             localStorage.setItem('arena_category', category);
-            window.location.href = 'battle.html';
+            
+            // Используем точку в начале пути для точной относительной адресации на GitHub Pages
+            window.location.href = './battle.html';
         }
     </script>
 </body>
