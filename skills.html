@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Варвары - Тренировка</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .wap-header { width: 100%; background: #000000; border-bottom: 2px solid #332211; padding: 6px 10px; position: fixed; top: 0; left: 0; z-index: 1000; font-family: Arial, sans-serif; font-size: 13px; color: #ffffff; }
+        .header-row-1 { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 5px; }
+        .header-row-2 { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; color: #b0c4de; }
+        .stat-item { display: flex; align-items: center; gap: 3px; }
+        .nickname { color: #ff9900; font-weight: bold; cursor: pointer; }
+        
+        .train-title { color: #ffd700; font-size: 20px; font-weight: bold; margin-bottom: 15px; text-transform: uppercase; text-align: center; border-bottom: 1px solid #332211; padding-bottom: 5px; }
+        .stats-table { width: 100%; max-width: 360px; margin: 0 auto; display: flex; flex-direction: column; gap: 6px; padding: 0 10px; box-sizing: border-box; }
+        .stat-upgrade-row { display: flex; justify-content: space-between; align-items: center; background: rgba(10, 24, 36, 0.5); padding: 8px 12px; border-radius: 6px; border: 1px solid #112a40; }
+        .stat-details { text-align: left; display: flex; flex-direction: column; }
+        .stat-label { font-size: 14px; font-weight: bold; color: #ffffff; }
+        .stat-count { font-size: 13px; color: #00ffcc; margin-top: 2px; }
+        .btn-plus { background: linear-gradient(to bottom, #d45d11, #801b00); border: 1px solid #ffcc00; border-radius: 4px; color: white; font-size: 12px; font-weight: bold; padding: 6px 10px; cursor: pointer; text-align: center; min-width: 85px; line-height: 1.3; }
+        .main-content { padding-top: 75px; }
+    </style>
+</head>
+<body>
+
+    <!-- Хедер ресурсов -->
+    <div class="wap-header">
+        <div class="header-row-1">
+            <div class="stat-item">✉️</div>
+            <div class="stat-item">🎖️ <span class="nickname" id="hdrUser" onclick="location.href='character.html'">Варвар</span></div>
+            <div class="stat-item" style="color: #ffcc00;">🛡️ <b id="hdrLevel">1</b></div>
+            <div class="stat-item" style="color: #ff4d4d;">❤️ <b id="hdrHp">100</b></div>
+            <div class="stat-item" style="color: #00ffcc;">🌀 <b id="hdrMana">0</b></div>
+            <div class="stat-item" style="color: #ffffff;">🪙 <b id="hdrSilver">0</b></div>
+        </div>
+        <div class="header-row-2">
+            <div class="stat-item" style="color: #00bfff;">💎 <b id="hdrDiamonds">0</b></div>
+            <div class="stat-item" style="color: #ffd700;">🟡 <b id="hdrGold">0</b></div>
+            <div class="stat-item" style="color: #ff6600;">⚔️ <b id="hdrEnergy">3/3</b></div>
+            <div class="stat-item">⏳ <span id="hdrHourglass">00:00:00</span></div>
+            <div class="stat-item">🕒 <span id="hdrTime">00:00:00</span></div>
+            <div class="stat-item">🔍</div>
+            <div class="stat-item">📜</div>
+        </div>
+    </div>
+
+    <div class="container main-content" style="justify-content: flex-start;">
+        <div class="train-title">Тренировка</div>
+
+        <!-- Таблица 5 статов из канона -->
+        <div class="stats-table">
+            <div class="stat-upgrade-row"><div class="stat-details"><span class="stat-label">💪 Сила</span><span class="stat-count">Значение: <b id="val_str">5</b></span></div><button class="btn-plus" onclick="upgrade('str')">➕ Качать<br><span id="cost_str">20</span> 🪙</button></div>
+            <div class="stat-upgrade-row"><div class="stat-details"><span class="stat-label">🛡️ Защита</span><span class="stat-count">Значение: <b id="val_def">5</b></span></div><button class="btn-plus" onclick="upgrade('def')">➕ Качать<br><span id="cost_def">20</span> 🪙</button></div>
+            <div class="stat-upgrade-row"><div class="stat-details"><span class="stat-label">🏃 Ловкость</span><span class="stat-count">Значение: <b id="val_agi">5</b></span></div><button class="btn-plus" onclick="upgrade('agi')">➕ Качать<br><span id="cost_agi">20</span> 🪙</button></div>
+            <div class="stat-upgrade-row"><div class="stat-details"><span class="stat-label">⚡ Мастерство</span><span class="stat-count">Значение: <b id="val_mst">5</b></span></div><button class="btn-plus" onclick="upgrade('mst')">➕ Качать<br><span id="cost_mst">20</span> 🪙</button></div>
+            <div class="stat-upgrade-row"><div class="stat-details"><span class="stat-label">➕ Живучесть</span><span class="stat-count">Значение: <b id="val_vit">5</b></span></div><button class="btn-plus" onclick="upgrade('vit')">➕ Качать<br><span id="cost_vit">20</span> 🪙</button></div>
+        </div>
+
+        <div class="menu-list" style="width: 100%; margin-top: 20px;">
+            <button class="menu-item" onclick="location.href='character.html'" style="background: #142d40 !important;"><div class="menu-item-content">↩️ <span>Назад к Герою</span></div><div class="menu-arrow">»</div></button>
+        </div>
+    </div>
+
+    <script src="menu.js"></script>
+    <script>
+        const ProfileManager = {
+            player: null,
+            init: function() {
+                this.player = window.GameStateManager ? window.GameStateManager.getPlayerStats() : JSON.parse(localStorage.getItem('player_stats')) || {};
+                this.player.str = Number(this.player.str) || 5;
+                this.player.def = Number(this.player.def) || 5;
+                this.player.agi = Number(this.player.agi) || 5;
+                this.player.mst = Number(this.player.mst) || 5;
+                this.player.vit = Number(this.player.vit) || 5;
+                localStorage.setItem('player_stats', JSON.stringify(this.player));
+                this.renderUI();
+            },
+            calculateCost: function(val) { return 20 + (val - 5) * 5; },
+            renderUI: function() {
+                const stats = ['str', 'def', 'agi', 'mst', 'vit'];
+                stats.forEach(s => {
+                    document.getElementById('val_' + s).innerText = this.player[s];
+                    document.getElementById('cost_' + s).innerText = this.calculateCost(this.player[s]);
+                });
+            },
+            buyUpgrade: function(type) {
+                let currentVal = Number(this.player[type]);
+                let cost = this.calculateCost(currentVal);
+                let silver = Number(this.player.silver) || 0;
+                if (silver >= cost) {
+                    this.player.silver = silver - cost;
+                    this.player[type] = currentVal + 1;
+                    if (type === 'vit') {
+                        this.player.maxHp = 100 + (this.player.vit - 5) * 12;
+                        this.player.hp = this.player.maxHp;
+                    }
+                    localStorage.setItem('player_stats', JSON.stringify(this.player));
+                    this.renderUI();
+                    if (window.GameStateManager) window.GameStateManager.updateHeaderUI();
+                } else { alert("Недостаточно серебра!"); }
+            }
+        };
+        function upgrade(type) { ProfileManager.buyUpgrade(type); }
+        document.addEventListener("DOMContentLoaded", () => { ProfileManager.init(); });
+    </script>
+</body>
+</html>

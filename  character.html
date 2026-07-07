@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Варвары - Герой</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .wap-header { width: 100%; background: #000000; border-bottom: 2px solid #332211; padding: 6px 10px; position: fixed; top: 0; left: 0; z-index: 1000; font-family: Arial, sans-serif; font-size: 13px; color: #ffffff; }
+        .header-row-1 { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 5px; }
+        .header-row-2 { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; color: #b0c4de; }
+        .stat-item { display: flex; align-items: center; gap: 3px; }
+        .nickname { color: #ff9900; font-weight: bold; cursor: pointer; }
+        
+        .hero-title { color: #ffffff; font-size: 18px; font-weight: bold; margin-bottom: 10px; text-align: center; }
+        .hero-avatar { width: 100%; text-align: center; margin: 15px 0; }
+        .hero-avatar img { max-width: 140px; height: auto; }
+        .main-content { padding-top: 75px; }
+    </style>
+</head>
+<body>
+
+    <!-- Хедер ресурсов -->
+    <div class="wap-header">
+        <div class="header-row-1">
+            <div class="stat-item">✉️</div>
+            <div class="stat-item">🎖️ <span class="nickname" id="hdrUser" onclick="location.href='character.html'">Варвар</span></div>
+            <div class="stat-item" style="color: #ffcc00;">🛡️ <b id="hdrLevel">1</b></div>
+            <div class="stat-item" style="color: #ff4d4d;">❤️ <b id="hdrHp">100</b></div>
+            <div class="stat-item" style="color: #00ffcc;">🌀 <b id="hdrMana">0</b></div>
+            <div class="stat-item" style="color: #ffffff;">🪙 <b id="hdrSilver">0</b></div>
+        </div>
+        <div class="header-row-2">
+            <div class="stat-item" style="color: #00bfff;">💎 <b id="hdrDiamonds">0</b></div>
+            <div class="stat-item" style="color: #ffd700;">🟡 <b id="hdrGold">0</b></div>
+            <div class="stat-item" style="color: #ff6600;">⚔️ <b id="hdrEnergy">3/3</b></div>
+            <div class="stat-item">⏳ <span id="hdrHourglass">00:00:00</span></div>
+            <div class="stat-item">🕒 <span id="hdrTime">00:00:00</span></div>
+            <div class="stat-item">🔍</div>
+            <div class="stat-item">📜</div>
+        </div>
+    </div>
+
+    <div class="container main-content" style="justify-content: flex-start;">
+        <div class="hero-title">Герой</div>
+        
+        <!-- Аватарка комарика из оригинала (пока в виде смайлика, потом заменим на картинку варвара) -->
+        <div class="hero-avatar" style="font-size: 80px;">🦟</div>
+
+        <!-- Список WAP-меню один в один как на твоем скрине -->
+        <div class="menu-list" style="width: 100%;">
+            <button class="menu-item" onclick="alert('Детали в разработке!')">
+                <div class="menu-item-content">🤠 <span>Детали</span></div>
+                <div class="menu-arrow">»</div>
+            </button>
+            <button class="menu-item" onclick="alert('Анкета в разработке!')">
+                <div class="menu-item-content">📝 <span>Анкета (редактирование)</span></div>
+                <div class="menu-arrow">»</div>
+            </button>
+            <button class="menu-item" onclick="alert('Профиль в разработке!')">
+                <div class="menu-item-content">🤠 <span>Профиль</span></div>
+                <div class="menu-arrow">»</div>
+            </button>
+            
+            <!-- РАБОЧАЯ КНОПКА ТРЕНИРОВКИ -->
+            <button class="menu-item" onclick="location.href='skills.html'">
+                <div class="menu-item-content">💪 <span>Тренировка</span></div>
+                <div class="menu-arrow">»</div>
+            </button>
+            
+            <button class="menu-item" onclick="alert('Экипировка в разработке!')">
+                <div class="menu-item-content">⚔️ <span>Экипировка</span></div>
+                <div class="menu-arrow">»</div>
+            </button>
+            <button class="menu-item" onclick="alert('Надписи в разработке!')">
+                <div class="menu-item-content">📝 <span>Надписи</span></div>
+                <div class="menu-arrow">»</div>
+            </button>
+            <button class="menu-item" onclick="alert('Аватарка в разработке!')">
+                <div class="menu-item-content">🖼️ <span>Аватарка</span></div>
+                <div class="menu-arrow">»</div>
+            </button>
+            <button class="menu-item" onclick="alert('Пригласить друзей в разработке!')">
+                <div class="menu-item-content">🧑‍🤝‍🧑 <span>Пригласить</span></div>
+                <div class="menu-arrow">»</div>
+            </button>
+            <button class="menu-item" onclick="location.href='menu.html'" style="background: #142d40 !important; margin-top: 10px;">
+                <div class="menu-item-content">↩️ <span>Назад</span></div>
+                <div class="menu-arrow">»</div>
+            </button>
+        </div>
+    </div>
+
+    <script src="menu.js"></script>
+</body>
+</html>
