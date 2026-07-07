@@ -14,12 +14,19 @@ const BattleSystem = {
     enemy: null,
 
     init: function() {
+        // Проверяем наличие GameStateManager, если его нет — создаем безопасный объект
         if (window.GameStateManager && typeof window.GameStateManager.getPlayerStats === 'function') {
             this.player = window.GameStateManager.getPlayerStats();
         } else {
             this.player = JSON.parse(localStorage.getItem('player_stats')) || {
-                name: "Злой_комарь", avatar: "🪰", str: 15, def: 15, hp: 100, maxHp: 100, silver: 500, gold: 0
+                name: "Варвар", avatar: "🪰", str: 15, def: 15, hp: 100, maxHp: 100, silver: 100, gold: 0
             };
+        }
+
+        // Если имя в локалсторадже пустое или сбросилось, берем текст прямо из хедера (там у тебя Admin)
+        const headerUser = document.getElementById('hdrUser');
+        if (headerUser && (!this.player.name || this.player.name === "Варвар")) {
+            this.player.name = headerUser.innerText.trim();
         }
 
         const category = localStorage.getItem('arena_category') || 'equal';
@@ -34,34 +41,38 @@ const BattleSystem = {
         if (document.getElementById('bName')) document.getElementById('bName').innerText = this.enemy.name;
         if (document.getElementById('pAvatar')) document.getElementById('pAvatar').innerText = this.player.avatar || "🪰";
         if (document.getElementById('bAvatar')) document.getElementById('bAvatar').innerText = this.enemy.avatar;
-        if (document.getElementById('pStr')) document.getElementById('pStr').innerText = this.player.str;
+        if (document.getElementById('pStr')) document.getElementById('pStr').innerText = this.player.str || 15;
         if (document.getElementById('bStr')) document.getElementById('bStr').innerText = this.enemy.str;
-        if (document.getElementById('pDef')) document.getElementById('pDef').innerText = this.player.def;
+        if (document.getElementById('pDef')) document.getElementById('pDef').innerText = this.player.def || 15;
         if (document.getElementById('bDef')) document.getElementById('bDef').innerText = this.enemy.def;
-        if (document.getElementById('pHp')) document.getElementById('pHp').innerText = this.player.hp;
+        if (document.getElementById('pHp')) document.getElementById('pHp').innerText = this.player.hp || 100;
         if (document.getElementById('bHp')) document.getElementById('bHp').innerText = this.enemy.hp;
     },
 
     calculateDamage: function(attackerStr, defenderDef) {
-        let baseDmg = attackerStr;
+        let baseDmg = Number(attackerStr) || 10;
+        let baseDef = Number(defenderDef) || 10;
         let randomFactor = 0.85 + Math.random() * 0.3;
         let finalDmg = Math.round(baseDmg * randomFactor);
-        finalDmg = finalDmg - Math.round(defenderDef * 0.4);
+        finalDmg = finalDmg - Math.round(baseDef * 0.4);
         return Math.max(3, finalDmg);
     },
 
     startCombatSimulation: function() {
-        let pCurrentHp = Number(this.player.hp);
-        let bCurrentHp = Number(this.enemy.hp);
+        // Принудительно страхуем жизни от пустых значений, чтобы цикл не зависал
+        let pCurrentHp = Number(this.player.hp) || 100;
+        let bCurrentHp = Number(this.enemy.hp) || 100;
         
-        let totalPlayerDamage = 0; // Считаем суммарный урон игрока
-        let totalEnemyDamage = 0;  // Считаем суммарный урон бота
+        let totalPlayerDamage = 0;
+        let totalEnemyDamage = 0;
         
         let logHtml = "";
         let round = 1;
         let isWin = false;
 
-        // Симуляция раундов
+        const actionBtn = document.getElementById('actionBtn');
+        if (actionBtn) actionBtn.disabled = true;
+
         while (pCurrentHp > 0 && bCurrentHp > 0 && round <= 30) {
             logHtml += `<div style="color: #ffd700; margin-top: 5px; font-weight: bold;">📜 Раунд ${round}</div>`;
 
@@ -85,8 +96,8 @@ const BattleSystem = {
 
             if (pCurrentHp <= 0) {
                 isWin = false;
-                let currentSilver = Number(this.player.silver) || 0;
-                let silverPenalty = Math.round(currentSilver * 0.10);
+                let currentSilver = window.GameStateManager ? Number(this.player.silver) : Number(localStorage.getItem('hdrSilver'));
+                let silverPenalty = Math.round((currentSilver || 0) * 0.10);
                 this.penalizePlayer(silverPenalty);
                 break;
             }
@@ -94,11 +105,9 @@ const BattleSystem = {
             round++;
         }
 
-        // Прячем экран подготовки, меняем заголовок на "Итог боя"
         document.getElementById('setupScreen').style.display = 'none';
         document.getElementById('screenTitle').innerText = "Итог боя";
 
-        // Формируем чистый экран результатов по шаблону со скрина
         const resultScreen = document.getElementById('resultScreen');
         resultScreen.style.display = 'block';
 
@@ -113,7 +122,7 @@ const BattleSystem = {
             resultHtml += `<div>Серебро: <span class="silver-icon"></span>${this.enemy.silver}</div>`;
         } else {
             let currentSilver = Number(this.player.silver) || 0;
-            let penalty = Math.round((currentSilver / 0.9) * 0.1); // Примерный штраф
+            let penalty = Math.round(currentSilver * 0.1);
             resultHtml += `<div class="result-status-lose">Ты проиграл</div>`;
             resultHtml += `<div>Причина - соперник оказался сильнее в бою</div>`;
             resultHtml += `<div style="margin-top:10px; font-weight:bold;">Штраф:</div>`;
@@ -134,8 +143,6 @@ const BattleSystem = {
         `;
 
         resultScreen.innerHTML = resultHtml;
-
-        // Записываем детальные раунды в скрытый лог ниже
         document.getElementById('reportContent').innerHTML = logHtml;
     },
 
@@ -159,6 +166,7 @@ const BattleSystem = {
     }
 };
 
+// Привязываем глобальный вызов для HTML кнопки
 window.executeBattle = function() {
     BattleSystem.startCombatSimulation();
 };
