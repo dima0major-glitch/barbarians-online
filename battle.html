@@ -28,7 +28,6 @@
             cursor: pointer; text-transform: uppercase; margin-bottom: 20px;
         }
         
-        /* Новый блок итогов боя в wap-стиле */
         .battle-result-screen { width: 100%; max-width: 380px; text-align: left; font-size: 15px; line-height: 1.6; color: #ffffff; padding: 10px; display: none; }
         .result-status-win { color: #00ff00; font-weight: bold; font-size: 17px; }
         .result-status-lose { color: #ff3333; font-weight: bold; font-size: 17px; }
@@ -63,10 +62,9 @@
 
     <div class="container main-content" style="justify-content: flex-start;">
         
-        <!-- Заголовок меняется скриптом на "Итог боя" -->
         <div class="battle-title" id="screenTitle">Сражения</div>
 
-        <!-- Экран подготовки к бою (скрывается после нажатия) -->
+        <!-- Экран подготовки к бою -->
         <div id="setupScreen" style="width:100%; display:flex; flex-direction:column; align-items:center;">
             <div class="vs-text"><span id="pName" style="color:#ff9900">Ты</span> против <span id="bName" style="color:#ff4d4d">Бота</span></div>
 
@@ -96,10 +94,8 @@
             <button class="btn-fight" id="actionBtn" onclick="executeBattle()">Сражаться</button>
         </div>
 
-        <!-- ЭКРАН ИТОГОВ БОЯ (Показывается вместо верхнего) -->
-        <div class="battle-result-screen" id="resultScreen">
-            <!-- Сюда сгенерируется сводка как на скрине -->
-        </div>
+        <!-- Экран итогов боя -->
+        <div class="battle-result-screen" id="resultScreen"></div>
 
         <!-- Нижнее WAP-меню навигации -->
         <div class="menu-list" style="margin-top: 15px; width: 100%;">
@@ -133,7 +129,7 @@
             </button>
         </div>
 
-        <!-- Скрытый блок подробных раундов (разворачивается по кнопке Детали) -->
+        <!-- Скрытый блок подробных раундов -->
         <div class="battle-report" id="battleReport">
             <b style="color: #00ffcc;">» Пораундовый лог урона:</b>
             <div id="reportContent" style="margin-top: 8px; color: #a3907c;"></div>
@@ -144,7 +140,6 @@
     <script src="menu.js"></script>
     <script src="battle.js"></script>
     <script>
-        // Функция открытия/закрытия подробных раундов
         function toggleDetails() {
             const report = document.getElementById('battleReport');
             if (report.style.display === 'block') {
