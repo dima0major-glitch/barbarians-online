@@ -2,7 +2,7 @@
 
 const GameStateManager = {
     defaultStats: {
-        name: "Варвар",
+        name: "Admin",    // Ставим имя по умолчанию, как у тебя на скринах
         level: 1,
         hp: 100,
         maxHp: 100,
@@ -10,12 +10,15 @@ const GameStateManager = {
         silver: 3759,
         diamonds: 0,
         gold: 100,
-        energy: 3,       // Теперь это число для расчетов
-        maxEnergy: 3,    // Максимум энергии
-        lastEnergyTime: Date.now(), // Время последнего обновления энергии
-        str: 15,
-        def: 15,
-        avatar: "🧔"
+        energy: 3,       
+        maxEnergy: 3,    
+        lastEnergyTime: Date.now(), 
+        str: 5,           // Базовые параметры строго по 5
+        def: 5,
+        agi: 5,
+        mst: 5,
+        vit: 5,
+        avatar: "🪰"
     },
 
     getPlayerStats: function() {
@@ -38,28 +41,24 @@ const GameStateManager = {
         if (currentEnergy >= maxEnergy) {
             player.lastEnergyTime = now;
             localStorage.setItem('player_stats', JSON.stringify(player));
-            return 0; // Восстанавливать не нужно, уже макс
+            return 0; 
         }
 
         let timePassed = now - (player.lastEnergyTime || now);
-        let regenInterval = 5 * 60 * 1000; // 5 минут в миллисекундах
+        let regenInterval = 5 * 60 * 1000; 
 
         if (timePassed >= regenInterval) {
             let energyToAdd = Math.floor(timePassed / regenInterval);
             player.energy = Math.min(maxEnergy, currentEnergy + energyToAdd);
-            // Сдвигаем точку отсчета на остаток времени
             player.lastEnergyTime = now - (timePassed % regenInterval);
             localStorage.setItem('player_stats', JSON.stringify(player));
         }
 
-        // Возвращаем, сколько миллисекунд осталось до следующего восстановления
         return regenInterval - (Date.now() - player.lastEnergyTime);
     },
 
     updateHeaderUI: function() {
         const player = this.getPlayerStats();
-        
-        // Считаем реген энергии перед выводом на экран
         let msLeft = this.checkEnergyRegen(player);
 
         const fields = {
@@ -78,16 +77,13 @@ const GameStateManager = {
             if (element) element.innerText = value;
         }
 
-        // Запуск часов реального времени и таймера энергии в песочных часах
         this.startHeaderClocks(msLeft, player.energy < (player.maxEnergy || 3));
     },
 
     startHeaderClocks: function(msLeft, needsRegen) {
-        // Очистим старые интервалы, чтобы не двоились
         if (window.headerClockInterval) clearInterval(window.headerClockInterval);
 
         const updateClock = () => {
-            // 1. Обычные системные часы (🕒)
             const timeElement = document.getElementById('hdrTime');
             if (timeElement) {
                 const now = new Date();
@@ -97,16 +93,13 @@ const GameStateManager = {
                 timeElement.innerText = `${hrs}:${mins}:${secs}`;
             }
 
-            // 2. Таймер песочных часов (⏳)
             const hourglassElement = document.getElementById('hdrHourglass');
             if (hourglassElement) {
                 if (!needsRegen) {
                     hourglassElement.innerText = "00:00:00";
                 } else {
-                    // Уменьшаем оставшееся время на 1 секунду (1000мс)
                     msLeft -= 1000;
                     if (msLeft <= 0) {
-                        // Если время вышло, перезапускаем всю страницу для начисления энергии
                         clearInterval(window.headerClockInterval);
                         window.location.reload();
                         return;
@@ -128,7 +121,7 @@ const GameStateManager = {
         if (confirm("Вы действительно хотите сбросить игровой прогресс персонажа?")) {
             localStorage.removeItem('player_stats');
             localStorage.removeItem('arena_category');
-            window.location.href = 'menu.html';
+            window.location.href = 'index.html'; // Ведет на экран входа
         }
     }
 };

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Твой запрос: меняем название вверху браузера -->
+    <!-- Название вверху браузера -->
     <title>Варвары</title>
     <link rel="stylesheet" href="style.css">
     <style>
@@ -23,8 +23,8 @@
         .header-row-1 { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 5px; }
         .header-row-2 { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; color: #b0c4de; }
         .stat-item { display: flex; align-items: center; gap: 3px; }
-        .nickname { color: #ff9900; font-weight: bold; }
-        .main-content { padding-top: 65px; }
+        .nickname { color: #ff9900; font-weight: bold; cursor: pointer; }
+        .main-content { padding-top: 75px; }
     </style>
 </head>
 <body>
@@ -33,7 +33,8 @@
     <div class="wap-header">
         <div class="header-row-1">
             <div class="stat-item">✉️</div>
-            <div class="stat-item">🎖️ <span class="nickname" id="hdrUser">Варвар</span></div>
+            <!-- Клик на ник в хедере тоже теперь надежно ведет в профиль -->
+            <div class="stat-item">🎖️ <span class="nickname" id="hdrUser" onclick="location.href='character.html'">Варвар</span></div>
             <div class="stat-item" style="color: #ffcc00;">🛡️ <b id="hdrLevel">1</b></div>
             <div class="stat-item" style="color: #ff4d4d;">❤️ <b id="hdrHp">100</b></div>
             <div class="stat-item" style="color: #00ffcc;">🌀 <b id="hdrMana">0</b></div>
@@ -56,6 +57,7 @@
         </div>
 
         <div class="menu-list">
+            <!-- Рабочая кнопка профиля персонажа -->
             <button class="menu-item" onclick="location.href='character.html'">
                 <div class="menu-item-content">🛡️ <span>Мой Варвар</span></div>
                 <div class="menu-arrow">»</div>
@@ -72,6 +74,7 @@
                 <div class="menu-item-content">🏰 <span>Посёлок</span></div>
                 <div class="menu-arrow">»</div>
             </button>
+            <!-- Безопасный сброс кэша памяти на телефоне -->
             <button class="menu-item" onclick="logout()" style="background: #240a0a !important; border-top: 2px solid #501010 !important;">
                 <div class="menu-item-content">🚪 <span>Выйти из игры</span></div>
                 <div class="menu-arrow">»</div>
@@ -80,6 +83,7 @@
         <div class="footer" style="margin-top: 40px;">Версия Alpha 0.0.1</div>
     </div>
 
+    <!-- Подключаем исправленный менеджер данных -->
     <script src="menu.js"></script>
 </body>
 </html>
