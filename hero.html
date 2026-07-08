@@ -3,122 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Профиль Варвара</title>
+    <title>Герой</title>
     <style>
-        body { 
-            background-color: #000c14; 
-            color: #fff; 
-            font-family: sans-serif; 
-            margin: 0; 
-            padding: 0;
-            max-width: 480px;
-            margin: 0 auto;
-        }
-        .top-bar {
-            background-color: #061019;
-            padding: 8px;
-            font-size: 13px;
-            border-bottom: 2px solid #1a334d;
-            text-align: center;
-            line-height: 1.6;
-        }
-        .content { padding: 10px; }
-        .status-block { font-size: 14px; line-height: 1.6; margin-bottom: 15px; }
-        .text-green { color: #00ff00; }
-        
-        .header-title {
-            background: linear-gradient(to right, #403018, #8c6a35, #403018);
-            border: 1px solid #d4af37;
-            text-align: center;
-            padding: 4px;
-            font-size: 14px;
-            font-weight: bold;
-            margin: 15px 0 8px 0;
-        }
-        .stat-list { list-style: none; padding: 0; margin: 0; font-size: 14px; }
-        .stat-list li {
-            padding: 6px 5px;
-            border-bottom: 1px dashed #1a334d;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .btn-plus {
-            background: #d4af37;
-            color: #000;
-            border: 1px solid #fff;
-            font-weight: bold;
-            padding: 2px 8px;
-            cursor: pointer;
-            font-size: 12px;
-            border-radius: 3px;
-        }
-        .price-label { font-size: 11px; color: #aaa; margin-right: 5px; }
+        body { background: #000b14; color: #fff; font-family: sans-serif; margin: 0; padding: 0; font-size: 14px; }
+        .header { background: linear-gradient(180deg, #0d1a26 0%, #050d14 100%); padding: 8px; text-align: center; font-weight: bold; font-size: 16px; color: #00ffcc; border-bottom: 1px solid #1a334d; }
+        .content { padding: 10px; text-align: center; }
+        .avatar-img { max-width: 150px; max-height: 200px; border: 2px solid #1a334d; border-radius: 5px; background: #030a12; object-fit: contain; margin-bottom: 10px; }
+        .menu-list { margin-top: 15px; border-top: 1px solid #1a334d; }
+        .menu-item { display: flex; justify-content: space-between; align-items: center; background: linear-gradient(180deg, #07131f 0%, #030a12 100%); padding: 10px 12px; border-bottom: 1px solid #102233; text-decoration: none; color: #3b9eff; font-weight: bold; }
+        .menu-item .arrow { color: #00ffcc; font-family: monospace; }
     </style>
 </head>
 <body>
 
-    <!-- Панель ресурсов -->
-    <div class="top-bar">
-        <span>👑 Ур: <b id="ui-level">1</b></span> | 
-        <span>❤️ HP: <b id="ui-hp">100/100</b></span> <br>
-        <span>🪙 Серебро: <b id="ui-gold">500</b></span> | 
-        <span>💎 Рубины: <b id="ui-rubies">10</b></span>
-    </div>
+    <div class="header">Герой</div>
 
     <div class="content">
-        <!-- Блок общей информации -->
-        <div class="status-block">
-            🟢 <span class="text-green" style="font-weight:bold">Сейчас играет</span><br>
-            ⚔️ Герой: <b id="ui-name">Загрузка...</b><br>
-            🛡️ Клан: <span id="ui-clan">Загрузка...</span><br>
-            🤝 Братство: <span id="ui-brotherhood" class="text-green">Загрузка...</span> (твое)<br>
-            🌿 Слава: <span id="ui-fame">0</span><br>
-            👥 Статус: <span id="ui-status">Загрузка...</span>
-        </div>
-
-        <!-- Раздел параметров -->
-        <div class="header-title">Параметры</div>
-        <ul class="stat-list">
-            <li>
-                <span>💪 Сила: <b id="val-strength">5</b></span>
-                <div>
-                    <span class="price-label" id="price-strength">(Цена: 50)</span>
-                    <button class="btn-plus" onclick="trainStat('strength')">[+]</button>
-                </div>
-            </li>
-            <li>
-                <span>🛡️ Защита: <b id="val-defense">5</b></span>
-                <div>
-                    <span class="price-label" id="price-defense">(Цена: 50)</span>
-                    <button class="btn-plus" onclick="trainStat('defense')">[+]</button>
-                </div>
-            </li>
-            <li>
-                <span>🏃 Ловкость: <b id="val-agility">5</b></span>
-                <div>
-                    <span class="price-label" id="price-agility">(Цена: 50)</span>
-                    <button class="btn-plus" onclick="trainStat('agility')">[+]</button>
-                </div>
-            </li>
-            <li>
-                <span>⚡ Мастерство: <b id="val-mastery">5</b></span>
-                <div>
-                    <span class="price-label" id="price-mastery">(Цена: 50)</span>
-                    <button class="btn-plus" onclick="trainStat('mastery')">[+]</button>
-                </div>
-            </li>
-            <li>
-                <span>➕ Живучесть: <b id="val-vitality">5</b></span>
-                <div>
-                    <span class="price-label" id="price-vitality">(Цена: 50)</span>
-                    <button class="btn-plus" onclick="trainStat('vitality')">[+]</button>
-                </div>
-            </li>
-        </ul>
+        <!-- Сюда автоматически подставится нужная аватарка -->
+        <img id="hero-current-avatar" src="" alt="Герой" class="avatar-img">
     </div>
 
-    <!-- Подключаем логику скрипта -->
-    <script src="app.js"></script>
+    <!-- Кнопки меню из оригинальной игры -->
+    <div class="menu-list">
+        <a href="#" class="menu-item"><span>🤠 Детали</span><span class="arrow">&gt;&gt;</span></a>
+        <a href="#" class="menu-item"><span>📝 Анкета (редактирование)</span><span class="arrow">&gt;&gt;</span></a>
+        <a href="#" class="menu-item"><span>👑 Профиль</span><span class="arrow">&gt;&gt;</span></a>
+        <a href="#" class="menu-item"><span>💪 Тренировка</span><span class="arrow">&gt;&gt;</span></a>
+        <a href="#" class="menu-item"><span>⚔️ Экипировка</span><span class="arrow">&gt;&gt;</span></a>
+        <a href="#" class="menu-item"><span>📜 Надписи</span><span class="arrow">&gt;&gt;</span></a>
+        
+        <!-- НАША СВЯЗАННАЯ КНОПКА АВАТАРКИ -->
+        <a href="аватарка.html" class="menu-item"><span>🖼️ Аватарка</span><span class="arrow">&gt;&gt;</span></a>
+        
+        <a href="#" class="menu-item"><span>👥 Пригласить</span><span class="arrow">&gt;&gt;</span></a>
+        <a href="index.html" class="menu-item"><span>↩️ Назад (В поселок)</span><span class="arrow">&gt;&gt;</span></a>
+    </div>
+
+    <script>
+        // Код подгрузки аватарки на экран героя
+        (function() {
+            let defData = { gold: 184491, hp: 172365, level: 15, energy: 3, fame: 83258, nextRegenTime: 0, stats: { strength: 5, defense: 5, agility: 5, mastery: 5, vitality: 5 } };
+            let heroData = JSON.parse(localStorage.getItem('barb_save')) || defData;
+            
+            // Если аватарки в сохранении нет, ставим дефолтного варвара с мечом
+            let currentAvatar = heroData.avatarUrl || "https://nocookie.net";
+            document.getElementById('hero-current-avatar').src = currentAvatar;
+        })();
+    </script>
 </body>
 </html>
