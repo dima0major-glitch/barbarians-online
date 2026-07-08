@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Военный поход</title>
+    <style>
+        body { background: #000; color: #fff; font-family: sans-serif; padding: 15px; text-align: center; }
+        .btn { display: block; width: 100%; max-width: 400px; margin: 12px auto; padding: 15px; background: #1f2937; color: #fff; border: 1px solid #374151; border-radius: 5px; font-weight: bold; font-size: 16px; cursor: pointer; }
+        .btn-gold { background: #1e3a8a; border-color: #3b82f6; }
+        .btn-back { background: #dc2626; border: none; margin-top: 30px; width: auto; padding: 10px 25px; }
+        .info { color: #cbd5e1; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+    <h2>🗺️ Военный Поход</h2>
+    <p class="info">Суточный лимит: 360 минут в день.</p>
+
+    <!-- Кнопки выбора времени похода -->
+    <button class="btn" onclick="startExpedition(10)">🏃 Быстрый набег (10 мин)</button>
+    <button class="btn" onclick="startExpedition(60)">🐎 Патруль окраин (60 мин)</button>
+    <button class="btn" onclick="startExpedition(180)">🏕️ Долгий поход (180 мин)</button>
+    <button class="btn btn-gold" onclick="startExpedition(360)">👑 Великий поход (360 мин) — 6 золота!</button>
+
+    <!-- Кнопка возврата на главную страницу поселка -->
+    <a href="index.html"><button class="btn btn-back">⬅️ Вернуться в Поселок</button></a>
+
+    <!-- Подключаем логику, чтобы функции startExpedition заработали на этой странице -->
+    <script>
+        // Подтягиваем данные игрока из браузера
+        let defData = { gold: 184491, hp: 172365, level: 15, energy: 3, fame: 83258, nextRegenTime: 0, stats: { strength: 5, defense: 5, agility: 5, mastery: 5, vitality: 5 } };
+        let heroData = JSON.parse(localStorage.getItem('barb_save')) || defData;
+        
+        function save() { 
+            localStorage.setItem('barb_save', JSON.stringify(heroData)); 
+        }
+    </script>
+    <script src="поход.js"></script>
+
+</body>
+</html>
