@@ -19,18 +19,18 @@ window.startExpedition = function(minutes) {
 
     if (minutes < 10 || minutes > 360) {
         alert("Время похода должно быть от 10 до 360 минут!");
-        return;
+        return false;
     }
 
     if (heroData.expeditionTimeUsed + minutes > 360) {
         let timeLeft = 360 - heroData.expeditionTimeUsed;
         alert(`Превышен суточный лимит! Сегодня вы можете пойти в поход максимум на ${timeLeft} мин.`);
-        return;
+        return false;
     }
 
     if (heroData.activeExpedition) {
         alert("Вы уже находитесь в походе!");
-        return;
+        return false;
     }
 
     let now = Math.floor(Date.now() / 1000);
@@ -41,10 +41,10 @@ window.startExpedition = function(minutes) {
     
     heroData.expeditionTimeUsed += minutes;
     save();
-    alert(`Вы отправились в поход на ${minutes} минут!`);
+    return true; // Возвращаем true для успешного запуска плашки
 };
 
-// Функция автоматической проверки: вернулся ли персонаж из похода
+// Функция автоматической проверки завершения похода
 window.checkExpeditionEnd = function() {
     if (!heroData.activeExpedition) return;
 
@@ -53,7 +53,7 @@ window.checkExpeditionEnd = function() {
     if (now >= heroData.activeExpedition.endTime) {
         let mins = heroData.activeExpedition.durationMinutes;
 
-        // Расчет награды: серебро зависит от минут, золото строго 6 за 360 минут
+        // Расчет награды серебра и золота
         let silverReward = Math.floor((mins / 10) * (Math.floor(Math.random() * 1001) + 500)); 
         let goldReward = Math.floor((mins / 360) * 6); 
 
@@ -62,7 +62,7 @@ window.checkExpeditionEnd = function() {
             heroData.fame += goldReward; 
         }
 
-        // ЗАПИСЫВАЕМ ИСТОРИЮ ДЛЯ СТИЛЬНОГО ЭКРАНА
+        // Записываем историю похода
         heroData.lastExpeditionReward = {
             mins: mins,
             silver: silverReward,
