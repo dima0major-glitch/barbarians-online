@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Barbarians Online</title>
+<title>Barbarians Online - Главная</title>
 <style>
 body { background-color: #000c14; color: #fff; font-family: sans-serif; margin: 0; padding: 0; max-width: 480px; margin: 0 auto; }
-.logo-header { background: #030a10; text-align: center; padding: 10px 0; border-bottom: 1px solid #1a334d; font-size: 20px; font-weight: bold; color: #00a2ff; text-shadow: 0 0 5px #00a2ff; }
+.logo-header { background: #030a10; text-align: center; padding: 12px 0; border-bottom: 2px solid #1a334d; font-size: 22px; font-weight: bold; color: #00a2ff; text-shadow: 0 0 8px #00a2ff; cursor: pointer; user-select: none; }
 .event-bar { background: #061019; padding: 6px; text-align: center; font-size: 12px; border-bottom: 1px solid #1a334d; color: #ffd700; }
 .top-bar { background-color: #061019; padding: 8px; font-size: 13px; border-bottom: 2px solid #1a334d; text-align: center; line-height: 1.8; position: sticky; top: 0; z-index: 100; }
 .top-bar a { color: #ffd700; text-decoration: none; font-weight: bold; cursor: pointer; }
@@ -14,127 +14,117 @@ body { background-color: #000c14; color: #fff; font-family: sans-serif; margin: 
 .game-screen { display: none; }
 .game-screen.active { display: block; }
 .header-title { background: linear-gradient(to right, #002233, #004466, #002233); border: 1px solid #00a2ff; text-align: center; padding: 6px; font-size: 14px; font-weight: bold; margin: 10px 0; color: #00ffcc; text-transform: uppercase; }
-.arena-img { width: 100%; max-width: 280px; height: auto; display: block; margin: 10px auto; border: 1px solid #1a334d; }
 .menu-list { display: flex; flex-direction: column; gap: 1px; background-color: #1a334d; margin: 10px 0; }
-.menu-btn { background: linear-gradient(to bottom, #102538, #0a1824); color: #fff; border: none; padding: 12px 15px; text-align: left; font-size: 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: bold; width: 100%; box-sizing: border-box; }
-.menu-btn:hover { background: #16324d; }
-.menu-btn .arrow { color: #00a2ff; }
-.vs-table { width: 100%; text-align: center; margin: 15px 0; font-size: 14px; }
-.vs-table td { padding: 6px; }
-.btn-fight { background: linear-gradient(to bottom, #b33600, #ff6600, #b33600); color: #fff; border: 1px solid #ffcc00; font-weight: bold; padding: 10px 30px; cursor: pointer; font-size: 16px; border-radius: 4px; display: block; margin: 15px auto; text-shadow: 1px 1px 2px #000; box-shadow: 0 0 10px #ff6600; }
-.stat-list { list-style: none; padding: 0; margin: 0; font-size: 13px; }
-.stat-list li { padding: 5px; border-bottom: 1px dashed #1a334d; }
-.text-green { color: #00ff00; }
-.text-red { color: #ff3333; }
+.menu-btn, .menu-link { background: linear-gradient(to bottom, #102538, #0a1824); color: #fff; border: none; padding: 12px 15px; text-align: left; font-size: 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: bold; width: 100%; box-sizing: border-box; text-decoration: none; }
+.menu-btn:hover, .menu-link:hover { background: #16324d; }
+.arrow { color: #00a2ff; }
+.stat-list { list-style: none; padding: 0; margin: 0; font-size: 14px; }
+.stat-list li { padding: 8px 5px; border-bottom: 1px dashed #1a334d; display: flex; justify-content: space-between; align-items: center; }
+.btn-action { background: #d4af37; color: #000; border: 1px solid #fff; font-weight: bold; padding: 3px 10px; cursor: pointer; font-size: 12px; border-radius: 3px; }
+.price-label { font-size: 11px; color: #aaa; margin-right: 5px; }
 </style>
 </head>
 <body>
-
-<div class="logo-header">⚔️ ВАРВАРЫ ⚔️</div>
+<div class="logo-header" onclick="changeScreen('screen-main')">⚔️ ВАРВАРЫ ⚔️</div>
 <div class="event-bar">⭐ Братство нуждается в твоей удаче! <a href="#" style="color:#00a2ff;">Чат</a></div>
-
 <div class="top-bar">
-✉️ <a onclick="changeScreen('main')">Игрок</a> | 
+✉️ <a onclick="changeScreen('screen-profile')">Игрок</a> | 
 <span>🏵️ <b id="ui-level">15</b></span> | 
 <span>❤️ <b id="ui-hp">172365</b></span> | 
 <span>🪙 <b id="ui-gold">184491</b></span> | 
-<span>💎 <b>98</b></span>
+<span>💎 <b>98</b></span> <br>
+<span>⚔️ <b id="ui-energy">3/3</b></span> | 
+<span>⏳ <b id="ui-timer">00:00</b></span>
 </div>
-
 <div class="content">
-
-<!-- ЭКРАН 1: ГЛАВНАЯ АРЕНА -->
-<div id="arena-home" class="game-screen active">
-<div class="header-title">Арена</div>
-<img class="arena-img" src="https://ibb.co" alt="Арена" onerror="this.src='https://icons8.com'">
-<p style="text-align:center; font-size:14px; margin:5px 0;">Покажи, на что ты способен!</p>
+<div id="screen-main" class="game-screen active">
+<div class="header-title">Главное меню</div>
 <div class="menu-list">
-<button class="menu-btn" onclick="openVersus('Ровня', 15, 120000)">⚔️ Ровня <span class="arrow">&gt;&gt;</span></button>
-<button class="menu-btn" onclick="openVersus('Младшие', 12, 60000)">⚔️ Младшие <span class="arrow">&gt;&gt;</span></button>
-<button class="menu-btn" onclick="openVersus('Старшие', 18, 250000)">⚔️ Старшие <span class="arrow">&gt;&gt;</span></button>
-</div>
-<div class="menu-list">
-<button class="menu-btn" onclick="changeScreen('main')">↩️ Главная <span class="arrow">&gt;&gt;</span></button>
+<button class="menu-btn" onclick="changeScreen('screen-profile')">📜 Персонаж / Тренировка <span class="arrow">&gt;&gt;</span></button>
+<a href="arena.html" class="menu-link">🏟️ Арена Поединков <span class="arrow">&gt;&gt;</span></a>
+<button class="menu-btn" onclick="alert('Подземелье откроется позже!')">👹 Подземелье <span class="arrow">&gt;&gt;</span></button>
 </div>
 </div>
-
-<!-- ЭКРАН 2: СРАВНЕНИЕ ХАРАКТЕРИСТИК -->
-<div id="arena-versus" class="game-screen">
-<div class="header-title">Сражения</div>
-<p style="text-align:center; font-weight:bold; font-size:15px;">Игрок против <span id="v-enemy-name">Враг</span></p>
-<table class="vs-table">
-<tr>
-<td><img src="https://icons8.com" width="60"></td>
-<td>💪<br>🛡️<br>🏃<br>⚡<br>➕</td>
-<td><img src="https://icons8.com" width="60"></td>
-</tr>
-<tr>
-<td>202<br>316<br>305<br>200<br>200</td>
-<td>Сила<br>Защ<br>Ловк<br>Маст<br>Жив</td>
-<td><span id="v-e-str">109</span><br><span id="v-e-def">121</span><br><span id="v-e-agi">120</span><br><span id="v-e-mas">91</span><br><span id="v-e-vit">64</span></td>
-</tr>
-</table>
-<button class="btn-fight" onclick="executeFight()">Сражаться</button>
-<div class="header-title" style="font-size:12px;">Параметры противника:</div>
+<div id="screen-profile" class="game-screen">
+<div class="header-title">Характеристики</div>
 <ul class="stat-list">
-<li>🏵️ Уровень: <b id="v-enemy-lvl">17</b></li>
-<li>⚔️ Побед: 730</li>
-<li>🛡️ Клан: Не состоит в клане</li>
+<li><span>💪 Сила: <b id="val-strength">5</b></span><div><span id="price-strength" class="price-label">(Цена: 50)</span><button class="btn-action" onclick="trainStat('strength')">[+]</button></div></li>
+<li><span>🛡️ Защита: <b id="val-defense">5</b></span><div><span id="price-defense" class="price-label">(Цена: 50)</span><button class="btn-action" onclick="trainStat('defense')">[+]</button></div></li>
+<li><span>🏃 Ловкость: <b id="val-agility">5</b></span><div><span id="price-agility" class="price-label">(Цена: 50)</span><button class="btn-action" onclick="trainStat('agility')">[+]</button></div></li>
+<li><span>⚡ Мастерство: <b id="val-mastery">5</b></span><div><span id="price-mastery" class="price-label">(Цена: 50)</span><button class="btn-action" onclick="trainStat('mastery')">[+]</button></div></li>
+<li><span>➕ Живучесть: <b id="val-vitality">5</b></span><div><span id="price-vitality" class="price-label">(Цена: 50)</span><button class="btn-action" onclick="trainStat('vitality')">[+]</button></div></li>
 </ul>
 <div class="menu-list" style="margin-top:15px;">
-<button class="menu-btn" onclick="changeScreen('arena-home')">↩️ Назад к Арене <span class="arrow">&gt;&gt;</span></button>
+<button class="menu-btn" onclick="changeScreen('screen-main')">↩️ На Главную <span class="arrow">&gt;&gt;</span></button>
 </div>
 </div>
-
-<!-- ЭКРАН 3: ИТОГ БОЯ -->
-<div id="arena-result" class="game-screen">
-<div class="header-title">Итог боя</div>
-<div style="padding:10px; line-height:1.6; font-size:14px;">
-<p class="text-green" id="r-status" style="font-weight:bold; font-size:16px;">Ты победил</p>
-<p id="r-reason">Причина - победитель нанес больше суммарного урона</p>
-<p><b>Награда:</b><br>Серебро: 🪙 <span id="r-prize" class="text-green">1944</span></p>
-<p><b>Нанесенный урон:</b><br>Игрок: <span id="r-p-dmg">2678</span><br><span id="r-e-title">Враг</span>: <span id="r-e-dmg">0</span></p>
-<p><b>Осталось здоровья:</b><br>Игрок: <span id="r-p-hp">172365</span><br><span id="r-e-title2">Враг</span>: <span id="r-e-hp">84377</span></p>
 </div>
-<div class="menu-list">
-<button class="menu-btn" onclick="changeScreen('arena-home')">⚔️ Следующий бой <span class="arrow">&gt;&gt;</span></button>
-<button class="menu-btn" onclick="changeScreen('main')">↩️ Главная <span class="arrow">&gt;&gt;</span></button>
-</div>
-</div>
-
-</div>
-
 <script>
-let currentEnemy = {};
+let defData = { gold: 184491, hp: 172365, level: 15, energy: 3, nextRegenTime: 0, stats: { strength: 5, defense: 5, agility: 5, mastery: 5, vitality: 5 } };
+let heroData = JSON.parse(localStorage.getItem('barb_save')) || defData;
+const REGEN_DELAY = 300; // Время восстановления в секундах (5 минут)
+
+function save() { localStorage.setItem('barb_save', JSON.stringify(heroData)); }
+
 window.changeScreen = function(id) {
 document.querySelectorAll('.game-screen').forEach(s => s.classList.remove('active'));
-let target = document.getElementById(id); if(target) target.classList.add('active');
+let t = document.getElementById(id); if(t) t.classList.add('active');
 };
-window.openVersus = function(type, lvl, hp) {
-currentEnemy = { name: type === 'Ровня' ? 'YRAZUDU' : 'Наемник', lvl: lvl, hp: hp, str: lvl * 8, def: lvl * 8, agi: lvl * 8, mas: lvl * 6, vit: lvl * 5 };
-document.getElementById("v-enemy-name").innerText = currentEnemy.name;
-document.getElementById("v-enemy-lvl").innerText = currentEnemy.lvl;
-document.getElementById("v-e-str").innerText = currentEnemy.str;
-document.getElementById("v-e-def").innerText = currentEnemy.def;
-document.getElementById("v-e-agi").innerText = currentEnemy.agi;
-document.getElementById("v-e-mas").innerText = currentEnemy.mas;
-document.getElementById("v-e-vit").innerText = currentEnemy.vit;
-changeScreen('arena-versus');
+
+window.trainStat = function(name) {
+let p = heroData.stats[name] * 10;
+if (heroData.gold >= p) {
+heroData.gold -= p; heroData.stats[name] += 1; save(); updateUI();
+} else { alert("Мало серебра!"); }
 };
-window.executeFight = function() {
-let pDmg = 2000 + Math.floor(Math.random() * 800);
-let eDmg = Math.random() > 0.6 ? Math.floor(Math.random() * 500) : 0;
-let prize = 1500 + Math.floor(Math.random() * 500);
-document.getElementById("r-status").className = pDmg > eDmg ? "text-green" : "text-red";
-document.getElementById("r-status").innerText = pDmg > eDmg ? "Ты победил" : "Ты проиграл";
-document.getElementById("r-prize").innerText = pDmg > eDmg ? prize : 0;
-document.getElementById("r-p-dmg").innerText = pDmg;
-document.getElementById("r-e-dmg").innerText = eDmg;
-document.getElementById("r-e-title").innerText = currentEnemy.name;
-document.getElementById("r-e-title2").innerText = currentEnemy.name;
-document.getElementById("r-e-hp").innerText = Math.max(0, currentEnemy.hp - pDmg);
-changeScreen('arena-result');
-};
+
+function checkRegen() {
+let now = Math.floor(Date.now() / 1000);
+if (heroData.energy < 3) {
+if (heroData.nextRegenTime === 0) {
+heroData.nextRegenTime = now + REGEN_DELAY; save();
+}
+while (now >= heroData.nextRegenTime && heroData.energy < 3) {
+heroData.energy += 1;
+if (heroData.energy < 3) { heroData.nextRegenTime += REGEN_DELAY; } 
+else { heroData.nextRegenTime = 0; }
+save();
+}
+} else { heroData.nextRegenTime = 0; save(); }
+}
+
+function startTimer() {
+setInterval(() => {
+checkRegen();
+let now = Math.floor(Date.now() / 1000);
+let timerText = "00:00";
+if (heroData.energy < 3 && heroData.nextRegenTime > now) {
+let diff = heroData.nextRegenTime - now;
+let mins = Math.floor(diff / 60);
+let secs = diff % 60;
+timerText = (mins < 10 ? "0" : "") + mins + ":" + (secs < 10 ? "0" : "") + secs;
+}
+document.getElementById("ui-energy").innerText = heroData.energy + "/3";
+document.getElementById("ui-timer").innerText = timerText;
+document.getElementById("ui-gold").innerText = heroData.gold;
+document.getElementById("ui-hp").innerText = heroData.hp;
+}, 1000);
+}
+
+function updateUI() {
+document.getElementById("ui-gold").innerText = heroData.gold;
+document.getElementById("ui-hp").innerText = heroData.hp;
+document.getElementById("ui-level").innerText = heroData.level;
+document.getElementById("ui-energy").innerText = heroData.energy + "/3";
+["strength", "defense", "agility", "mastery", "vitality"].forEach(n => {
+let v = heroData.stats[n]; document.getElementById("val-" + n).innerText = v;
+document.getElementById("price-" + n).innerText = "(Цена: " + (v * 10) + ")";
+});
+}
+
+checkRegen();
+updateUI();
+startTimer();
 </script>
 </body>
 </html>
