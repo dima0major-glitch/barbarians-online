@@ -3,38 +3,210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Военный поход</title>
+    <title>Поход</title>
     <style>
-        body { background: #000; color: #fff; font-family: sans-serif; padding: 15px; text-align: center; }
-        .btn { display: block; width: 100%; max-width: 400px; margin: 12px auto; padding: 15px; background: #1f2937; color: #fff; border: 1px solid #374151; border-radius: 5px; font-weight: bold; font-size: 16px; cursor: pointer; }
-        .btn-gold { background: #1e3a8a; border-color: #3b82f6; }
-        .btn-back { background: #dc2626; border: none; margin-top: 30px; width: auto; padding: 10px 25px; }
-        .info { color: #cbd5e1; margin-bottom: 20px; }
+        /* Общие стили в духе Норманнов */
+        body { 
+            background: #000b14; 
+            color: #fff; 
+            font-family: sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            font-size: 14px;
+        }
+        
+        /* Шапка страницы */
+        .header {
+            background: linear-gradient(180deg, #0d1a26 0%, #050d14 100%);
+            padding: 8px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+            color: #00ffcc;
+            border-bottom: 1px solid #1a334d;
+            letter-spacing: 1px;
+        }
+
+        /* Контентный блок */
+        .content {
+            padding: 10px;
+            text-align: center;
+        }
+
+        /* Иллюстрация похода */
+        .promo-img {
+            width: 100%;
+            max-width: 320px;
+            border: 2px solid #1a334d;
+            border-radius: 5px;
+            margin-bottom: 12px;
+        }
+
+        /* Блок информации о последнем походе */
+        .info-block {
+            text-align: left;
+            max-width: 320px;
+            margin: 0 auto 15px auto;
+            line-height: 1.5;
+            color: #cbd5e1;
+        }
+        .info-block strong {
+            color: #fff;
+        }
+
+        /* Стилизация выпадающего списка минут */
+        .time-select {
+            background: #111e29;
+            color: #fff;
+            border: 1px solid #26405a;
+            padding: 8px;
+            width: 100%;
+            max-width: 220px;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 14px;
+            margin-bottom: 15px;
+            outline: none;
+        }
+
+        /* Огненная кнопка "Отправить" как на скрине */
+        .btn-submit {
+            background: linear-gradient(180deg, #8a2be2 0%, #4b0082 100%); /* Заглушка, если нет картинки */
+            background-image: url('https://ibb.co'); /* Если у вас есть картинка рамки, укажите путь */
+            background-size: 100% 100%;
+            border: 2px solid #ff4500;
+            box-shadow: inset 0 0 10px #ff0000, 0 0 5px #ff4500;
+            color: #fff;
+            font-weight: bold;
+            padding: 10px 40px;
+            font-size: 14px;
+            border-radius: 3px;
+            cursor: pointer;
+            text-shadow: 1px 1px 2px #000;
+            transition: transform 0.1s;
+        }
+        .btn-submit:active {
+            transform: scale(0.98);
+        }
+
+        /* Ссылки меню внизу (Обновить, Шахта, Главная...) */
+        .menu-list {
+            margin-top: 25px;
+            border-top: 1px solid #1a334d;
+        }
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(180deg, #07131f 0%, #030a12 100%);
+            padding: 10px 12px;
+            border-bottom: 1px solid #102233;
+            text-decoration: none;
+            color: #3b9eff;
+            font-weight: bold;
+        }
+        .menu-item:active {
+            background: #0d1a26;
+        }
+        .menu-item .icon-text {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .menu-item .arrow {
+            color: #00ffcc;
+            font-family: monospace;
+        }
     </style>
 </head>
 <body>
 
-    <h2>🗺️ Военный Поход</h2>
-    <p class="info">Суточный лимит: 360 минут в день.</p>
+    <!-- Шапка страницы -->
+    <div class="header">Поход</div>
 
-    <!-- Кнопки выбора времени похода -->
-    <button class="btn" onclick="startExpedition(10)">🏃 Быстрый набег (10 мин)</button>
-    <button class="btn" onclick="startExpedition(60)">🐎 Патруль окраин (60 мин)</button>
-    <button class="btn" onclick="startExpedition(180)">🏕️ Долгий поход (180 мин)</button>
-    <button class="btn btn-gold" onclick="startExpedition(360)">👑 Великий поход (360 мин) — 6 золота!</button>
+    <!-- Основной контент -->
+    <div class="content">
+        <!-- Картинка варвара на коне (можете заменить на свою локальную ссылку) -->
+        <img src="https://freepik.com" alt="Поход" class="promo-img">
 
-    <!-- Кнопка возврата на главную страницу поселка -->
-    <a href="index.html"><button class="btn btn-back">⬅️ Вернуться в Поселок</button></a>
+        <!-- История и лимиты -->
+        <div class="info-block">
+            <strong>Последний поход:</strong><br>
+            <span id="last-exp-info">Вы еще не ходили в поход.</span><br>
+            Осталось времени на поход: <span id="ui-time-left">360</span> минут
+        </div>
 
-    <!-- Подключаем логику, чтобы функции startExpedition заработали на этой странице -->
+        <!-- Выпадающий список выбора времени -->
+        <select id="expedition-time" class="time-select">
+            <option value="10">10 минут</option>
+            <option value="30">30 минут</option>
+            <option value="60">60 минут (1 час)</option>
+            <option value="180">180 минут (3 часа)</option>
+            <option value="360">360 минут (6 часов)</option>
+        </select>
+
+        <br>
+        
+        <!-- Кнопка отправки -->
+        <button class="btn-submit" onclick="sendToExpedition()">Отправить</button>
+    </div>
+
+    <!-- Нижнее меню навигации точно как на скрине -->
+    <div class="menu-list">
+        <a href="#" class="menu-item" onclick="location.reload(); return false;">
+            <div class="icon-text">🔄 Обновить</div>
+            <div class="arrow">&gt;&gt;</div>
+        </a>
+        <a href="index.html" class="menu-item">
+            <div class="icon-text">🏠 Главная</div>
+            <div class="arrow">&gt;&gt;</div>
+        </a>
+        <a href="hero.html" class="menu-item">
+            <div class="icon-text">🤠 Герой</div>
+            <div class="arrow">&gt;&gt;</div>
+        </a>
+    </div>
+
+    <!-- Скрипт связи интерфейса со старым поход.js -->
     <script>
-        // Подтягиваем данные игрока из браузера
+        // Подгружаем базу данных
         let defData = { gold: 184491, hp: 172365, level: 15, energy: 3, fame: 83258, nextRegenTime: 0, stats: { strength: 5, defense: 5, agility: 5, mastery: 5, vitality: 5 } };
         let heroData = JSON.parse(localStorage.getItem('barb_save')) || defData;
         
         function save() { 
             localStorage.setItem('barb_save', JSON.stringify(heroData)); 
         }
+
+        // Перехватываем значение из селекта и отправляем в поход.js
+        function sendToExpedition() {
+            let select = document.getElementById('expedition-time');
+            let minutes = parseInt(select.value);
+            if (window.startExpedition) {
+                window.startExpedition(minutes);
+                updateLocalUI();
+            }
+        }
+
+        // Обновление локальных текстов лимита и последнего похода
+        function updateLocalUI() {
+            let used = heroData.expeditionTimeUsed || 0;
+            document.getElementById('ui-time-left').innerText = (360 - used);
+            
+            // Если есть сохраненная инфа о последней награде
+            if (heroData.lastExpeditionReward) {
+                document.getElementById('last-exp-info').innerHTML = 
+                    `Ты был в походе ${heroData.lastExpeditionReward.mins} минут, награда: 🪙 ${heroData.lastExpeditionReward.silver} сер. , 🌟 ${heroData.lastExpeditionReward.gold} зол.`;
+            }
+        }
+
+        // Запуск таймеров проверки каждую секунду
+        setInterval(function() {
+            if (window.checkDailyLimitReset) window.checkDailyLimitReset(); 
+            if (window.checkExpeditionEnd) window.checkExpeditionEnd(); 
+            updateLocalUI();
+        }, 1000);
+
+        updateLocalUI();
     </script>
     <script src="поход.js"></script>
 

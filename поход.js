@@ -53,7 +53,7 @@ window.checkExpeditionEnd = function() {
     if (now >= heroData.activeExpedition.endTime) {
         let mins = heroData.activeExpedition.durationMinutes;
 
-        // Расчет награды: серебро рандомно (зависит от минут), золото строго 6 за 360 минут
+        // Расчет награды: серебро зависит от минут, золото строго 6 за 360 минут
         let silverReward = Math.floor((mins / 10) * (Math.floor(Math.random() * 1001) + 500)); 
         let goldReward = Math.floor((mins / 360) * 6); 
 
@@ -61,6 +61,13 @@ window.checkExpeditionEnd = function() {
         if (typeof heroData.fame !== 'undefined') { 
             heroData.fame += goldReward; 
         }
+
+        // ЗАПИСЫВАЕМ ИСТОРИЮ ДЛЯ СТИЛЬНОГО ЭКРАНА
+        heroData.lastExpeditionReward = {
+            mins: mins,
+            silver: silverReward,
+            gold: goldReward
+        };
 
         heroData.activeExpedition = null;
         save();
