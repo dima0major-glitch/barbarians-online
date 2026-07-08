@@ -1,124 +1,143 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Barbarians Online - Главная</title>
-    <style>
-        body { background-color: #000c14; color: #fff; font-family: sans-serif; margin: 0; padding: 0; max-width: 480px; margin: 0 auto; }
-        .logo-header { background: #030a10; text-align: center; padding: 12px 0; border-bottom: 2px solid #1a334d; font-size: 22px; font-weight: bold; color: #00a2ff; text-shadow: 0 0 8px #00a2ff; cursor: pointer; }
-        .event-bar { background: #061019; padding: 6px; text-align: center; font-size: 12px; border-bottom: 1px solid #1a334d; color: #ffd700; }
-        .top-bar { background-color: #061019; padding: 8px; font-size: 13px; border-bottom: 2px solid #1a334d; text-align: center; line-height: 1.8; position: sticky; top: 0; z-index: 100; }
-        .top-bar a { color: #ffd700; text-decoration: none; font-weight: bold; cursor: pointer; }
-        .content { padding: 10px; }
-        .game-screen { display: none; }
-        .game-screen.active { display: block; }
-        .header-title { background: linear-gradient(to right, #002233, #004466, #002233); border: 1px solid #00a2ff; text-align: center; padding: 6px; font-size: 14px; font-weight: bold; margin: 10px 0; color: #00ffcc; text-transform: uppercase; }
-        .menu-list { display: flex; flex-direction: column; gap: 1px; background-color: #1a334d; margin: 10px 0; }
-        .menu-btn, .menu-link { background: linear-gradient(to bottom, #102538, #0a1824); color: #fff; border: none; padding: 12px 15px; text-align: left; font-size: 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: bold; width: 100%; box-sizing: border-box; text-decoration: none; }
-        .menu-btn:hover, .menu-link:hover { background: #16324d; }
-        .arrow { color: #00a2ff; }
-        .stat-list { list-style: none; padding: 0; margin: 0; font-size: 14px; }
-        .stat-list li { padding: 8px 5px; border-bottom: 1px dashed #1a334d; display: flex; justify-content: space-between; align-items: center; }
-        .btn-action { background: #d4af37; color: #000; border: 1px solid #fff; font-weight: bold; padding: 3px 10px; cursor: pointer; font-size: 12px; border-radius: 3px; }
-        .price-label { font-size: 11px; color: #aaa; margin-right: 5px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Barbarians Online</title>
+<style>
+body { background-color: #000c14; color: #fff; font-family: sans-serif; margin: 0; padding: 0; max-width: 480px; margin: 0 auto; }
+.logo-header { background: #030a10; text-align: center; padding: 12px 0; border-bottom: 2px solid #1a334d; font-size: 22px; font-weight: bold; color: #00a2ff; text-shadow: 0 0 8px #00a2ff; cursor: pointer; }
+.event-bar { background: #061019; padding: 6px; text-align: center; font-size: 12px; border-bottom: 1px solid #1a334d; color: #ffd700; }
+.top-bar { background-color: #061019; padding: 8px; font-size: 13px; border-bottom: 2px solid #1a334d; text-align: center; line-height: 1.8; position: sticky; top: 0; z-index: 100; }
+.top-bar a { color: #ffd700; text-decoration: none; font-weight: bold; cursor: pointer; }
+.content { padding: 10px; }
+.game-screen { display: none; }
+.game-screen.active { display: block; }
+.header-title { background: linear-gradient(to right, #002233, #004466, #002233); border: 1px solid #00a2ff; text-align: center; padding: 6px; font-size: 14px; font-weight: bold; margin: 10px 0; color: #00ffcc; text-transform: uppercase; }
+.menu-list { display: flex; flex-direction: column; gap: 1px; background-color: #1b2838; margin: 10px 0; border: 1px solid #1a334d; }
+.menu-btn, .menu-link { background: linear-gradient(to bottom, #0f2030, #08131d); color: #fff; border: none; padding: 12px 15px; text-align: left; font-size: 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: bold; width: 100%; box-sizing: border-box; text-decoration: none; border-bottom: 1px solid #111e2c; }
+.menu-btn:hover, .menu-link:hover { background: #12283d; }
+.arrow { color: #00a2ff; font-weight: bold; }
+.komar-img { width: 140px; height: auto; display: block; margin: 15px auto 5px auto; }
+.status-info { font-size: 14px; line-height: 1.7; padding: 5px 10px; }
+.stat-list { list-style: none; padding: 0; margin: 0; font-size: 14px; }
+.stat-list li { padding: 8px 5px; border-bottom: 1px dashed #1a334d; display: flex; justify-content: space-between; align-items: center; }
+.btn-action { background: #d4af37; color: #000; border: 1px solid #fff; font-weight: bold; padding: 3px 10px; cursor: pointer; font-size: 12px; border-radius: 3px; }
+</style>
 </head>
 <body>
+<div class="logo-header" onclick="changeScreen('screen-main')">⚔️ ВАРВАРЫ ⚔️</div>
+<div class="event-bar">⭐ Братство нуждается в твоей удаче! <a href="#" style="color:#00a2ff;">Чат</a></div>
+<div class="top-bar">
+✉️ <a onclick="changeScreen('screen-profile')">👑 Злой_комарь</a> | 
+<span>🏵️ <b>15</b></span> | 
+<span>❤️ <b id="ui-hp">172365</b></span> | 
+<span>🪙 <b id="ui-gold">184491</b></span> | 
+<span>💎 <b>98</b></span> <br>
+<span>⚔️ <b id="ui-energy">3/3</b></span> | 
+<span>⏳ <b id="ui-timer">00:00</b></span>
+</div>
+<div class="content">
+<div id="screen-main" class="game-screen active">
+<div class="header-title">Главное меню</div>
+<div class="menu-list">
+<button class="menu-btn" onclick="changeScreen('screen-profile')">📜 Мой Варвар / Профиль <span class="arrow">&gt;&gt;</span></button>
+<a href="arena.html" class="menu-link">🏟️ Арена Поединков <span class="arrow">&gt;&gt;</span></a>
+</div>
+</div>
+<div id="screen-profile" class="game-screen">
+<h3 style="text-align:center; margin:10px 0 0 0; color:#ffd700;">Злой_комарь</h3>
+<img class="komar-img" src="https://ibb.co" alt="Комарь" onerror="this.src='https://icons8.com'">
+<div style="text-align:center; font-size:12px; margin-bottom:10px;">🇺🇦</div>
+<div class="status-info">
+🟢 <span style="color:#00ff00; font-weight:bold;">Сейчас играет</span><br>
+🏵️ Уровень: <b>15</b><br>
+🛡️ Клан: Не состоит в клане<br>
+🤝 Братство: Не состоит в братстве<br>
+🌿 Слава: <b id="ui-fame">83258</b><br>
+👥 Статус: Лучший друг
+</div>
+<div class="menu-list">
+<button class="menu-btn" onclick="changeScreen('screen-train')">📊 Характеристики <span class="arrow">&gt;&gt;</span></button>
+<button class="menu-btn" onclick="alert('У тебя пока нет достижений!')">🎖️ Достижения <span class="arrow">&gt;&gt;</span></button>
+<button class="menu-btn" onclick="alert('Подарков: 5')">🎁 Подарки (5) <span class="arrow">&gt;&gt;</span></button>
+<button class="menu-btn" onclick="alert('Проклятий нет!')">👁️‍🗨️ Проклятия <span class="arrow">&gt;&gt;</span></button>
+<button class="menu-btn" onclick="alert('Редактирование анкеты')">📝 Анкета <span class="arrow">&gt;&gt;</span></button>
+<button class="menu-btn" onclick="changeScreen('screen-main')">↩️ Назад <span class="arrow">&gt;&gt;</span></button>
+<button class="menu-btn" onclick="changeScreen('screen-main')">🏠 Главная <span class="arrow">&gt;&gt;</span></button>
+</div>
+</div>
+<div id="screen-train" class="game-screen">
+<div class="header-title">Тренировка параметров</div>
+<ul class="stat-list">
+<li><span>💪 Сила: <b id="val-strength">5</b></span><div><span id="price-strength" style="font-size:11px;color:#aaa;margin-right:5px;">(Цена: 50)</span><button class="btn-action" onclick="trainStat('strength')">[+]</button></div></li>
+<li><span>🛡️ Защита: <b id="val-defense">5</b></span><div><span id="price-defense" style="font-size:11px;color:#aaa;margin-right:5px;">(Цена: 50)</span><button class="btn-action" onclick="trainStat('defense')">[+]</button></div></li>
+<li><span>🏃 Ловкость: <b id="val-agility">5</b></span><div><span id="price-agility" style="font-size:11px;color:#aaa;margin-right:5px;">(Цена: 50)</span><button class="btn-action" onclick="trainStat('agility')">[+]</button></div></li>
+<li><span>⚡ Мастерство: <b id="val-mastery">5</b></span><div><span id="price-mastery" style="font-size:11px;color:#aaa;margin-right:5px;">(Цена: 50)</span><button class="btn-action" onclick="trainStat('mastery')">[+]</button></div></li>
+<li><span>➕ Живучесть: <b id="val-vitality">5</b></span><div><span id="price-vitality" style="font-size:11px;color:#aaa;margin-right:5px;">(Цена: 50)</span><button class="btn-action" onclick="trainStat('vitality')">[+]</button></div></li>
+</ul>
+<div class="menu-list" style="margin-top:15px;">
+<button class="menu-btn" onclick="changeScreen('screen-profile')">↩️ Назад в Профиль <span class="arrow">&gt;&gt;</span></button>
+</div>
+</div>
+</div>
 
-    <div class="logo-header" onclick="changeScreen('screen-main')">⚔️ ВАРВАРЫ ⚔️</div>
-    <div class="event-bar">⭐ Братство нуждается в твоей удаче! <a href="#" style="color:#00a2ff;">Чат</a></div>
+<!-- ТУТ СЕЙЧАС БУДЕТ ВТОРАЯ ЧАСТЬ КОДА -->
 
-    <div class="top-bar">
-        ✉️ <a onclick="changeScreen('screen-profile')">Игрок</a> | 
-        <span>🏵️ <b id="ui-level">15</b></span> | 
-        <span>❤️ <b id="ui-hp">172365</b></span> | 
-        <span>🪙 <b id="ui-gold">184491</b></span> | 
-        <span>💎 <b>98</b></span> <br>
-        <span>⚔️ <b id="ui-energy">3/3</b></span> | 
-        <span>⏳ <b id="ui-timer">00:00</b></span>
-    </div>
-
-    <div class="content">
-        <!-- ГЛАВНАЯ СТРАНИЦА -->
-        <div id="screen-main" class="game-screen active">
-            <div class="header-title">Главное меню</div>
-            <div class="menu-list">
-                <button class="menu-btn" onclick="changeScreen('screen-profile')">📜 Персонаж / Тренировка <span class="arrow">&gt;&gt;</span></button>
-                <a href="arena.html" class="menu-link">🏟️ Арена Поединков <span class="arrow">&gt;&gt;</span></a>
-                <button class="menu-btn" onclick="alert('Подземелье откроется позже!')">👹 Подземелье <span class="arrow">&gt;&gt;</span></button>
-            </div>
-        </div>
-
-        <!-- ТРЕНИРОВКА -->
-        <div id="screen-profile" class="game-screen">
-            <div class="header-title">Характеристики</div>
-            <ul class="stat-list">
-                <li><span>💪 Сила: <b id="val-strength">5</b></span><div><span id="price-strength" class="price-label">(Цена: 50)</span><button class="btn-action" onclick="trainStat('strength')">[+]</button></div></li>
-                <li><span>🛡️ Защита: <b id="val-defense">5</b></span><div><span id="price-defense" class="price-label">(Цена: 50)</span><button class="btn-action" onclick="trainStat('defense')">[+]</button></div></li>
-                <li><span>🏃 Ловкость: <b id="val-agility">5</b></span><div><span id="price-agility" class="price-label">(Цена: 50)</span><button class="btn-action" onclick="trainStat('agility')">[+]</button></div></li>
-                <li><span>⚡ Мастерство: <b id="val-mastery">5</b></span><div><span id="price-mastery" class="price-label">(Цена: 50)</span><button class="btn-action" onclick="trainStat('mastery')">[+]</button></div></li>
-                <li><span>➕ Живучесть: <b id="val-vitality">5</b></span><div><span id="price-vitality" class="price-label">(Цена: 50)</span><button class="btn-action" onclick="trainStat('vitality')">[+]</button></div></li>
-            </ul>
-            <div class="menu-list" style="margin-top:15px;">
-                <button class="menu-btn" onclick="changeScreen('screen-main')">↩️ На Главную <span class="arrow">&gt;&gt;</span></button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        let defData = { gold: 184491, hp: 172365, level: 15, energy: 3, nextRegenTime: 0, stats: { strength: 5, defense: 5, agility: 5, mastery: 5, vitality: 5 } };
-        let heroData = JSON.parse(localStorage.getItem('barb_save')) || defData;
-        const REGEN_DELAY = 300;
-
-        function save() { 
-            localStorage.setItem('barb_save', JSON.stringify(heroData)); 
-        }
-
-        window.changeScreen = function(id) {
-            document.querySelectorAll('.game-screen').forEach(function(s) { s.classList.remove('active'); });
-            let t = document.getElementById(id); if(t) t.classList.add('active');
-        };
-
-        window.trainStat = function(name) {
-            let p = heroData.stats[name] * 10;
-            if (heroData.gold >= p) {
-                heroData.gold -= p; heroData.stats[name] += 1; save(); updateUI();
-            } else { alert("Мало серебра!"); }
-        };
-
-        function checkRegen() {
-            let now = Math.floor(Date.now() / 1000);
-            if (heroData.energy < 3 && heroData.nextRegenTime !== 0) {
-                while (now >= heroData.nextRegenTime && heroData.energy < 3) {
-                    heroData.energy += 1;
-                    heroData.nextRegenTime = (heroData.energy < 3) ? heroData.nextRegenTime + REGEN_DELAY : 0;
-                    save();
-                }
-            }
-        }
-
-        function updateUI() {
-            checkRegen();
-            let now = Math.floor(Date.now() / 1000);
-            let tText = "00:00";
-            if (heroData.energy < 3 && heroData.nextRegenTime > now) {
-                let d = heroData.nextRegenTime - now;
-                let m = Math.floor(d / 60); let s = d % 60;
-                tText = (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
-            }
-            document.getElementById("ui-gold").innerText = heroData.gold;
-            document.getElementById("ui-hp").innerText = heroData.hp;
-            document.getElementById("ui-energy").innerText = heroData.energy + "/3";
-            document.getElementById("ui-timer").innerText = tText;
-            document.getElementById("ui-level").innerText = heroData.level;
-            ["strength", "defense", "agility", "mastery", "vitality"].forEach(function(n) {
-                let v = heroData.stats[n];
-                document.getElementById("val-" + n).innerText = v;
-                document.getElementById("price-" + n).innerText = "(Цена: " + (v * 10) + ")";
-            });
-        }
-        setInterval(updateUI, 1000); updateUI();
-    </script>
 </body>
 </html>
+<script>
+    let defData = { gold: 184491, hp: 172365, level: 15, energy: 3, fame: 83258, nextRegenTime: 0, stats: { strength: 5, defense: 5, agility: 5, mastery: 5, vitality: 5 } };
+    let heroData = JSON.parse(localStorage.getItem('barb_save')) || defData;
+    const REGEN_DELAY = 300;
+
+    function save() { 
+        localStorage.setItem('barb_save', JSON.stringify(heroData)); 
+    }
+
+    window.changeScreen = function(id) {
+        document.querySelectorAll('.game-screen').forEach(function(s) { s.classList.remove('active'); });
+        let t = document.getElementById(id); if(t) t.classList.add('active');
+    };
+
+    window.trainStat = function(name) {
+        let p = heroData.stats[name] * 10;
+        if (heroData.gold >= p) {
+            heroData.gold -= p; heroData.stats[name] += 1; save(); updateUI();
+        } else { alert("Мало серебра!"); }
+    };
+
+    function checkRegen() {
+        let now = Math.floor(Date.now() / 1000);
+        if (heroData.energy < 3 && heroData.nextRegenTime !== 0) {
+            while (now >= heroData.nextRegenTime && heroData.energy < 3) {
+                heroData.energy += 1;
+                heroData.nextRegenTime = (heroData.energy < 3) ? heroData.nextRegenTime + REGEN_DELAY : 0;
+                save();
+            }
+        }
+    }
+
+    function updateUI() {
+        checkRegen();
+        let now = Math.floor(Date.now() / 1000);
+        let tText = "00:00";
+        if (heroData.energy < 3 && heroData.nextRegenTime > now) {
+            let d = heroData.nextRegenTime - now;
+            let m = Math.floor(d / 60); let s = d % 60;
+            tText = (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
+        }
+        if(!heroData.fame) { heroData.fame = 83258; }
+        document.getElementById("ui-gold").innerText = heroData.gold;
+        document.getElementById("ui-hp").innerText = heroData.hp;
+        document.getElementById("ui-energy").innerText = heroData.energy + "/3";
+        document.getElementById("ui-timer").innerText = tText;
+        document.getElementById("ui-fame").innerText = heroData.fame.toLocaleString('ru-RU');
+        ["strength", "defense", "agility", "mastery", "vitality"].forEach(function(n) {
+            let v = heroData.stats[n];
+            document.getElementById("val-" + n).innerText = v;
+            document.getElementById("price-" + n).innerText = "(Цена: " + (v * 10) + ")";
+        });
+    }
+    setInterval(updateUI, 1000); updateUI();
+</script>
