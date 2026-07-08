@@ -33,7 +33,7 @@ body { background-color: #000c14; color: #fff; font-family: sans-serif; margin: 
 </div>
 <div class="content">
 
-<!-- ГЛАВНЫЙ ЭКРАН ПО СКРИНШОТУ -->
+<!-- ГЛАВНЫЙ ЭКРАН С ЛОКАЦИЯМИ -->
 <div id="screen-main" class="game-screen active">
 <div class="welcome-block">
 <div>Добро пожаловать!</div>
@@ -43,7 +43,7 @@ body { background-color: #000c14; color: #fff; font-family: sans-serif; margin: 
 <button class="menu-btn" onclick="alert('Событий пока нет!')">⭐ События <span class="arrow">&gt;&gt;</span></button>
 <button class="menu-btn" onclick="alert('Задания откроются на 16 уровне!')">📜 Задания <span class="arrow">&gt;&gt;</span></button>
 <a href="arena.html" class="menu-link">⚔️ Дуэль <span class="arrow">&gt;&gt;</span></a>
-<button class="menu-btn" onclick="alert('Поселок строится')">🏰 Поселок <span class="arrow">&gt;&gt;</span></button>
+<a href="poselok.html" class="menu-link">🏰 Поселок <span class="arrow">&gt;&gt;</span></a>
 <button class="menu-btn" onclick="alert('Походы временно недоступны')">🛡️ Поход <span class="arrow">&gt;&gt;</span></button>
 <button class="menu-btn" onclick="alert('Фафнир спит')">🐲 Фафнир <span class="arrow">&gt;&gt;</span></button>
 <button class="menu-btn" onclick="alert('Подземелье завалено камнями')">👹 Подземелье <span class="arrow">&gt;&gt;</span></button>
@@ -63,7 +63,7 @@ body { background-color: #000c14; color: #fff; font-family: sans-serif; margin: 
 </div>
 </div>
 
-<!-- ЭКРАН ПРОФИЛЯ -->
+<!-- ПРОФИЛЬ ГЕРОЯ -->
 <div id="screen-profile" class="game-screen">
 <h3 style="text-align:center; margin:10px 0 0 0; color:#ffd700;">Злой_комарь</h3>
 <img class="komar-img" src="https://icons8.com" alt="Комар">
@@ -82,7 +82,7 @@ body { background-color: #000c14; color: #fff; font-family: sans-serif; margin: 
 </div>
 </div>
 
-<!-- ЭКРАН ТРЕНИРОВКИ -->
+<!-- ТРЕНИРОВКА -->
 <div id="screen-train" class="game-screen">
 <div class="header-title">Тренировка параметров</div>
 <ul class="stat-list">
@@ -145,7 +145,6 @@ body { background-color: #000c14; color: #fff; font-family: sans-serif; margin: 
             tText = "00:" + (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
         }
 
-        // Обновление текущего времени (часы)
         let dObj = new Date();
         let hrs = dObj.getHours(); let mins = dObj.getMinutes(); let secs = dObj.getSeconds();
         let clockText = (hrs < 10 ? "0" : "") + hrs + ":" + (mins < 10 ? "0" : "") + mins + ":" + (secs < 10 ? "0" : "") + secs;
