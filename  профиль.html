@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль игрока</title>
+    <style>
+        /* Стиль Норманнов */
+        body { 
+            background: #000b14; 
+            color: #fff; 
+            font-family: sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            font-size: 14px;
+        }
+
+        /* Синяя плашка похода сверху */
+        .system-notification {
+            display: none;
+            background: linear-gradient(180deg, #10253d 0%, #071324 100%);
+            border-bottom: 1px solid #1f4268;
+            color: #79b2f2;
+            padding: 8px;
+            text-align: center;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+        .system-notification a { color: #3b9eff; text-decoration: underline; }
+
+        /* Верхний бар с ресурсами */
+        .top-bar {
+            background: #030a12;
+            padding: 6px;
+            font-size: 11px;
+            text-align: center;
+            border-bottom: 1px solid #1a334d;
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+        .gold-text { color: #fbbf24; font-weight: bold; }
+        .hp-text { color: #ef4444; font-weight: bold; }
+
+        .content {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .char-name {
+            color: #ffcc00;
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .avatar-container {
+            margin: 0 auto 10px auto;
+            max-width: 150px;
+            text-align: center;
+        }
+
+        .avatar-img {
+            max-width: 150px;
+            max-height: 200px;
+            object-fit: contain;
+            border: 1px solid #26405a;
+            background: #030a12;
+        }
+
+        .flag-line {
+            margin: 5px 0 15px 0;
+            font-size: 16px;
+        }
+
+        .info-list {
+            text-align: left;
+            max-width: 300px;
+            margin: 0 auto 15px auto;
+            line-height: 1.6;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .status-online { color: #00ff00; font-weight: bold; }
+        .status-dot { width: 10px; height: 10px; background-color: #00ff00; border-radius: 50%; display: inline-block; }
+
+        /* Меню навигации */
+        .menu-list {
+            border-top: 1px solid #1a334d;
+        }
+        
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(180deg, #07131f 0%, #030a12 100%);
+            padding: 10px 12px;
+            border-bottom: 1px solid #102233;
+            text-decoration: none;
+            color: #3b9eff;
+            font-weight: bold;
+        }
+        
+        .menu-item .arrow { 
+            color: #00ffcc; 
+            font-family: monospace; 
+        }
+
+        .menu-divider {
+            height: 4px;
+            background: #102233;
+            border-top: 1px solid #1a334d;
+            border-bottom: 1px solid #1a334d;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Уведомление о походе -->
+    <div id="top-notification" class="system-notification"></div>
+
+    <!-- Живой верхний бар ресурсов -->
+    <div class="top-bar">
+        📥 ✉️ <span class="gold-text">Злой_комарь</span> | 🏵️ <span id="bar-level">15</span> | ❤️ <span id="bar-hp" class="hp-text">172 365</span> | 🪙 <span id="bar-silver">1 590</span> | ⚪ 184 491<br>
+        🔷 0 | 🔶 <span id="bar-gold" class="gold-text">98</span> | ⚔️ <span id="bar-energy">3/3</span> | ⏳ <span id="bar-timer">00:00:00</span> | 🕒 <span id="bar-clock">00:00:00</span> | 🍳 🎒
+    </div>
+
+    <div class="content">
+        <div class="char-name">Злой_комарь</div>
+
+        <!-- Твой варвар вместо знака вопроса -->
+        <div class="avatar-container">
+            <img id="ui-profile-avatar" src="" alt="Аватар" class="avatar-img">
+        </div>
+
+        <div class="flag-line">🇺🇦</div>
+
+        <div class="info-list">
+            <div class="info-item status-online"><span class="status-dot"></span> Сейчас играет</div>
+            <div class="info-item">🏵️ Уровень: <strong id="ui-level">15</strong></div>
+            <div class="info-item">🛡️ Клан: <span>Не состоит в клане</span></div>
+            <div class="info-item">🤝 Братство: <span style="color: #fbbf24; font-weight: bold;">Дом</span> <span style="color: #22c55e;">(твое)</span></div>
+            <div class="info-item">🌿 Слава: <strong id="ui-fame">83258</strong></div>
+            <div class="info-item">👥 Статус: <span>Лучший friend</span></div>
+        </div>
+    </div>
+
+    <!-- Полный список кнопок по твоему плану -->
+    <div class="menu-list">
+        <a href="тренировка.html" class="menu-item"><span>📊 Характеристики</span><span class="arrow">&gt;&gt;</span></a>
+        <a href="#" class="menu-item"><span>🎖️ Достижения</span><span class="arrow">&gt;&gt;</span></a>
+        <a href="#" class="menu-item"><span>🎁 Подарки (5)</span><span class="arrow">&gt;&gt;</span></a>
+        <a href="#" class="menu-item"><span>💀 Проклятия</span><span class="arrow">&gt;&gt;</span></a>
+        <a href="анкета.html" class="menu-item"><span>📝 Анкета</span><span class="arrow">&gt;&gt;</span></a>
+        <a href="hero.html" class="menu-item"><span>↩️ Назад</span><span class="arrow">&gt;&gt;</span></a>
+    </div>
+
+    <div class="menu-divider"></div>
+
+    <!-- Нижняя навигация -->
+    <div class="menu-list">
+        <a href="index.html" class="menu-item"><span>🏠 Главная</span><span class="arrow">&gt;&gt;</span></a>
+        <a href="hero.html" class="menu-item"><span>🤠 Герой</span><span class="arrow">&gt;&gt;</span></a>
+        <a href="#" class="menu-item"><span>✉️ Почта</span><span class="arrow">&gt;&gt;</span></a>
+        <a href="#" class="menu-item"><span>💬 Чат</span><span class="arrow">&gt;&gt;</span></a>
+    </div>
+
+    <!-- СВЯЗУЮЩИЕ ИГРОВЫЕ СКРИПТЫ -->
+    <script>
+        let defData = { gold: 184491, hp: 172365, level: 15, energy: 3, fame: 83258, nextRegenTime: 0, stats: { strength: 5, defense: 5, agility: 5, mastery: 5, vitality: 5 } };
+        let heroData = JSON.parse(localStorage.getItem('barb_save')) || defData;
+        const REGEN_DELAY = 300;
+
+        const DEFAULT_BARBARIAN = "https://imgur.com";
+
+        function save() { 
+            localStorage.setItem('barb_save', JSON.stringify(heroData)); 
+        }
+
+        function checkRegen() {
+            let now = Math.floor(Date.now() / 1000);
+            if (heroData.energy < 3 && heroData.nextRegenTime !== 0) {
+                while (now >= heroData.nextRegenTime && heroData.energy < 3) {
+                    heroData.energy += 1;
+                    heroData.nextRegenTime = (heroData.energy < 3) ? heroData.nextRegenTime + REGEN_DELAY : 0;
+                    save();
+                }
+            }
+        }
+
+        function updateUI() {
+            checkRegen();
+            let now = Math.floor(Date.now() / 1000);
+            
+            // Таймер энергии
+            let tText = "00:00:00";
+            if (heroData.energy < 3 && heroData.nextRegenTime > now) {
+                let d = heroData.nextRegenTime - now;
+                let m = Math.floor(d / 60); let s = d % 60;
+                tText = "00:" + (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
+            }
+
+            // Обычные часы
+            let dObj = new Date();
+            let hrs = dObj.getHours(); let mins = dObj.getMinutes(); let secs = dObj.getSeconds();
+            let clockText = (hrs < 10 ? "0" : "") + hrs + ":" + (mins < 10 ? "0" : "") + mins + ":" + (secs < 10 ? "0" : "") + secs;
+
+            // Обновляем циферки на экране
+            document.getElementById('ui-profile-avatar').src = heroData.avatarUrl || DEFAULT_BARBARIAN;
+            document.getElementById('ui-level').innerText = heroData.level;
+            document.getElementById('ui-fame').innerText = heroData.fame.toLocaleString('ru-RU');
+
+            // Обновляем верхний бар
+            document.getElementById('bar-level').innerText = heroData.level;
+            document.getElementById('bar-hp').innerText = heroData.hp.toLocaleString('ru-RU');
+            document.getElementById('bar-silver').innerText = heroData.gold.toLocaleString('ru-RU');
+            document.getElementById('bar-gold').innerText = heroData.fame_gold || 98;
+            document.getElementById('bar-energy').innerText = heroData.energy + "/3";
+            document.getElementById('bar-timer').innerText = tText;
+            document.getElementById('bar-clock').innerText = clockText;
+
+            // Живая плашка похода сверху страницы профиля
+            let notifBox = document.getElementById('top-notification');
+            if (heroData.activeExpedition && heroData.activeExpedition.endTime > now) {
+                let timeLeft = heroData.activeExpedition.endTime - now;
+                let ehrs = Math.floor(timeLeft / 3600); let emins = Math.floor((timeLeft % 3600) / 60); let esecs = timeLeft % 60;
+                let expTimeStr = (ehrs < 10 ? "0" : "") + ehrs + ":" + (emins < 10 ? "0" : "") + emins + ":" + (esecs < 10 ? "0" : "") + esecs;
+                
+                let justText = localStorage.getItem('exp_just_started') || "";
+                notifBox.innerHTML = `${justText ? justText + '<br>' : ''}Ты сейчас в походе. Осталось: ${expTimeStr} <a href="поход.html">Посмотреть</a>`;
+                notifBox.style.display = "block";
+            } else {
+                notifBox.style.display = "none";
+            }
+        }
+
+        setInterval(function() {
+            if (window.checkDailyLimitReset) window.checkDailyLimitReset(); 
+            if (window.checkExpeditionEnd) window.checkExpeditionEnd(); 
+            updateUI();
+        }, 1000);
+
+        updateUI();
