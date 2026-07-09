@@ -2,31 +2,72 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Варвары Онлайн - Регистрация</title>
-    <!-- Путь изменен: файл style.css лежит прямо рядом -->
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Варвары — Регистрация</title>
+    <style>
+        body { background-color: #061118; color: #ffffff; font-family: Arial, sans-serif; margin: 0; padding: 0; user-select: none; }
+        .game-banner { background: linear-gradient(to bottom, #112d3e, #091a26); border-bottom: 2px solid #1c8cd1; padding: 8px; text-align: center; font-size: 16px; font-weight: bold; color: #ffffff; text-shadow: 1px 1px 3px #000; }
+        .form-container { text-align: center; padding: 20px 15px; }
+        .input-label { font-size: 14px; color: #b0cbdc; margin-bottom: 6px; display: block; }
+        .input-field { background-color: #3a3a3a; border: 1px solid #222; color: #fff; width: 80%; max-width: 260px; padding: 10px; font-size: 16px; text-align: center; margin-bottom: 15px; outline: none; }
+        .captcha-box { display: flex; justify-content: center; align-items: center; gap: 10px; margin: 10px auto; }
+        .captcha-image-mock { background: linear-gradient(45deg, #0d2535, #16384f); border: 1px solid #1c8cd1; color: #00ffcc; font-family: monospace; font-size: 22px; font-weight: bold; padding: 5px 15px; text-shadow: 2px 2px #000; }
+        .captcha-refresh { background-color: #3a3a3a; border: 1px solid #555; color: #fff; font-size: 16px; padding: 5px 10px; cursor: pointer; }
+        .captcha-hint { font-size: 12px; color: #799bb3; margin-bottom: 8px; }
+        .btn-submit { background: linear-gradient(to bottom, #a33600, #521600); border: 2px solid #ff5500; border-radius: 4px; color: #fff; font-size: 15px; font-weight: bold; padding: 10px 40px; cursor: pointer; box-shadow: 0 0 10px rgba(255, 68, 0, 0.4); margin: 15px 0; text-shadow: 1px 1px 2px #000; }
+        .menu-link { background: linear-gradient(to bottom, #091b29, #050e16); padding: 13px 15px; margin-bottom: 2px; display: flex; justify-content: space-between; align-items: center; text-decoration: none; color: #adc8d9; font-size: 14px; font-weight: bold; }
+        .menu-arrow { color: #1c8cd1; font-weight: bold; letter-spacing: -2px; font-size: 15px; }
+        .legal-info { text-align: center; font-size: 10px; color: #4a6273; padding: 20px 15px; text-transform: uppercase; }
+        .error-msg { color: #ff4d4d; font-size: 13px; margin-bottom: 10px; display: none; }
+    </style>
 </head>
 <body>
-
-    <div class="container">
-        
-        <div class="auth-box">
-            <h2>Регистрация воина</h2>
-            
-            <form id="registerForm">
-                <input type="text" id="regUsername" placeholder="Имя варвара" required>
-                <input type="email" id="regEmail" placeholder="Email" required>
-                <input type="password" id="regPassword" placeholder="Пароль" required>
-                <button type="submit" class="btn-submit">Создать аккаунт</button>
-            </form>
-            
-            <a href="login.html" class="link-text">Уже есть аккаунт? Войти</a>
-        </div>
-
+    <div class="game-banner">🛡️ Варвары ⚔️</div>
+    <div class="form-container">
+        <div id="error-box" class="error-msg">Неверная капча!</div>
+        <form id="regForm" onsubmit="handleAuth(event)">
+            <label class="input-label">Введите логин</label>
+            <input type="text" id="username" class="input-field" required autocomplete="off">
+            <label class="input-label">Введите пароль</label>
+            <input type="password" id="password" class="input-field" required>
+            <div class="captcha-box">
+                <div id="captcha-text" class="captcha-image-mock">0 + 0</div>
+                <button type="button" class="captcha-refresh" onclick="generateCaptcha()">↻</button>
+            </div>
+            <div class="captcha-hint">Пример: 19+1=... ответ '20'</div>
+            <input type="number" id="captcha-input" class="input-field" placeholder="Ответ" required>
+            <br><button type="submit" class="btn-submit">Войти</button>
+        </form>
     </div>
+    <div style="margin-top:15px;">
+        <a href="/" class="menu-link"><span>🏠 На главную</span><span class="menu-arrow">»»</span></a>
+    </div>
+    <div class="legal-info">MISUTECH LIMITED SUITE C, LEVEL 7, WORLD TRUST TOWER, 50 STANLEY STREET, CENTRAL, HONG KONG</div>
 
-    <!-- Путь изменен: файл auth.js лежит прямо рядом -->
-    <script src="auth.js"></script>
+    <script>
+        let n1, n2, ans;
+        function generateCaptcha() {
+            n1 = Math.floor(Math.random() * 20) + 1; n2 = Math.floor(Math.random() * 10) + 1; ans = n1 + n2;
+            document.getElementById('captcha-text').innerText = `${n1} + ${n2}`;
+            document.getElementById('captcha-input').value = '';
+        }
+        async function handleAuth(event) {
+            event.preventDefault();
+            const uAns = parseInt(document.getElementById('captcha-input').value);
+            const uLogin = document.getElementById('username').value;
+            if (uAns !== ans) {
+                document.getElementById('error-box').style.display = "block";
+                generateCaptcha(); return;
+            }
+            const res = await fetch('/api/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: uLogin })
+            });
+            const data = await res.json();
+            if (data.success) { window.location.href = "/game"; }
+        }
+        generateCaptcha();
+    </script>
 </body>
 </html>

@@ -1,220 +1,80 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Barbarians Online</title>
-<style>
-body { background-color: #000c14; color: #fff; font-family: sans-serif; margin: 0; padding: 0; max-width: 480px; margin: 0 auto; }
-.logo-header { background: #030a10; text-align: center; padding: 12px 0; border-bottom: 2px solid #1a334d; font-size: 22px; font-weight: bold; color: #00a2ff; text-shadow: 0 0 8px #00a2ff; cursor: pointer; }
-.top-bar { background-color: #061019; padding: 8px; font-size: 12px; border-bottom: 2px solid #1a334d; text-align: center; line-height: 1.8; position: sticky; top: 0; z-index: 100; }
-.top-bar a { color: #ffd700; text-decoration: none; font-weight: bold; cursor: pointer; }
-.content { padding: 5px; }
-.game-screen { display: none; }
-.game-screen.active { display: block; }
-.welcome-block { text-align: center; margin: 15px 0; font-size: 15px; }
-.welcome-sub { font-size: 13px; color: #aaa; margin-top: 5px; }
-.menu-list { display: flex; flex-direction: column; gap: 1px; background-color: #1a334d; margin: 10px 0; border: 1px solid #1a334d; }
-.menu-btn, .menu-link { background: linear-gradient(to bottom, #0f2030, #08131d); color: #fff; border: none; padding: 11px 12px; text-align: left; font-size: 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: bold; width: 100%; box-sizing: border-box; text-decoration: none; border-bottom: 1px solid #111e2c; }
-.menu-btn:hover, .menu-link:hover { background: #12283d; }
-.arrow { color: #00a2ff; font-weight: bold; }
-.komar-img { width: 140px; height: auto; display: block; margin: 15px auto 5px auto; }
-.status-info { font-size: 14px; line-height: 1.7; padding: 5px 10px; }
-.stat-list { list-style: none; padding: 0; margin: 0; font-size: 14px; }
-.stat-list li { padding: 8px 5px; border-bottom: 1px dashed #1a334d; display: flex; justify-content: space-between; align-items: center; }
-.btn-action { background: #d4af37; color: #000; border: 1px solid #fff; font-weight: bold; padding: 3px 10px; cursor: pointer; font-size: 12px; border-radius: 3px; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Варвары — Игра</title>
+    <style>
+        body { background-color: #061118; color: #ffffff; font-family: Arial, sans-serif; margin: 0; padding: 0; user-select: none; }
+        .game-banner { background: linear-gradient(to bottom, #112d3e, #091a26); border-bottom: 2px solid #1c8cd1; padding: 8px; text-align: center; font-size: 16px; font-weight: bold; color: #ffffff; text-shadow: 1px 1px 3px #000; }
+        .game-header { background: linear-gradient(to bottom, #091a26, #051017); border-bottom: 2px solid #142a3a; padding: 10px 8px; text-align: center; font-size: 13px; }
+        .player-row { display: flex; justify-content: center; align-items: center; gap: 5px; font-weight: bold; color: #e2f2ff; margin-bottom: 6px; }
+        .stats-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; font-size: 12px; color: #b0cbdc; }
+        .stat-item { display: flex; align-items: center; gap: 3px; }
+        .stat-item.gold { color: #ffcc00; }
+        .stat-item.hp { color: #ff4d4d; }
+        .welcome-block { text-align: center; padding: 12px 5px 6px 5px; }
+        .welcome-title { font-size: 18px; font-weight: bold; color: #ffffff; margin-bottom: 4px; }
+        .welcome-sub { font-size: 12px; color: #799bb3; }
+        .menu-link { background: linear-gradient(to bottom, #091b29, #050e16); padding: 13px 15px; margin-bottom: 2px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #0f2231; text-decoration: none; color: #adc8d9; font-size: 14px; font-weight: bold; }
+        .menu-link:active { background: #0d273d; }
+        .menu-arrow { color: #1c8cd1; font-weight: bold; letter-spacing: -2px; font-size: 15px; }
+        .menu-divider { height: 4px; background: repeating-linear-gradient(90deg, #3d240e, #1f1207 20px); border-top: 1px solid #5c3716; border-bottom: 1px solid #5c3716; margin: 6px 0; }
+        .footer-links { display: flex; justify-content: center; gap: 15px; padding: 15px 0 10px 0; font-size: 12px; }
+        .footer-links a { color: #7ba2bd; text-decoration: none; }
+        .legal-info { text-align: center; font-size: 10px; color: #4a6273; padding: 0 15px 25px 15px; text-transform: uppercase; }
+    </style>
 </head>
 <body>
-<div class="logo-header" onclick="changeScreen('screen-main')">⚔️ ВАРВАРЫ ⚔️</div>
-<div class="top-bar">
-📥 ✉️ <a onclick="changeScreen('screen-profile')">🤠 Злой_комарь</a> | 🏵️ <b>15</b> | ❤️ <b id="ui-hp">172365</b> | 🪙 <b>1590</b> | ⚪ <b id="ui-gold">184491</b><br>
-🔷 <b>0</b> | 🔶 <b>98</b> | ⚔️ <b id="ui-energy">3/3</b> | ⏳ <b id="ui-timer">00:00:00</b> | 🕒 <b id="ui-clock">00:00:00</b> | 🔍 🎒
-</div>
-<div class="content">
+    <div class="game-banner">🛡️ Варвары ⚔️</div>
+    <div class="game-header">
+        <div class="player-row">
+            <span>🪓 <span id="player-name">Загрузка...</span></span> 
+            <span style="color: #ff9900;">👑 <span id="player-level">1</span></span>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-item hp">❤️ <span id="player-hp">0</span></div>
+            <div class="stat-item">🛡️ <span id="player-def">0</span></div>
+            <div class="stat-item">🪙 <span id="player-silver">0</span></div>
+            <div class="stat-item gold">💰 <span id="player-gold">0</span></div>
+            <div class="stat-item" style="color: #00ccff;">💎 <span id="player-gems">0</span></div>
+            <div class="stat-item">⚔️ 3/3</div>
+        </div>
+    </div>
 
-<!-- ГЛАВНЫЙ ЭКРАН С ЛОКАЦИЯМИ -->
-<div id="screen-main" class="game-screen active">
-<div class="welcome-block">
-<div>Добро пожаловать!</div>
-<div class="welcome-sub">Рядом с тобой 1090 варваров (онлайн)</div>
-</div>
-<div class="menu-list">
-<button class="menu-btn" onclick="alert('Событий пока нет!')">⭐ События <span class="arrow">&gt;&gt;</span></button>
-<button class="menu-btn" onclick="alert('Задания откроются на 16 уровне!')">📜 Задания <span class="arrow">&gt;&gt;</span></button>
-<a href="arena.html" class="menu-link">⚔️ Дуэль <span class="arrow">&gt;&gt;</span></a>
-<a href="poselok.html" class="menu-link">🏰 Поселок <span class="arrow">&gt;&gt;</span></a>
-<a href="поход.html" class="menu-link">🛡️ Поход</a>
-<button class="menu-btn" onclick="alert('Фафнир спит')">🐲 Фафнир <span class="arrow">&gt;&gt;</span></button>
-<button class="menu-btn" onclick="alert('Подземелье завалено камнями')">👹 Подземелье <span class="arrow">&gt;&gt;</span></button>
-<button class="menu-btn" onclick="alert('Нежить уничтожена')">💀 Нежить <span class="arrow">&gt;&gt;</span></button>
-<button class="menu-btn" onclick="alert('Порт закрыт на реконструкцию')">🚢 Порт <span class="arrow">&gt;&gt;</span></button>
-<button class="menu-btn" onclick="alert('Ты не состоишь в клане')">🛡️ Клан <span class="arrow">&gt;&gt;</span></button>
-<button class="menu-btn" onclick="alert('Ты не состоишь в братстве')">🤝 Братство <span class="arrow">&gt;&gt;</span></button>
-<button class="menu-btn" onclick="alert('У тебя еще нет питомца')">🐾 Зверь <span class="arrow">&gt;&gt;</span></button>
-<button class="menu-btn" onclick="alert('Рейтинг обновляется раз в сутки')">🏆 Рейтинг <span class="arrow">&gt;&gt;</span></button>
-</div>
-<div class="menu-list">
-<button class="menu-btn" onclick="changeScreen('screen-main')">🏠 Главная <span class="arrow">&gt;&gt;</span></button>
-<button class="menu-btn" onclick="changeScreen('screen-profile')">🤠 Герой <span class="arrow">&gt;&gt;</span></button>
-<button class="menu-btn" onclick="alert('Почта пуста')">✉️ Почта <span class="arrow">&gt;&gt;</span></button>
-<button class="menu-btn" onclick="alert('Чат временно отключен')">💬 Чат <span class="arrow">&gt;&gt;</span></button>
-<button class="menu-btn" onclick="alert('Форум на тех. обслуживании')">📋 Форум <span class="arrow">&gt;&gt;</span></button>
-</div>
-</div>
+    <div class="welcome-block">
+        <div class="welcome-title">Добро пожаловать!</div>
+        <div class="welcome-sub">Рядом с тобой <span id="online-count">1080</span> варваров (онлайн)</div>
+    </div>
 
-<!-- ПРОФИЛЬ ГЕРОЯ -->
-<div id="screen-profile" class="game-screen">
-<h3 style="text-align:center; margin:10px 0 0 0; color:#ffd700;">Злой_комарь</h3>
-<img class="komar-img" src="https://icons8.com" alt="Комар">
-<div style="text-align:center; font-size:12px; margin-bottom:10px;">🇺🇦</div>
-<div class="status-info">
-    🟢 <span style="color:#00ff00; font-weight:bold;">Сейчас играет</span><br>
-    🏵️ Уровень: <b>15</b><br>
-    🛡️ Клан: Не состоит в клане<br>
-    🤝 Братство: Не состоит в братстве<br>
-    🌿 Слава: <b id="ui-fame">83 258</b><br>
-    👥 Статус: Лучший друг
-</div>
-<div class="menu-list">
-<button class="menu-btn" onclick="changeScreen('screen-train')">📊 Характеристики <span class="arrow">&gt;&gt;</span></button>
-<button class="menu-btn" onclick="changeScreen('screen-main')">🏠 Главная <span class="arrow">&gt;&gt;</span></button>
-</div>
-</div>
+    <div style="margin-top: 5px;">
+        <a href="#" class="menu-link"><span>⭐ События</span><span class="menu-arrow">»»</span></a>
+        <a href="#" class="menu-link"><span>⚔️ Дуэль</span><span class="menu-arrow">»»</span></a>
+        <a href="#" class="menu-link"><span>🏡 Поселок</span><span class="menu-arrow">»»</span></a>
+        <div class="menu-divider"></div>
+        <a href="/game" class="menu-link"><span>🏠 Главная</span><span class="menu-arrow">»»</span></a>
+        <a href="#" class="menu-link"><span>💬 Чат</span><span class="menu-arrow">»»</span></a>
+    </div>
 
-<!-- ТРЕНИРОВКА -->
-<div id="screen-train" class="game-screen">
-<div class="header-title">Тренировка параметров</div>
-<ul class="stat-list">
-<li><span>💪 Сила: <b id="val-strength">5</b></span><div><span id="price-strength" class="price-label">(Цена: 50)</span><button class="btn-action" onclick="trainStat('strength')">[+]</button></div></li>
-<li><span>🛡️ Защита: <b id="val-defense">5</b></span><div><span id="price-defense" class="price-label">(Цена: 50)</span><button class="btn-action" onclick="trainStat('defense')">[+]</button></div></li>
-<li><span>🏃 Ловкость: <b id="val-agility">5</b></span><div><span id="price-agility" class="price-label">(Цена: 50)</span><button class="btn-action" onclick="trainStat('agility')">[+]</button></div></li>
-<li><span>⚡ Мастерство: <b id="val-mastery">5</b></span><div><span id="price-mastery" class="price-label">(Цена: 50)</span><button class="btn-action" onclick="trainStat('mastery')">[+]</button></div></li>
-<li><span>➕ Живучесть: <b id="val-vitality">5</b></span><div><span id="price-vitality" class="price-label">(Цена: 50)</span><button class="btn-action" onclick="trainStat('vitality')">[+]</button></div></li>
-</ul>
-<div class="menu-list" style="margin-top:15px;">
-<button class="menu-btn" onclick="changeScreen('screen-profile')">↩️ Назад в Профиль <span class="arrow">&gt;&gt;</span></button>
-</div>
-</div>
+    <div class="footer-links">
+        <a href="/">Выйти</a>
+    </div>
+    <div class="legal-info">MISUTECH LIMITED SUITE C, LEVEL 7, WORLD TRUST TOWER, 50 STANLEY STREET, CENTRAL, HONG KONG</div>
 
-</div>
-
-<!-- ТУТ СЕЙЧАС БУДЕТ ВТОРАЯ ЧАСТЬ КОДА -->
-<script src="поход.js"></script>
-
+    <script>
+        async function loadPlayerData() {
+            const response = await fetch('/api/user-data');
+            const user = await response.json();
+            document.getElementById('player-name').innerText = user.username;
+            document.getElementById('player-level').innerText = user.level;
+            document.getElementById('player-hp').innerText = user.hp;
+            document.getElementById('player-def').innerText = user.def;
+            document.getElementById('player-silver').innerText = user.silver;
+            document.getElementById('player-gold').innerText = user.gold;
+            document.getElementById('player-gems').innerText = user.gems;
+            document.getElementById('online-count').innerText = user.onlineCount;
+        }
+        loadPlayerData();
+    </script>
 </body>
 </html>
-<script>
-    let defData = { gold: 184491, hp: 172365, level: 15, energy: 3, fame: 83258, nextRegenTime: 0, stats: { strength: 5, defense: 5, agility: 5, mastery: 5, vitality: 5 } };
-    let heroData = JSON.parse(localStorage.getItem('barb_save')) || defData;
-    const REGEN_DELAY = 300;
-
-    function save() { 
-        localStorage.setItem('barb_save', JSON.stringify(heroData)); 
-    }
-
-    window.changeScreen = function(id) {
-        document.querySelectorAll('.game-screen').forEach(function(s) { s.classList.remove('active'); });
-        let t = document.getElementById(id); if(t) t.classList.add('active');
-    };
-
-    window.trainStat = function(name) {
-        let p = heroData.stats[name] * 10;
-        if (heroData.gold >= p) {
-            heroData.gold -= p; heroData.stats[name] += 1; save(); updateUI();
-        } else { alert("Мало серебра!"); }
-    };
-
-    function checkRegen() {
-        let now = Math.floor(Date.now() / 1000);
-        if (heroData.energy < 3 && heroData.nextRegenTime !== 0) {
-            while (now >= heroData.nextRegenTime && heroData.energy < 3) {
-                heroData.energy += 1;
-                heroData.nextRegenTime = (heroData.energy < 3) ? heroData.nextRegenTime + REGEN_DELAY : 0;
-                save();
-            }
-        }
-    }
-
-    function updateUI() {
-        checkRegen();
-        let now = Math.floor(Date.now() / 1000);
-        let tText = "00:00:00";
-        if (heroData.energy < 3 && heroData.nextRegenTime > now) {
-            let d = heroData.nextRegenTime - now;
-            let m = Math.floor(d / 60); let s = d % 60;
-            tText = "00:" + (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
-        }
-
-        let dObj = new Date();
-        let hrs = dObj.getHours(); let mins = dObj.getMinutes(); let secs = dObj.getSeconds();
-        let clockText = (hrs < 10 ? "0" : "") + hrs + ":" + (mins < 10 ? "0" : "") + mins + ":" + (secs < 10 ? "0" : "") + secs;
-
-        if(!heroData.fame) { heroData.fame = 83258; }
-        document.getElementById("ui-gold").innerText = heroData.gold.toLocaleString('ru-RU');
-        document.getElementById("ui-hp").innerText = heroData.hp.toLocaleString('ru-RU');
-        document.getElementById("ui-energy").innerText = heroData.energy + "/3";
-        document.getElementById("ui-timer").innerText = tText;
-        document.getElementById("ui-clock").innerText = clockText;
-        document.getElementById("ui-fame").innerText = heroData.fame.toLocaleString('ru-RU');
-
-        ["strength", "defense", "agility", "mastery", "vitality"].forEach(function(n) {
-            let v = heroData.stats[n];
-            document.getElementById("val-" + n).innerText = v;
-            document.getElementById("price-" + n).innerText = "(Цена: " + (v * 10) + ")";
-        });
-    }
-        // Новые переменные для похода
-    if (typeof heroData.expeditionTimeUsed === 'undefined') heroData.expeditionTimeUsed = 0;
-    if (typeof heroData.lastExpeditionReset === 'undefined') heroData.lastExpeditionReset = new Date().toLocaleDateString();
-    if (typeof heroData.activeExpedition === 'undefined') heroData.activeExpedition = null;
-
-    function checkDailyLimitReset() {
-        let today = new Date().toLocaleDateString();
-        if (heroData.lastExpeditionReset !== today) {
-            heroData.expeditionTimeUsed = 0;
-            heroData.lastExpeditionReset = today;
-            save();
-        }
-    }
-
-    window.startExpedition = function(minutes) {
-        checkDailyLimitReset();
-        if (minutes < 10 || minutes > 360) { alert("Время похода должно быть от 10 до 360 минут!"); return; }
-        if (heroData.expeditionTimeUsed + minutes > 360) {
-            let timeLeft = 360 - heroData.expeditionTimeUsed;
-            alert(`Превышен суточный лимит! Сегодня вы можете пойти в поход максимум на ${timeLeft} мин.`);
-            return;
-        }
-        if (heroData.activeExpedition) { alert("Вы уже находитесь в походе!"); return; }
-        let now = Math.floor(Date.now() / 1000);
-        heroData.activeExpedition = { endTime: now + (minutes * 60), durationMinutes: minutes };
-        heroData.expeditionTimeUsed += minutes;
-        save();
-        alert(`Вы отправились в поход на ${minutes} минут!`);
-    };
-
-    window.checkExpeditionEnd = function() {
-        if (!heroData.activeExpedition) return;
-        let now = Math.floor(Date.now() / 1000);
-        if (now >= heroData.activeExpedition.endTime) {
-            let mins = heroData.activeExpedition.durationMinutes;
-            let silverReward = Math.floor((mins / 10) * (Math.floor(Math.random() * 1001) + 500)); 
-            let goldReward = Math.floor((mins / 360) * 6); 
-            heroData.gold += silverReward;
-            if (typeof heroData.fame !== 'undefined') { heroData.fame += goldReward; }
-            heroData.activeExpedition = null;
-            save();
-            alert(`Событие: Вы успешно вернулись из похода!\nНайдено серебра: ${silverReward.toLocaleString('ru-RU')}\nНайдено золота: ${goldReward}`);
-            updateUI();
-        }
-    };
-
-        setInterval(function() {
-        checkDailyLimitReset();      // Добавилось: сброс лимита суток
-        window.checkExpeditionEnd(); // Добавилось: проверка таймера похода
-        updateUI();                  // Ваша старая функция обновления экрана
-    }, 1000); 
-    updateUI();                      // Ваша старая строчка мгновенного старта при загрузке
-
-</script>
