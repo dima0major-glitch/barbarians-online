@@ -6,8 +6,6 @@
     <title>Варвары — Профиль героя</title>
     <style>
         body { background-color: #061118; color: #ffffff; font-family: Arial, sans-serif; margin: 0; padding: 0; user-select: none; }
-        
-        /* Специфичные стили только для карточки характеристик */
         .category-bar { background: linear-gradient(to bottom, #d4c2a8, #bba78c); color: #3d240e; font-size: 14px; font-weight: bold; text-align: center; padding: 5px 15px; margin: 10px 0 5px 0; border-top: 1px solid #ebd9c0; border-bottom: 1px solid #8e785d; box-shadow: inset 0 1px 2px rgba(255,255,255,0.4); display: flex; justify-content: space-between; align-items: center; }
         .category-bar::before, .category-bar::after { content: "⚜️"; font-size: 12px; color: #6a4f31; }
         .stats-block { padding: 8px 15px; font-size: 14px; line-height: 1.6; }
@@ -20,68 +18,48 @@
     </style>
 </head>
 <body>
-
-    <!-- Шапка игры вставится сюда автоматически из global_core.js -->
-
     <div class="category-bar">Параметры</div>
     <div class="stats-block">
-        <div class="stat-row">
-            <div>💪 <span class="highlight-title">Сила:</span> <span id="stat-str">5</span></div>
-        </div>
-        <div class="stat-row">
-            <div>🛡️ <span class="highlight-title">Защита:</span> <span id="stat-def">5</span></div>
-        </div>
-        <div class="stat-row">
-            <div>🏃 <span class="highlight-title">Ловкость:</span> <span id="stat-agi">5</span></div>
-        </div>
-        <div class="stat-row">
-            <div>⚡ <span class="highlight-title">Мастерство:</span> <span id="stat-mst">5</span></div>
-        </div>
-        <div class="stat-row">
-            <div>➕ <span class="highlight-title">Живучесть:</span> <span id="stat-vit">5</span></div>
-        </div>
+        <div class="stat-row"><div>💪 <span class="highlight-title">Сила:</span> <span id="stat-str">5</span></div></div>
+        <div class="stat-row"><div>🛡️ <span class="highlight-title">Защита:</span> <span id="stat-def">5</span></div></div>
+        <div class="stat-row"><div>🏃 <span class="highlight-title">Ловкость:</span> <span id="stat-agi">5</span></div></div>
+        <div class="stat-row"><div>⚡ <span class="highlight-title">Мастерство:</span> <span id="stat-mst">5</span></div></div>
+        <div class="stat-row"><div>➕ <span class="highlight-title">Живучесть:</span> <span id="stat-vit">5</span></div></div>
         <hr style="border-color: #0f2231; margin: 8px 0;">
         <div>❤️ <span class="highlight-title">Здоровье:</span> <span id="char-hp">250</span></div>
         <div>💚 <span class="highlight-title">Здор. макс.:</span> <span id="char-hp-max">250</span></div>
-        <div>❤️ <span class="highlight-title">Здор. восст.:</span> <span id="char-hp-reg">30</span> в час</div>
+        <div>❤️ <span class="highlight-title">Здор. восст.:</span> 30 в час</div>
     </div>
     <div class="category-bar">Бонусы</div>
     <div class="stats-block" style="color: #8faec4;">
         <div>Одежда: 💪 +0 🛡️ +0 🏃 +0 ⚡ +0 ➕ +0</div>
         <div>Бонусы одежды: 💪 +0 🛡️ +0 🏃 +0 ⚡ +0</div>
-        <div>Братский Дух: 💪 +0 🛡️ +0 🏃 +0 ⚡ +0</div>
-        <div>Забор: 🛡️ +0</div>
     </div>
-
     <div class="category-bar">Статистика</div>
     <div class="stats-block">
         <div>👥 <span class="highlight-title">Друзей:</span> 0</div>
         <div class="green-text">👑 <span class="highlight-title" style="color:#00ffaa;">Уровень:</span> <span id="char-lvl">1</span></div>
-        <div>⭐ <span class="highlight-title">Опыт:</span> <span id="char-exp">0</span></div>
+        <div>⭐ <span class="highlight-title">Опыт:</span> <span id="char-exp">0</span> / <span id="char-exp-max">15</span></div>
         <div class="yellow-text">🏆 <span class="highlight-title" style="color:#ffff00;">Слава:</span> <span id="char-fame">0</span></div>
         <div>🏰 <span class="highlight-title">Клан:</span> Не состоит в клане</div>
-        <div>🛡️ <span class="highlight-title">Братство:</span> <span class="yellow-text">Нет</span></div>
-        <div>⚔️ <span class="highlight-title">Побед:</span> 0</div>
-        <div>💀 <span class="highlight-title">Проигрышей:</span> 0</div>
         <div class="yellow-text">🪙 <span class="highlight-title" style="color:#ffff00;">Серебро в сумке:</span> <span id="char-silver">10000</span></div>
         <div>💰 <span class="highlight-title">Золото в сумке:</span> <span id="char-gold">15</span></div>
         <div>💎 <span class="highlight-title">Кристаллы:</span> <span id="char-gems">0</span></div>
-        <div>👹 <span class="highlight-title">Убито гоблинов:</span> 0</div>
     </div>
-
-    <a href="index.html" class="menu-link">
-        <span>🏠 Вернуться на главную</span>
-        <span class="menu-arrow">»»</span>
-    </a>
-
+    <a href="index.html" class="menu-link"><span>🏠 Вернуться на главную</span><span class="menu-arrow">»»</span></a>
     <script>
+        function getMaxExpForLvl(level) {
+            if (level <= 1) return 15;
+            return Math.floor(Math.pow(level - 1, 2) * 10 + 15);
+        }
+
         function loadHeroData() {
             let userSilver = localStorage.getItem('barb_silver') || '10000';
-            let lvl = localStorage.getItem('barb_lvl') || '1';
+            let lvl = parseInt(localStorage.getItem('barb_lvl') || '1');
             let gold = localStorage.getItem('barb_gold') || '15';
             let gems = localStorage.getItem('barb_gems') || '0';
             let fame = localStorage.getItem('barb_fame') || '0';
-            let exp = localStorage.getItem('barb_exp') || '0';
+            let exp = parseInt(localStorage.getItem('barb_exp') || '0');
 
             let str = parseInt(localStorage.getItem('barb_str') || '5');
             let def = parseInt(localStorage.getItem('barb_def') || '5');
@@ -89,29 +67,39 @@
             let mst = parseInt(localStorage.getItem('barb_mst') || '5');
             let vit = parseInt(localStorage.getItem('barb_vit') || '5');
 
-            let maxHp = 250 + (vit * 20);
+            let equipped = JSON.parse(localStorage.getItem('barb_equipped') || '{}');
+            for (let slot in equipped) {
+                let item = equipped[slot];
+                if (item.bonus) {
+                    if (item.bonus.str) str += item.bonus.str;
+                    if (item.bonus.def) def += item.bonus.def;
+                    if (item.bonus.agi) agi += item.bonus.agi;
+                    if (item.bonus.mst) mst += item.bonus.mst;
+                    if (item.bonus.vit) vit += item.bonus.vit;
+                }
+            }
 
-            // Наполнение текстовых блоков профиля данными персонажа
+            let maxHp = 250 + (vit * 20);
+            let maxExp = getMaxExpForLvl(lvl);
+
             document.getElementById('stat-str').innerText = str;
             document.getElementById('stat-def').innerText = def;
             document.getElementById('stat-agi').innerText = agi;
             document.getElementById('stat-mst').innerText = mst;
             document.getElementById('stat-vit').innerText = vit;
-
             document.getElementById('char-hp').innerText = maxHp;
             document.getElementById('char-hp-max').innerText = maxHp;
             
             document.getElementById('char-lvl').innerText = lvl;
             document.getElementById('char-exp').innerText = exp;
+            document.getElementById('char-exp-max').innerText = maxExp;
             document.getElementById('char-fame').innerText = fame;
             document.getElementById('char-silver').innerText = userSilver;
             document.getElementById('char-gold').innerText = gold;
             document.getElementById('char-gems').innerText = gems;
         }
-
         document.addEventListener("DOMContentLoaded", loadHeroData);
     </script>
-    <!-- Подключаем сквозное автоматическое ядро интерфейса, боев и времени -->
     <script src="global_core.js"></script>
 </body>
 </html>
