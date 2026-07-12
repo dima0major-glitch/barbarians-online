@@ -37,7 +37,9 @@
     <div class="game-header">
         <div class="header-row">
             <div class="header-item">✉️</div>
+            <!-- Никнейм обычный, без кликов -->
             <div class="header-item nickname">🪓 <span id="player-name">Загрузка...</span></div>
+            <!-- ТОЛЬКО клик по уровню открывает полную статистику героя -->
             <div class="header-item lvl" onclick="window.location.href='hero.html'"><span id="header-lvl">👑 1</span></div>
             <div class="header-item hp">❤️ <span id="header-hp">250</span></div>
             <div class="header-item armor">🛡️ <span id="header-def">5</span></div>
@@ -47,8 +49,6 @@
             <div class="header-item">⚔️ 3/3</div>
             <div class="header-item">⏳ 00:00:00</div>
             <div class="header-item">🕒 15:27:52</div>
-            <div class="header-item">🔍</div>
-            <div class="header-item">📜</div>
         </div>
     </div>
 
@@ -95,10 +95,7 @@
     <script>
         function checkAndLoad() {
             const savedName = localStorage.getItem('barbarians_username');
-            if (!savedName) {
-                window.location.href = "start.html";
-                return;
-            }
+            if (!savedName) { window.location.href = "start.html"; return; }
             
             const lvl = localStorage.getItem('barb_lvl') || '1';
             const silver = localStorage.getItem('barb_silver') || '10000';
@@ -114,12 +111,7 @@
             document.getElementById('header-def').innerText = def;
             document.getElementById('header-hp').innerText = maxHp;
         }
-        
-        function logout() {
-            localStorage.clear();
-            window.location.href = "start.html";
-        }
-        
+        function logout() { localStorage.clear(); window.location.href = "start.html"; }
         checkAndLoad();
     </script>
 </body>
