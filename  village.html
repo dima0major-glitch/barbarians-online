@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Варвары — Поселок</title>
+    <style>
+        body { background-color: #061118; color: #ffffff; font-family: Arial, sans-serif; margin: 0; padding: 0; user-select: none; }
+        
+        .category-bar { background: linear-gradient(to bottom, #092429, #040f12); color: #00ffcc; font-size: 14px; font-weight: bold; text-align: center; padding: 6px 15px; border-top: 1px solid #144b54; border-bottom: 1px solid #040e10; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .village-banner-container { background-color: #040b0f; padding: 10px; text-align: center; border-bottom: 1px solid #0f2231; }
+        .village-art { width: 90%; max-width: 320px; height: 130px; margin: 0 auto; border: 1px solid #1c8cd1; background: linear-gradient(45deg, #112535, #07111a); border-radius: 4px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #4b6a82; box-shadow: 0 4px 8px rgba(0,0,0,0.5); }
+        .art-icon { font-size: 40px; margin-bottom: 5px; }
+
+        .menu-container { margin-top: 2px; }
+        .menu-link { background: linear-gradient(to bottom, #091b29, #050e16); padding: 13px 15px; margin-bottom: 2px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #0f2231; text-decoration: none; color: #adc8d9; font-size: 14px; font-weight: bold; }
+        .menu-link:active { background: #0d273d; }
+        .menu-arrow { color: #1c8cd1; font-weight: bold; letter-spacing: -2px; font-size: 15px; }
+        .menu-divider { height: 4px; background: repeating-linear-gradient(90deg, #3d240e, #1f1207 20px); border-top: 1px solid #5c3716; border-bottom: 1px solid #5c3716; margin: 6px 0; }
+    </style>
+</head>
+<body>
+
+    <!-- Шапка добавится автоматически из global_core.js -->
+
+    <div class="category-bar">Поселок</div>
+
+    <div class="village-banner-container">
+        <div class="village-art">
+            <span class="art-icon">🏡🌳</span>
+            <span style="font-size: 11px; text-transform: uppercase; font-weight: bold; letter-spacing: 1px;">Родная Деревня</span>
+        </div>
+    </div>
+
+    <div class="menu-container">
+        <!-- Основные здания Поселка из твоего скриншота -->
+        <a href="shop.html" class="menu-link"><span>🏪 Лавка</span><span class="menu-arrow">»»</span></a>
+        <a href="market.html" class="menu-link"><span>📦 Рынок</span><span class="menu-arrow">»»</span></a>
+        <a href="farm.html" class="menu-link"><span>🌱 Участок</span><span class="menu-arrow">»»</span></a>
+        <a href="mine.html" class="menu-link"><span>⛏️ Шахта</span><span class="menu-arrow">»»</span></a>
+        <a href="house.html" class="menu-link"><span>🏠 Дом</span><span class="menu-arrow">»»</span></a>
+        <a href="druid.html" class="menu-link"><span>🧙‍♂️ Друид</span><span class="menu-arrow">»»</span></a>
+        <a href="witch.html" class="menu-link"><span>🔮 Ведьма</span><span class="menu-arrow">»»</span></a>
+        <a href="merchant.html" class="menu-link"><span>🐫 Купец</span><span class="menu-arrow">»»</span></a>
+        <a href="forge.html" class="menu-link"><span>⚒️ Кузнец</span><span class="menu-arrow">»»</span></a>
+        <a href="consul.html" class="menu-link"><span>📜 Консул</span><span class="menu-arrow">»»</span></a>
+        <a href="daily.html" class="menu-link"><span>🎁 Ежедневная награда</span><span class="menu-arrow">»»</span></a>
+        <a href="monk.html" class="menu-link"><span>⛪ Монах</span><span class="menu-arrow">»»</span></a>
+        <a href="tavern.html" class="menu-link"><span>🍺 Таверна</span><span class="menu-arrow">»»</span></a>
+
+        <div class="menu-divider"></div>
+
+        <!-- Кнопки навигации снизу -->
+        <a href="index.html" class="menu-link"><span>🏠 Главная</span><span class="menu-arrow">»»</span></a>
+        <a href="hero.html" class="menu-link"><span>🤠 Герой</span><span class="menu-arrow">»»</span></a>
+    </div>
+
+    <!-- Подключаем ядро игры -->
+    <script src="global_core.js"></script>
+</body>
+</html>

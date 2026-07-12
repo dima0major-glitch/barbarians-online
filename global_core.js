@@ -7,7 +7,7 @@ const REGEN_TIME = 5 * 60 * 1000; // 5 минут в миллисекундах
 function renderGlobalHeader() {
     if (document.getElementById('global-game-header-container')) return;
 
-    // Внедряем CSS-стили шапки прямо в документ, чтобы они работали везде автоматически
+    // Внедряем CSS-стили шапки прямо в документ
     const styleTag = document.createElement('style');
     styleTag.innerHTML = `
         .game-banner { background: linear-gradient(to bottom, #112d3e, #091a26); border-bottom: 2px solid #1c8cd1; padding: 8px; text-align: center; font-size: 16px; font-weight: bold; color: #ffffff; text-shadow: 1px 1px 3px #000; }
@@ -29,6 +29,7 @@ function renderGlobalHeader() {
     const headerContainer = document.createElement('div');
     headerContainer.id = 'global-game-header-container';
     
+    // Переписанная разметка: теперь ⏳ и 🕒 ведут по клику прямо на village.html
     headerContainer.innerHTML = `
         <div class="game-banner">🛡️ Варвары ⚔️</div>
         <div class="game-header">
@@ -44,8 +45,8 @@ function renderGlobalHeader() {
                 <div class="header-item" id="header-battles-zone" onclick="window.location.href='duel.html'">
                     ⚔️ <span id="header-battles">3/3</span>
                 </div>
-                <div class="header-item">⏳ <span id="header-timer">00:00</span></div>
-                <div class="header-item">🕒 <span id="header-clock">00:00:00</span></div>
+                <div class="header-item" onclick="window.location.href='village.html'" style="cursor: pointer; text-decoration: underline;">⏳ <span id="header-timer">00:00</span></div>
+                <div class="header-item" onclick="window.location.href='village.html'" style="cursor: pointer; text-decoration: underline;">🕒 <span id="header-clock">00:00:00</span></div>
             </div>
         </div>
     `;
@@ -69,7 +70,6 @@ function updateGlobalGameCore() {
         localStorage.setItem('barb_last_regen', lastRegen);
     }
 
-    // Логика восстановления боёв
     if (count < MAX_BATTLES) {
         let passed = now - lastRegen;
         if (passed >= REGEN_TIME) {
@@ -86,7 +86,6 @@ function updateGlobalGameCore() {
         localStorage.setItem('barb_last_regen', lastRegen);
     }
 
-    // Расчет тикающего таймера
     let timerStr = "00:00";
     if (count < MAX_BATTLES) {
         let msLeft = REGEN_TIME - (now - lastRegen);
@@ -97,7 +96,6 @@ function updateGlobalGameCore() {
         timerStr = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
     }
 
-    // Наполнение элементов шапки данными
     const elName = document.getElementById('header-player-name');
     const elLvl = document.getElementById('header-lvl');
     const elHp = document.getElementById('header-hp');
@@ -125,7 +123,6 @@ function updateGlobalGameCore() {
     if (elBattles) elBattles.innerText = `${count}/3`;
     if (elTimer) elTimer.innerText = timerStr;
 
-    // Подсветка зоны боев (красная, если 0/3)
     if (elBattlesZone) {
         if (count <= 0) {
             elBattlesZone.className = "header-item battles-btn-disabled";
@@ -139,7 +136,6 @@ function updateGlobalGameCore() {
         elClock.innerText = d.toTimeString().split(' ');
     }
 
-    // Авто-блокировка кнопок на Арене (duel.html)
     const fightButtons = document.querySelectorAll('.fight-btn');
     const alertMsg = document.getElementById('no-battles-msg');
     if (fightButtons.length > 0) {
