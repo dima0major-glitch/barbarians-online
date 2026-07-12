@@ -6,7 +6,7 @@
     <title>Варвары — Игра</title>
     <style>
         body { background-color: #061118; color: #ffffff; font-family: Arial, sans-serif; margin: 0; padding: 0; user-select: none; }
-        .game-banner { background: linear-gradient(to bottom, #112d3e, #091a26); border-bottom: 2px solid #1c8cd1; padding: 8px; text-align: center; font-size: 16px; font-weight: bold; color: #ffffff; text-shadow: 1px 1px 3px #000; }
+        .game-banner { background: linear-gradient(to bottom, #112d3e, #091a26); border-bottom: 2px solid #1c8cd1; padding: 8px; text-align: center; font-size: 16px; font-weight: bold; text-shadow: 1px 1px 3px #000; }
         .game-header { background: linear-gradient(to bottom, #091a26, #051017); border-bottom: 2px solid #142a3a; padding: 10px 8px; text-align: center; font-size: 13px; }
         .player-row { display: flex; justify-content: center; align-items: center; gap: 5px; font-weight: bold; color: #e2f2ff; margin-bottom: 6px; }
         .stats-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; font-size: 12px; color: #b0cbdc; }
@@ -21,7 +21,7 @@
         .menu-arrow { color: #1c8cd1; font-weight: bold; letter-spacing: -2px; font-size: 15px; }
         .menu-divider { height: 4px; background: repeating-linear-gradient(90deg, #3d240e, #1f1207 20px); border-top: 1px solid #5c3716; border-bottom: 1px solid #5c3716; margin: 6px 0; }
         .footer-links { display: flex; justify-content: center; gap: 15px; padding: 15px 0 10px 0; font-size: 12px; }
-        .footer-links a { color: #7ba2bd; text-decoration: none; }
+        .footer-links a { color: #7ba2bd; text-decoration: none; cursor: pointer; }
         .legal-info { text-align: center; font-size: 10px; color: #4a6273; padding: 0 15px 25px 15px; text-transform: uppercase; }
     </style>
 </head>
@@ -30,21 +30,21 @@
     <div class="game-header">
         <div class="player-row">
             <span>🪓 <span id="player-name">Загрузка...</span></span> 
-            <span style="color: #ff9900;">👑 <span id="player-level">1</span></span>
+            <span style="color: #ff9900;">👑 1</span>
         </div>
         <div class="stats-grid">
-            <div class="stat-item hp">❤️ <span id="player-hp">0</span></div>
-            <div class="stat-item">🛡️ <span id="player-def">0</span></div>
-            <div class="stat-item">🪙 <span id="player-silver">0</span></div>
-            <div class="stat-item gold">💰 <span id="player-gold">0</span></div>
-            <div class="stat-item" style="color: #00ccff;">💎 <span id="player-gems">0</span></div>
+            <div class="stat-item hp">❤️ 250</div>
+            <div class="stat-item">🛡️ 15</div>
+            <div class="stat-item">🪙 1000</div>
+            <div class="stat-item gold">💰 5</div>
+            <div class="stat-item" style="color: #00ccff;">💎 0</div>
             <div class="stat-item">⚔️ 3/3</div>
         </div>
     </div>
 
     <div class="welcome-block">
         <div class="welcome-title">Добро пожаловать!</div>
-        <div class="welcome-sub">Рядом с тобой <span id="online-count">1080</span> варваров (онлайн)</div>
+        <div class="welcome-sub">Рядом с тобой 1080 варваров (онлайн)</div>
     </div>
 
     <div style="margin-top: 5px;">
@@ -52,29 +52,36 @@
         <a href="#" class="menu-link"><span>⚔️ Дуэль</span><span class="menu-arrow">»»</span></a>
         <a href="#" class="menu-link"><span>🏡 Поселок</span><span class="menu-arrow">»»</span></a>
         <div class="menu-divider"></div>
-        <a href="/game" class="menu-link"><span>🏠 Главная</span><span class="menu-arrow">»»</span></a>
+        <a href="index.html" class="menu-link"><span>🏠 Главная</span><span class="menu-arrow">»»</span></a>
         <a href="#" class="menu-link"><span>💬 Чат</span><span class="menu-arrow">»»</span></a>
     </div>
 
     <div class="footer-links">
-        <a href="/">Выйти</a>
+        <a onclick="logout()">Выйти</a>
     </div>
     <div class="legal-info">MISUTECH LIMITED SUITE C, LEVEL 7, WORLD TRUST TOWER, 50 STANLEY STREET, CENTRAL, HONG KONG</div>
 
     <script>
-        async function loadPlayerData() {
-            const response = await fetch('/api/user-data');
-            const user = await response.json();
-            document.getElementById('player-name').innerText = user.username;
-            document.getElementById('player-level').innerText = user.level;
-            document.getElementById('player-hp').innerText = user.hp;
-            document.getElementById('player-def').innerText = user.def;
-            document.getElementById('player-silver').innerText = user.silver;
-            document.getElementById('player-gold').innerText = user.gold;
-            document.getElementById('player-gems').innerText = user.gems;
-            document.getElementById('online-count').innerText = user.onlineCount;
+        function checkAndLoad() {
+            // Проверяем, есть ли имя игрока в браузере
+            const savedName = localStorage.getItem('barbarians_username');
+            
+            // Если имени нет — цепочка нарушена, выкидываем на старт!
+            if (!savedName) {
+                window.location.href = "start.html";
+                return;
+            }
+            
+            // Если имя есть — вставляем его в шапку
+            document.getElementById('player-name').innerText = savedName;
         }
-        loadPlayerData();
+        
+        function logout() {
+            localStorage.removeItem('barbarians_username');
+            window.location.href = "start.html";
+        }
+        
+        checkAndLoad();
     </script>
 </body>
 </html>

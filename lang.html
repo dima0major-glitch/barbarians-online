@@ -3,19 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Варвары — Язык</title>
+    <title>Варвары — Выбор языка</title>
     <style>
         body { background-color: #061118; color: #ffffff; font-family: Arial, sans-serif; margin: 0; padding: 0; user-select: none; }
-        .game-banner { background: linear-gradient(to bottom, #112d3e, #091a26); border-bottom: 2px solid #1c8cd1; padding: 8px; text-align: center; font-size: 16px; font-weight: bold; color: #ffffff; text-shadow: 1px 1px 3px #000; }
+        .game-banner { background: linear-gradient(to bottom, #112d3e, #091a26); border-bottom: 2px solid #1c8cd1; padding: 8px; text-align: center; font-size: 16px; font-weight: bold; text-shadow: 1px 1px 3px #000; }
         .welcome-msg { text-align: center; color: #00ffaa; font-size: 15px; font-weight: bold; padding: 15px 10px; }
         .lang-title-bar { background: linear-gradient(to bottom, #d4c2a8, #bba78c); color: #3d240e; font-size: 13px; font-weight: bold; text-align: center; padding: 6px 15px; margin: 5px 0 12px 0; display: flex; justify-content: space-between; align-items: center; }
         .lang-title-bar::before, .lang-title-bar::after { content: "⚜️"; font-size: 12px; color: #6a4f31; }
         .lang-item { background: linear-gradient(to bottom, #091b29, #050e16); padding: 13px 15px; margin-bottom: 2px; display: flex; justify-content: space-between; align-items: center; text-decoration: none; color: #adc8d9; font-size: 14px; font-weight: bold; }
-        .lang-item:active { background: #0d273d; }
         .lang-text { display: flex; align-items: center; gap: 10px; }
         .lang-arrow { color: #1c8cd1; font-weight: bold; letter-spacing: -2px; font-size: 15px; }
         .footer-nav { display: flex; justify-content: center; padding: 20px 0 10px 0; font-size: 12px; }
-        .footer-nav a { color: #7ba2bd; text-decoration: none; }
         .legal-info { text-align: center; font-size: 10px; color: #4a6273; padding: 0 15px 25px 15px; text-transform: uppercase; }
     </style>
 </head>
@@ -24,8 +22,8 @@
     <div class="welcome-msg">ДОБРО ПОЖАЛОВАТЬ ВАРВАР!</div>
     <div class="lang-title-bar"><span>Выбери язык интерфейса</span></div>
     <div class="lang-list">
-        <a href="/register?lang=uk" class="lang-item"><span class="lang-text">🇺🇦 Українська (UK)</span><span class="lang-arrow">»»</span></a>
-        <a href="/register?lang=ru" class="lang-item"><span class="lang-text">🇷🇺 Русский (RU)</span><span class="lang-arrow">»»</span></a>
+        <a href="register.html?lang=uk" class="lang-item"><span class="lang-text">🇺🇦 Українська (UK)</span><span class="lang-arrow">»»</span></a>
+        <a href="register.html?lang=ru" class="lang-item"><span class="lang-text">🇷🇺 Русский (RU)</span><span class="lang-arrow">»»</span></a>
     </div>
     <div class="footer-nav"><a href="#">Об игре</a></div>
     <div class="legal-info">MISUTECH LIMITED SUITE C, LEVEL 7, WORLD TRUST TOWER, 50 STANLEY STREET, CENTRAL, HONG KONG</div>

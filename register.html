@@ -6,7 +6,7 @@
     <title>Варвары — Регистрация</title>
     <style>
         body { background-color: #061118; color: #ffffff; font-family: Arial, sans-serif; margin: 0; padding: 0; user-select: none; }
-        .game-banner { background: linear-gradient(to bottom, #112d3e, #091a26); border-bottom: 2px solid #1c8cd1; padding: 8px; text-align: center; font-size: 16px; font-weight: bold; color: #ffffff; text-shadow: 1px 1px 3px #000; }
+        .game-banner { background: linear-gradient(to bottom, #112d3e, #091a26); border-bottom: 2px solid #1c8cd1; padding: 8px; text-align: center; font-size: 16px; font-weight: bold; text-shadow: 1px 1px 3px #000; }
         .form-container { text-align: center; padding: 20px 15px; }
         .input-label { font-size: 14px; color: #b0cbdc; margin-bottom: 6px; display: block; }
         .input-field { background-color: #3a3a3a; border: 1px solid #222; color: #fff; width: 80%; max-width: 260px; padding: 10px; font-size: 16px; text-align: center; margin-bottom: 15px; outline: none; }
@@ -40,7 +40,7 @@
         </form>
     </div>
     <div style="margin-top:15px;">
-        <a href="/" class="menu-link"><span>🏠 На главную</span><span class="menu-arrow">»»</span></a>
+        <a href="start.html" class="menu-link"><span>🏠 На главную</span><span class="menu-arrow">»»</span></a>
     </div>
     <div class="legal-info">MISUTECH LIMITED SUITE C, LEVEL 7, WORLD TRUST TOWER, 50 STANLEY STREET, CENTRAL, HONG KONG</div>
 
@@ -51,7 +51,7 @@
             document.getElementById('captcha-text').innerText = `${n1} + ${n2}`;
             document.getElementById('captcha-input').value = '';
         }
-        async function handleAuth(event) {
+        function handleAuth(event) {
             event.preventDefault();
             const uAns = parseInt(document.getElementById('captcha-input').value);
             const uLogin = document.getElementById('username').value;
@@ -59,13 +59,12 @@
                 document.getElementById('error-box').style.display = "block";
                 generateCaptcha(); return;
             }
-            const res = await fetch('/api/register', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: uLogin })
-            });
-            const data = await res.json();
-            if (data.success) { window.location.href = "/game"; }
+            
+            // Сохраняем имя игрока в память браузера (Local Storage)
+            localStorage.setItem('barbarians_username', uLogin);
+            
+            // Сразу перекидываем в игру
+            window.location.href = "index.html";
         }
         generateCaptcha();
     </script>
