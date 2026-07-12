@@ -6,7 +6,7 @@
     <title>Варвары — Регистрация</title>
     <style>
         body { background-color: #061118; color: #ffffff; font-family: Arial, sans-serif; margin: 0; padding: 0; user-select: none; }
-        .game-banner { background: linear-gradient(to bottom, #112d3e, #091a26); border-bottom: 2px solid #1c8cd1; padding: 8px; text-align: center; font-size: 16px; font-weight: bold; text-shadow: 1px 1px 3px #000; }
+        .game-banner { background: linear-gradient(to bottom, #112d3e, #091a26); border-bottom: 2px solid #1c8cd1; padding: 8px; text-align: center; font-size: 16px; font-weight: bold; color: #ffffff; text-shadow: 1px 1px 3px #000; }
         .form-container { text-align: center; padding: 20px 15px; }
         .input-label { font-size: 14px; color: #b0cbdc; margin-bottom: 6px; display: block; }
         .input-field { background-color: #3a3a3a; border: 1px solid #222; color: #fff; width: 80%; max-width: 260px; padding: 10px; font-size: 16px; text-align: center; margin-bottom: 15px; outline: none; }
@@ -60,10 +60,25 @@
                 generateCaptcha(); return;
             }
             
-            // Сохраняем имя игрока в память браузера (Local Storage)
-            localStorage.setItem('barbarians_username', uLogin);
+            // Очищаем старую память телефона при регистрации заново
+            localStorage.clear(); 
             
-            // Сразу перекидываем в игру
+            // Выдаем стартовые параметры варвару
+            localStorage.setItem('barbarians_username', uLogin);
+            localStorage.setItem('barb_lvl', '1');
+            localStorage.setItem('barb_exp', '0');
+            localStorage.setItem('barb_exp_max', '30');
+            localStorage.setItem('barb_fame', '0');
+            localStorage.setItem('barb_silver', '10000'); // 10к серебра
+            localStorage.setItem('barb_gold', '15');       // 15 золота
+            
+            // Базовые статы по 5
+            localStorage.setItem('barb_str', '5');
+            localStorage.setItem('barb_def', '5');
+            localStorage.setItem('barb_agi', '5');
+            localStorage.setItem('barb_mst', '5');
+            localStorage.setItem('barb_vit', '5');
+            
             window.location.href = "index.html";
         }
         generateCaptcha();
