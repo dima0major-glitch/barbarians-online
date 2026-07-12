@@ -7,8 +7,6 @@
     <style>
         body { background-color: #061118; color: #ffffff; font-family: Arial, sans-serif; margin: 0; padding: 0; user-select: none; }
         .game-banner { background: linear-gradient(to bottom, #112d3e, #091a26); border-bottom: 2px solid #1c8cd1; padding: 8px; text-align: center; font-size: 16px; font-weight: bold; color: #ffffff; text-shadow: 1px 1px 3px #000; }
-        
-        /* Та самая общая шапка ресурсов для страницы героя */
         .game-header { background: linear-gradient(to bottom, #091a26, #051017); border-bottom: 2px solid #142a3a; padding: 8px 5px; font-size: 12px; color: #b0cbdc; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
         .header-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px; line-height: 1.4; }
         .header-item { display: flex; align-items: center; gap: 2px; }
@@ -19,7 +17,6 @@
         .silver { color: #e5e5e5; }
         .gold { color: #ffcc00; font-weight: bold; }
         .gems { color: #00ccff; }
-
         .category-bar { background: linear-gradient(to bottom, #d4c2a8, #bba78c); color: #3d240e; font-size: 14px; font-weight: bold; text-align: center; padding: 5px 15px; margin: 10px 0 5px 0; border-top: 1px solid #ebd9c0; border-bottom: 1px solid #8e785d; box-shadow: inset 0 1px 2px rgba(255,255,255,0.4); display: flex; justify-content: space-between; align-items: center; }
         .category-bar::before, .category-bar::after { content: "⚜️"; font-size: 12px; color: #6a4f31; }
         .stats-block { padding: 8px 15px; font-size: 14px; line-height: 1.6; }
@@ -37,7 +34,6 @@
 
     <div class="game-banner">🛡️ Варвары ⚔️</div>
 
-    <!-- ВЕРХНЯЯ ПАНЕЛЬ ТЕПЕРЬ ВСЕГДА ТУТ -->
     <div class="game-header">
         <div class="header-row">
             <div class="header-item">✉️</div>
@@ -53,8 +49,6 @@
             <div class="header-item">🕒 15:27:52</div>
         </div>
     </div>
-
-    <!-- Синяя кнопка тренировки успешно удалена! -->
 
     <div class="category-bar">Параметры</div>
     <div class="stats-block">
@@ -111,7 +105,6 @@
         <span>🏠 Вернуться на главную</span>
         <span class="menu-arrow">»»</span>
     </a>
-
     <script>
         function calculateStatCost(currentStatValue) {
             return 10 + (currentStatValue - 5) * 5;
@@ -124,6 +117,8 @@
             let userSilver = parseInt(localStorage.getItem('barb_silver') || '10000');
             let lvl = localStorage.getItem('barb_lvl') || '1';
             let gold = localStorage.getItem('barb_gold') || '15';
+            let fame = localStorage.getItem('barb_fame') || '0';
+            let exp = localStorage.getItem('barb_exp') || '0';
 
             let str = parseInt(localStorage.getItem('barb_str') || '5');
             let def = parseInt(localStorage.getItem('barb_def') || '5');
@@ -131,58 +126,69 @@
             let mst = parseInt(localStorage.getItem('barb_mst') || '5');
             let vit = parseInt(localStorage.getItem('barb_vit') || '5');
 
-            let costStr = calculateStatCost(str); let costDef = calculateStatCost(def);
-            let costAgi = calculateStatCost(agi); let costMst = calculateStatCost(mst);
+            let maxHp = 250 + (vit * 20);
+
+            let costStr = calculateStatCost(str);
+            let costDef = calculateStatCost(def);
+            let costAgi = calculateStatCost(agi);
+            let costMst = calculateStatCost(mst);
             let costVit = calculateStatCost(vit);
 
-            document.getElementById('stat-str').innerText = str; document.getElementById('stat-def').innerText = def;
-            document.getElementById('stat-agi').innerText = agi; document.getElementById('stat-mst').innerText = mst;
+            document.getElementById('header-player-name').innerText = savedName;
+            document.getElementById('header-lvl').innerHTML = `👑 ${lvl}`;
+            document.getElementById('header-hp').innerText = maxHp;
+            document.getElementById('header-def').innerText = def;
+            document.getElementById('header-silver').innerText = `🪙 ${userSilver}`;
+            document.getElementById('header-gold').innerText = `💰 ${gold}`;
+
+            document.getElementById('stat-str').innerText = str;
+            document.getElementById('stat-def').innerText = def;
+            document.getElementById('stat-agi').innerText = agi;
+            document.getElementById('stat-mst').innerText = mst;
             document.getElementById('stat-vit').innerText = vit;
 
-            document.getElementById('cost-str').innerText = costStr; document.getElementById('cost-def').innerText = costDef;
-            document.getElementById('cost-agi').innerText = costAgi; document.getElementById('cost-mst').innerText = costMst;
+            document.getElementById('cost-str').innerText = costStr;
+            document.getElementById('cost-def').innerText = costDef;
+            document.getElementById('cost-agi').innerText = costAgi;
+            document.getElementById('cost-mst').innerText = costMst;
             document.getElementById('cost-vit').innerText = costVit;
 
-            document.getElementById('buy-str').disabled = (userSilver < costStr); document.getElementById('buy-def').disabled = (userSilver < costDef);
-            document.getElementById('buy-agi').disabled = (userSilver < costAgi); document.getElementById('buy-mst').disabled = (userSilver < costMst);
-            document.getElementById('buy-vit').disabled = (userSilver < costVit);
+            document.getElementById('char-hp').innerText = maxHp;
+            document.getElementById('char-hp-max').innerText = maxHp;
 
             document.getElementById('char-lvl').innerText = lvl;
-            document.getElementById('char-exp').innerText = localStorage.getItem('barb_exp') || '0';
-            document.getElementById('char-exp-max').innerText = localStorage.getItem('barb_exp_max') || '30';
-            document.getElementById('char-fame').innerText = localStorage.getItem('barb_fame') || '0';
+            document.getElementById('char-exp').innerText = exp;
+            document.getElementById('char-fame').innerText = fame;
             document.getElementById('char-silver').innerText = userSilver;
             document.getElementById('char-gold').innerText = gold;
 
-            let maxHp = 250 + (vit * 20);
-            document.getElementById('char-hp').innerText = maxHp; document.getElementById('char-hp-max').innerText = maxHp;
-
-            // СИНХРОНИЗАЦИЯ С ВЕРХНЕЙ ОБЩЕЙ ШАПКОЙ
-            document.getElementById('header-player-name').innerText = savedName;
-            document.getElementById('header-lvl').innerText = `👑 ${lvl}`;
-            document.getElementById('header-silver').innerText = `🪙 ${userSilver}`;
-            document.getElementById('header-gold').innerText = `💰 ${gold}`;
-            document.getElementById('header-def').innerText = def;
-            document.getElementById('header-hp').innerText = maxHp;
+            document.getElementById('buy-str').disabled = (userSilver < costStr);
+            document.getElementById('buy-def').disabled = (userSilver < costDef);
+            document.getElementById('buy-agi').disabled = (userSilver < costAgi);
+            document.getElementById('buy-mst').disabled = (userSilver < costMst);
+            document.getElementById('buy-vit').disabled = (userSilver < costVit);
         }
 
-        function buyStat(statName) {
+        function buyStat(statType) {
             let userSilver = parseInt(localStorage.getItem('barb_silver') || '10000');
-            let currentStatValue = parseInt(localStorage.getItem('barb_' + statName) || '5');
-            let currentCost = calculateStatCost(currentStatValue);
+            let currentStatValue = parseInt(localStorage.getItem('barb_' + statType) || '5');
+            let cost = calculateStatCost(currentStatValue);
 
-            if (userSilver >= currentCost) {
-                localStorage.setItem('barb_silver', userSilver - currentCost);
-                localStorage.setItem('barb_' + statName, currentStatValue + 1);
+            if (userSilver >= cost) {
+                localStorage.setItem('barb_silver', userSilver - cost);
+                localStorage.setItem('barb_' + statType, currentStatValue + 1);
                 
-                if(statName === 'def') {
+                if (statType === 'def') {
                     localStorage.setItem('barb_def', currentStatValue + 1);
                 }
-                
+
                 loadHeroData();
+            } else {
+                alert("🛑 Недостаточно серебра!");
             }
         }
-        loadHeroData();
+
+        document.addEventListener("DOMContentLoaded", loadHeroData);
     </script>
 </body>
 </html>
