@@ -7,8 +7,6 @@
     <style>
         body { background-color: #061118; color: #ffffff; font-family: Arial, sans-serif; margin: 0; padding: 0; user-select: none; }
         .game-banner { background: linear-gradient(to bottom, #112d3e, #091a26); border-bottom: 2px solid #1c8cd1; padding: 8px; text-align: center; font-size: 16px; font-weight: bold; color: #ffffff; text-shadow: 1px 1px 3px #000; }
-        
-        /* Верхняя панель ресурсов */
         .game-header { background: linear-gradient(to bottom, #091a26, #051017); border-bottom: 2px solid #142a3a; padding: 8px 5px; font-size: 12px; color: #b0cbdc; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
         .header-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px; line-height: 1.4; }
         .header-item { display: flex; align-items: center; gap: 2px; }
@@ -18,31 +16,19 @@
         .armor { color: #a0b0b8; }
         .silver { color: #e5e5e5; }
         .gold { color: #ffcc00; font-weight: bold; }
-
-        /* Заголовок страницы */
         .category-bar { background: linear-gradient(to bottom, #1d252c, #0c1217); color: #adc8d9; font-size: 14px; font-weight: bold; text-align: center; padding: 6px 15px; border-top: 1px solid #28343f; border-bottom: 1px solid #10171e; box-shadow: inset 0 1px 2px rgba(255,255,255,0.1); }
-        
-        /* Сетка тренировки стат из референса */
         .train-container { border-bottom: 1px solid #0f2231; background-color: #050d12; padding: 12px 10px; }
         .stat-block-main { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 8px; }
-        
-        /* Круглые иконки */
         .stat-icon-wrapper { width: 44px; height: 44px; background: radial-gradient(circle, #1a2f3d, #09131a); border: 2px solid #2c4252; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.6); flex-shrink: 0; }
-        
-        /* Текстовые описания */
         .stat-info { font-size: 12px; line-height: 1.4; color: #8cb4cd; }
         .stat-name { font-size: 14px; font-weight: bold; color: #ffffff; margin-bottom: 2px; }
         .stat-desc { color: #5b798e; margin-bottom: 3px; }
         .stat-level-text { font-size: 12px; color: #b0cbdc; }
         .stat-cost-text { font-size: 12px; color: #e5e5e5; font-weight: bold; }
-        
-        /* Атмосферные кнопки WAP-улучшения по центру */
         .btn-center-wrapper { display: flex; justify-content: center; margin-top: 4px; padding-bottom: 4px; }
         .btn-upgrade { background: linear-gradient(to bottom, #16242f, #070d12); border: 1px solid #1c8cd1; color: #adc8d9; font-size: 13px; font-weight: bold; padding: 6px 40px; border-radius: 4px; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1); width: 65%; text-align: center; }
         .btn-upgrade:active { background: #111e29; border-color: #00ffaa; color: #00ffaa; }
         .btn-upgrade:disabled { background: #0b1114; border-color: #24303a; color: #435360; cursor: not-allowed; box-shadow: none; }
-        
-        /* Навигация */
         .menu-link { background: linear-gradient(to bottom, #091b29, #050e16); padding: 13px 15px; margin-top: 2px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #0f2231; text-decoration: none; color: #adc8d9; font-size: 14px; font-weight: bold; }
         .menu-arrow { color: #1c8cd1; font-weight: bold; letter-spacing: -2px; }
     </style>
@@ -51,7 +37,6 @@
 
     <div class="game-banner">🛡️ Варвары ⚔️</div>
 
-    <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
     <div class="game-header">
         <div class="header-row">
             <div class="header-item">✉️</div>
@@ -70,7 +55,6 @@
 
     <div class="category-bar">ТРЕНИРОВКА ПЕРСОНАЖА</div>
     
-    <!-- СИЛА -->
     <div class="train-container">
         <div class="stat-block-main">
             <div class="stat-icon-wrapper">💪</div>
@@ -86,7 +70,6 @@
         </div>
     </div>
 
-    <!-- ЗАЩИТА -->
     <div class="train-container">
         <div class="stat-block-main">
             <div class="stat-icon-wrapper">🛡️</div>
@@ -102,7 +85,6 @@
         </div>
     </div>
 
-    <!-- ЛОВКОСТЬ -->
     <div class="train-container">
         <div class="stat-block-main">
             <div class="stat-icon-wrapper">🏃</div>
@@ -118,7 +100,6 @@
         </div>
     </div>
 
-    <!-- МАСТЕРСТВО -->
     <div class="train-container">
         <div class="stat-block-main">
             <div class="stat-icon-wrapper">⚡</div>
@@ -134,7 +115,6 @@
         </div>
     </div>
 
-    <!-- ЖИВУЧЕСТЬ -->
     <div class="train-container">
         <div class="stat-block-main">
             <div class="stat-icon-wrapper">➕</div>
@@ -150,9 +130,8 @@
         </div>
     </div>
 
-    <!-- КНОПКИ НАВИГАЦИИ -->
     <a href="profile.html" class="menu-link" style="margin-top: 15px;">
-        <span><span>↩️ Назад в профиль</span></span>
+        <span>↩️ Назад в профиль</span>
         <span class="menu-arrow">»»</span>
     </a>
     <a href="index.html" class="menu-link">
@@ -161,7 +140,8 @@
     </a>
     <script>
         function calculateStatCost(currentStatValue) {
-            return 10 + (currentStatValue - 5) * 5;
+            if (currentStatValue <= 5) return 10; 
+            return 10 + Math.pow(currentStatValue - 5, 2) * 8;
         }
 
         function loadTrainingData() {
@@ -186,7 +166,6 @@
             let costMst = calculateStatCost(mst);
             let costVit = calculateStatCost(vit);
 
-            // Синхронизация верхней шапки ресурсов
             document.getElementById('header-player-name').innerText = savedName;
             document.getElementById('header-lvl').innerHTML = `👑 ${lvl}`;
             document.getElementById('header-hp').innerText = maxHp;
@@ -194,21 +173,18 @@
             document.getElementById('header-silver').innerText = `🪙 ${userSilver}`;
             document.getElementById('header-gold').innerText = `💰 ${gold}`;
 
-            // Синхронизация текущих уровней характеристик на странице
             document.getElementById('stat-str').innerText = str;
             document.getElementById('stat-def').innerText = def;
             document.getElementById('stat-agi').innerText = agi;
             document.getElementById('stat-mst').innerText = mst;
             document.getElementById('stat-vit').innerText = vit;
 
-            // Синхронизация динамических ценников
             document.getElementById('cost-str').innerText = costStr;
             document.getElementById('cost-def').innerText = costDef;
             document.getElementById('cost-agi').innerText = costAgi;
             document.getElementById('cost-mst').innerText = costMst;
             document.getElementById('cost-vit').innerText = costVit;
 
-            // Автоматическое отключение и изменение стиля кнопки при нехватке серебра
             document.getElementById('buy-str').disabled = (userSilver < costStr);
             document.getElementById('buy-def').disabled = (userSilver < costDef);
             document.getElementById('buy-agi').disabled = (userSilver < costAgi);
@@ -222,23 +198,19 @@
             let cost = calculateStatCost(currentStatValue);
 
             if (userSilver >= cost) {
-                // Списываем баланс серебра, прибавляем стат
                 localStorage.setItem('barb_silver', userSilver - cost);
                 localStorage.setItem('barb_' + statType, currentStatValue + 1);
                 
-                // Пересчитываем броню в шапку на лету, если улучшали Защиту
                 if (statType === 'def') {
                     localStorage.setItem('barb_def', currentStatValue + 1);
                 }
 
-                // Перерисовываем интерфейс страницы
                 loadTrainingData();
             } else {
                 alert("🛑 Недостаточно серебра для тренировки!");
             }
         }
 
-        // Запуск при полной загрузке DOM
         document.addEventListener("DOMContentLoaded", loadTrainingData);
     </script>
 </body>
