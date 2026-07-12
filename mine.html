@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Варвары — Шахта</title>
+    <style>
+        body { background-color: #061118; color: #ffffff; font-family: Arial, sans-serif; margin: 0; padding: 0; user-select: none; }
+        .category-bar { background: linear-gradient(to bottom, #241f12, #0f0d07); color: #ffcc00; font-size: 14px; font-weight: bold; text-align: center; padding: 6px 15px; border-top: 1px solid #54492a; border-bottom: 1px solid #14110a; text-transform: uppercase; }
+        .mine-container { background-color: #050d12; padding: 15px; text-align: center; border-bottom: 1px solid #0f2231; }
+        .resource-block { background: #07151f; margin: 8px 10px; padding: 12px; border: 1px solid #1c8cd1; border-radius: 4px; text-align: left; }
+        .res-title { font-size: 14px; font-weight: bold; color: #ffffff; margin-bottom: 5px; display: flex; justify-content: space-between; }
+        .mine-btn { background: linear-gradient(to bottom, #7a5c08, #423202); border: 1px solid #ffcc00; color: #ffebaa; font-size: 13px; font-weight: bold; padding: 6px 20px; border-radius: 4px; cursor: pointer; text-shadow: 1px 1px 1px #000; float: right; }
+        .mine-btn:disabled { background: #1a1e21; border-color: #3a4146; color: #555; cursor: not-allowed; }
+        .menu-container { margin-top: 5px; }
+        .menu-link { background: linear-gradient(to bottom, #091b29, #050e16); padding: 13px 15px; margin-bottom: 2px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #0f2231; text-decoration: none; color: #adc8d9; font-size: 14px; font-weight: bold; }
+        .menu-arrow { color: #1c8cd1; font-weight: bold; letter-spacing: -2px; font-size: 15px; }
+    </style>
+</head>
+<body>
+    <div class="category-bar">Золотая и Кристальная Шахта</div>
+    <div class="mine-container">
+        <div class="resource-block">
+            <div class="res-title">💎 Кристальная жила <span id="gems-energy">150/150 Ен.</span></div>
+            <span style="font-size:11px; color:#799bb3;">Расход: 30 ен. за удар | Кулдаун: 2 мин.</span>
+            <button class="mine-btn" id="btn-gems" onclick="dig('gems')">Копать</button>
+            <div style="clear:both;"></div>
+            <div id="cooldown-gems" style="font-size:12px; color:#ff4d4d; margin-top:5px; display:none;">⏳ Перезагрузка: <span id="timer-gems">00:00</span></div>
+        </div>
+        <div class="resource-block">
+            <div class="res-title">💰 Золотая жила <span id="gold-energy">80/80 Ен.</span></div>
+            <span style="font-size:11px; color:#799bb3;">Расход: 30 ен. за удар | Кулдаун: 2 мин.</span>
+            <button class="mine-btn" id="btn-gold" onclick="dig('gold')">Копать</button>
+            <div style="clear:both;"></div>
+            <div id="cooldown-gold" style="font-size:12px; color:#ff4d4d; margin-top:5px; display:none;">⏳ Перезагрузка: <span id="timer-gold">00:00</span></div>
+        </div>
+        <div id="mine-report" style="margin-top:10px; font-size:13px; font-weight:bold; color:#00ffaa;"></div>
+    </div>
+    <div class="menu-container">
+        <a href="poselok.html" class="menu-link"><span>🏡 Назад в Поселок</span><span class="menu-arrow">»»</span></a>
+        <a href="index.html" class="menu-link"><span>🏠 Главная</span><span class="menu-arrow">»»</span></a>
+    </div>
+    <script>
+        const COOLDOWN_MS = 2 * 60 * 1000; 
+        const ENERGY_COST = 30;
+
+        function updateMineUI() {
+            let now = Date.now();
+            ['gems', 'gold'].forEach(type => {
+                let max = type === 'gems' ? 150 : 80;
+                let eng = localStorage.getItem(`mine_eng_${type}`) !== null ? parseInt(localStorage.getItem(`mine_eng_${type}`)) : max;
+                let cd = parseInt(localStorage.getItem(`mine_cd_${type}`) || '0');
+
+                document.getElementById(`${type}-energy`).innerText = `${eng}/${max} Ен.`;
+
+                let btn = document.getElementById(`btn-${type}`);
+                let cdBlock = document.getElementById(`cooldown-${type}`);
+
+                if (now < cd) {
+                    btn.disabled = true;
+                    cdBlock.style.display = "block";
+                    let left = Math.ceil((cd - now) / 1000);
+                    let m = Math.floor(left / 60).toString().padStart(2,'0');
+                    let s = (left % 60).toString().padStart(2,'0');
+                    document.getElementById(`timer-${type}`).innerText = `${m}:${s}`;
+                } else {
+                    btn.disabled = (eng < ENERGY_COST);
+                    cdBlock.style.display = "none";
+                }
+            });
+        }
+
+        function dig(type) {
+            let max = type === 'gems' ? 150 : 80;
+            let eng = localStorage.getItem(`mine_eng_${type}`) !== null ? parseInt(localStorage.getItem(`mine_eng_${type}`)) : max;
+            
+            if (eng < ENERGY_COST) { alert("Не хватает энергии!"); return; }
+
+            eng -= ENERGY_COST;
+            localStorage.setItem(`mine_eng_${type}`, eng);
+            localStorage.setItem(`mine_cd_${type}`, Date.now() + COOLDOWN_MS);
+
+            let loot = 0;
+            let report = "";
+            if (type === 'gems') {
+                loot = Math.random() < 0.4 ? Math.floor(Math.random() * 2) + 1 : 0; 
+                if (loot > 0) {
+                    let cur = parseInt(localStorage.getItem('barb_gems') || '0');
+                    localStorage.setItem('barb_gems', cur + loot);
+                    report = `⛏️ Бум! Вы выкопали Кристаллы: +💎 ${loot}`;
+                } else { report = "⛏️ Ничего не нашлось в этой породе..."; }
+            } else {
+                loot = Math.floor(Math.random() * 3) + 1; 
+                let cur = parseInt(localStorage.getItem('barb_gold') || '15');
+                localStorage.setItem('barb_gold', cur + loot);
+                report = `⛏️ Удачно! Вы откололи Золото: +💰 ${loot}`;
+            }
+
+            document.getElementById('mine-report').innerText = report;
+            updateMineUI();
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            updateMineUI();
+            setInterval(updateMineUI, 1000);
+        });
+    </script>
+    <script src="global_core.js"></script>
+</body>
+</html>
