@@ -7,6 +7,19 @@
     <style>
         body { background-color: #061118; color: #ffffff; font-family: Arial, sans-serif; margin: 0; padding: 0; user-select: none; }
         .game-banner { background: linear-gradient(to bottom, #112d3e, #091a26); border-bottom: 2px solid #1c8cd1; padding: 8px; text-align: center; font-size: 16px; font-weight: bold; color: #ffffff; text-shadow: 1px 1px 3px #000; }
+        
+        /* Та самая общая шапка ресурсов для страницы героя */
+        .game-header { background: linear-gradient(to bottom, #091a26, #051017); border-bottom: 2px solid #142a3a; padding: 8px 5px; font-size: 12px; color: #b0cbdc; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
+        .header-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px; line-height: 1.4; }
+        .header-item { display: flex; align-items: center; gap: 2px; }
+        .nickname { font-weight: bold; color: #e2f2ff; }
+        .lvl { color: #ff9900; font-weight: bold; cursor: pointer; }
+        .hp { color: #ff4d4d; }
+        .armor { color: #a0b0b8; }
+        .silver { color: #e5e5e5; }
+        .gold { color: #ffcc00; font-weight: bold; }
+        .gems { color: #00ccff; }
+
         .category-bar { background: linear-gradient(to bottom, #d4c2a8, #bba78c); color: #3d240e; font-size: 14px; font-weight: bold; text-align: center; padding: 5px 15px; margin: 10px 0 5px 0; border-top: 1px solid #ebd9c0; border-bottom: 1px solid #8e785d; box-shadow: inset 0 1px 2px rgba(255,255,255,0.4); display: flex; justify-content: space-between; align-items: center; }
         .category-bar::before, .category-bar::after { content: "⚜️"; font-size: 12px; color: #6a4f31; }
         .stats-block { padding: 8px 15px; font-size: 14px; line-height: 1.6; }
@@ -16,8 +29,6 @@
         .green-text { color: #00ffaa; }
         .btn-plus { background: linear-gradient(to bottom, #113824, #081c12); border: 1px solid #00ffaa; color: #00ffaa; font-size: 11px; font-weight: bold; padding: 3px 8px; border-radius: 3px; cursor: pointer; }
         .btn-plus:disabled { background: #111a15; border-color: #44554d; color: #55665e; cursor: not-allowed; }
-        .test-btn-container { display: flex; justify-content: center; margin: 10px 0; }
-        .btn-test { background: linear-gradient(to bottom, #16537e, #0b2e46); border: 1px solid #1c8cd1; color: #fff; padding: 8px 15px; font-size: 12px; font-weight: bold; border-radius: 4px; cursor: pointer; }
         .menu-link { background: linear-gradient(to bottom, #091b29, #050e16); padding: 13px 15px; margin-top: 15px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #0f2231; border-bottom: 1px solid #0f2231; text-decoration: none; color: #adc8d9; font-size: 14px; font-weight: bold; }
         .menu-arrow { color: #1c8cd1; font-weight: bold; letter-spacing: -2px; }
     </style>
@@ -26,9 +37,24 @@
 
     <div class="game-banner">🛡️ Варвары ⚔️</div>
 
-    <div class="test-btn-container">
-        <button class="btn-test" onclick="testAddExperience()">➕ Получить +15 опыта (Тест уровней)</button>
+    <!-- ВЕРХНЯЯ ПАНЕЛЬ ТЕПЕРЬ ВСЕГДА ТУТ -->
+    <div class="game-header">
+        <div class="header-row">
+            <div class="header-item">✉️</div>
+            <div class="header-item nickname">🪓 <span id="header-player-name">Загрузка...</span></div>
+            <div class="header-item lvl" onclick="window.location.href='hero.html'"><span id="header-lvl">👑 1</span></div>
+            <div class="header-item hp">❤️ <span id="header-hp">250</span></div>
+            <div class="header-item armor">🛡️ <span id="header-def">5</span></div>
+            <div class="header-item silver"><span id="header-silver">🪙 10000</span></div>
+            <div class="header-item gems">💎 0</div>
+            <div class="header-item gold"><span id="header-gold">💰 15</span></div>
+            <div class="header-item">⚔️ 3/3</div>
+            <div class="header-item">⏳ 00:00:00</div>
+            <div class="header-item">🕒 15:27:52</div>
+        </div>
     </div>
+
+    <!-- Синяя кнопка тренировки успешно удалена! -->
 
     <div class="category-bar">Параметры</div>
     <div class="stats-block">
@@ -92,17 +118,18 @@
         }
 
         function loadHeroData() {
-            if (!localStorage.getItem('barb_lvl')) {
-                localStorage.setItem('barb_lvl', '1'); localStorage.setItem('barb_exp', '0'); localStorage.setItem('barb_exp_max', '30');
-                localStorage.setItem('barb_fame', '0'); localStorage.setItem('barb_silver', '10000'); localStorage.setItem('barb_gold', '15');
-                localStorage.setItem('barb_str', '5'); localStorage.setItem('barb_def', '5'); localStorage.setItem('barb_agi', '5');
-                localStorage.setItem('barb_mst', '5'); localStorage.setItem('barb_vit', '5');
-            }
+            const savedName = localStorage.getItem('barbarians_username');
+            if (!savedName) { window.location.href = "start.html"; return; }
 
-            let userSilver = parseInt(localStorage.getItem('barb_silver'));
-            let str = parseInt(localStorage.getItem('barb_str')); let def = parseInt(localStorage.getItem('barb_def'));
-            let agi = parseInt(localStorage.getItem('barb_agi')); let mst = parseInt(localStorage.getItem('barb_mst'));
-            let vit = parseInt(localStorage.getItem('barb_vit'));
+            let userSilver = parseInt(localStorage.getItem('barb_silver') || '10000');
+            let lvl = localStorage.getItem('barb_lvl') || '1';
+            let gold = localStorage.getItem('barb_gold') || '15';
+
+            let str = parseInt(localStorage.getItem('barb_str') || '5');
+            let def = parseInt(localStorage.getItem('barb_def') || '5');
+            let agi = parseInt(localStorage.getItem('barb_agi') || '5');
+            let mst = parseInt(localStorage.getItem('barb_mst') || '5');
+            let vit = parseInt(localStorage.getItem('barb_vit') || '5');
 
             let costStr = calculateStatCost(str); let costDef = calculateStatCost(def);
             let costAgi = calculateStatCost(agi); let costMst = calculateStatCost(mst);
@@ -120,52 +147,41 @@
             document.getElementById('buy-agi').disabled = (userSilver < costAgi); document.getElementById('buy-mst').disabled = (userSilver < costMst);
             document.getElementById('buy-vit').disabled = (userSilver < costVit);
 
-            document.getElementById('char-lvl').innerText = localStorage.getItem('barb_lvl');
-            document.getElementById('char-exp').innerText = localStorage.getItem('barb_exp');
-            document.getElementById('char-exp-max').innerText = localStorage.getItem('barb_exp_max');
-            document.getElementById('char-fame').innerText = localStorage.getItem('barb_fame');
+            document.getElementById('char-lvl').innerText = lvl;
+            document.getElementById('char-exp').innerText = localStorage.getItem('barb_exp') || '0';
+            document.getElementById('char-exp-max').innerText = localStorage.getItem('barb_exp_max') || '30';
+            document.getElementById('char-fame').innerText = localStorage.getItem('barb_fame') || '0';
             document.getElementById('char-silver').innerText = userSilver;
-            document.getElementById('char-gold').innerText = localStorage.getItem('barb_gold');
+            document.getElementById('char-gold').innerText = gold;
 
             let maxHp = 250 + (vit * 20);
             document.getElementById('char-hp').innerText = maxHp; document.getElementById('char-hp-max').innerText = maxHp;
+
+            // СИНХРОНИЗАЦИЯ С ВЕРХНЕЙ ОБЩЕЙ ШАПКОЙ
+            document.getElementById('header-player-name').innerText = savedName;
+            document.getElementById('header-lvl').innerText = `👑 ${lvl}`;
+            document.getElementById('header-silver').innerText = `🪙 ${userSilver}`;
+            document.getElementById('header-gold').innerText = `💰 ${gold}`;
+            document.getElementById('header-def').innerText = def;
+            document.getElementById('header-hp').innerText = maxHp;
         }
 
         function buyStat(statName) {
-            let userSilver = parseInt(localStorage.getItem('barb_silver'));
-            let currentStatValue = parseInt(localStorage.getItem('barb_' + statName));
+            let userSilver = parseInt(localStorage.getItem('barb_silver') || '10000');
+            let currentStatValue = parseInt(localStorage.getItem('barb_' + statName) || '5');
             let currentCost = calculateStatCost(currentStatValue);
 
             if (userSilver >= currentCost) {
                 localStorage.setItem('barb_silver', userSilver - currentCost);
                 localStorage.setItem('barb_' + statName, currentStatValue + 1);
+                
+                if(statName === 'def') {
+                    localStorage.setItem('barb_def', currentStatValue + 1);
+                }
+                
                 loadHeroData();
             }
         }
-
-        function testAddExperience() {
-            let currentExp = parseInt(localStorage.getItem('barb_exp')) + 15;
-            let maxExp = parseInt(localStorage.getItem('barb_exp_max'));
-            let lvl = parseInt(localStorage.getItem('barb_lvl'));
-            let silver = parseInt(localStorage.getItem('barb_silver'));
-            let gold = parseInt(localStorage.getItem('barb_gold'));
-            let fame = parseInt(localStorage.getItem('barb_fame'));
-
-            if (currentExp >= maxExp) {
-                currentExp = currentExp - maxExp; lvl += 1;
-                let rewardSilver = lvl * 10000; let rewardGold = lvl * 10; let rewardFame = 15 + (lvl * 5);
-                silver += rewardSilver; gold += rewardGold; fame += rewardFame;
-                maxExp = 30 + (lvl * 25);
-
-                alert(`🎉 УРОВЕНЬ ПОВЫШЕН! Вы достигли ${lvl} уровня!\n🎁 Награда:\n🪙 Серебро: +${rewardSilver}\n💰 Золото: +${rewardGold}\n🏆 Слава: +${rewardFame}`);
-            }
-
-            localStorage.setItem('barb_exp', currentExp); localStorage.setItem('barb_exp_max', maxExp);
-            localStorage.setItem('barb_lvl', lvl); localStorage.setItem('barb_silver', silver);
-            localStorage.setItem('barb_gold', gold); localStorage.setItem('barb_fame', fame);
-            loadHeroData();
-        }
-
         loadHeroData();
     </script>
 </body>
