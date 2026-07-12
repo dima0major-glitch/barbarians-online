@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Варвары — Управление Героем</title>
+    <style>
+        body { background-color: #061118; color: #ffffff; font-family: Arial, sans-serif; margin: 0; padding: 0; user-select: none; }
+        .game-banner { background: linear-gradient(to bottom, #112d3e, #091a26); border-bottom: 2px solid #1c8cd1; padding: 8px; text-align: center; font-size: 16px; font-weight: bold; color: #ffffff; text-shadow: 1px 1px 3px #000; }
+        
+        /* Общая шапка ресурсов */
+        .game-header { background: linear-gradient(to bottom, #091a26, #051017); border-bottom: 2px solid #142a3a; padding: 8px 5px; font-size: 12px; color: #b0cbdc; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
+        .header-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px; line-height: 1.4; }
+        .header-item { display: flex; align-items: center; gap: 2px; }
+        .nickname { font-weight: bold; color: #e2f2ff; cursor: pointer; }
+        .lvl { color: #ff9900; font-weight: bold; cursor: pointer; }
+        .hp { color: #ff4d4d; }
+        .armor { color: #a0b0b8; }
+        .silver { color: #e5e5e5; }
+        .gold { color: #ffcc00; font-weight: bold; }
+        .gems { color: #00ccff; }
+
+        /* Заголовок раздела */
+        .section-title { font-size: 16px; font-weight: bold; text-align: center; color: #adc8d9; margin: 12px 0 6px 0; text-shadow: 1px 1px 2px #000; }
+
+        /* Блок для аватарки */
+        .avatar-container { display: flex; justify-content: center; align-items: center; padding: 15px 0; background: #040b10; border-bottom: 1px solid #0f2231; }
+        .avatar-placeholder { width: 140px; height: 140px; border: 2px dashed #1c8cd1; border-radius: 8px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #52738c; font-size: 12px; background-color: #07151f; }
+        .avatar-icon { font-size: 36px; margin-bottom: 5px; }
+
+        /* Стили кнопок WAP-меню */
+        .menu-container { margin-top: 5px; }
+        .menu-link { background: linear-gradient(to bottom, #091b29, #050e16); padding: 13px 15px; margin-bottom: 2px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #0f2231; text-decoration: none; color: #adc8d9; font-size: 14px; font-weight: bold; }
+        .menu-link:active { background: #0d273d; }
+        .menu-arrow { color: #1c8cd1; font-weight: bold; letter-spacing: -2px; font-size: 15px; }
+    </style>
+</head>
+<body>
+
+    <div class="game-banner">🛡️ Варвары ⚔️</div>
+
+    <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
+    <div class="game-header">
+        <div class="header-row">
+            <div class="header-item">✉️</div>
+            <div class="header-item nickname" onclick="window.location.href='profile.html'">🪓 <span id="header-player-name">Загрузка...</span></div>
+            <div class="header-item lvl" onclick="window.location.href='hero.html'"><span id="header-lvl">👑 1</span></div>
+            <div class="header-item hp">❤️ <span id="header-hp">250</span></div>
+            <div class="header-item armor">🛡️ <span id="header-def">5</span></div>
+            <div class="header-item silver"><span id="header-silver">🪙 10000</span></div>
+            <div class="header-item gems">💎 0</div>
+            <div class="header-item gold"><span id="header-gold">💰 15</span></div>
+            <div class="header-item">⚔️ 3/3</div>
+            <div class="header-item">⏳ 00:00:00</div>
+            <div class="header-item">🕒 15:27:52</div>
+        </div>
+    </div>
+
+    <div class="section-title">Герой</div>
+
+    <!-- МЕСТО ДЛЯ АВАТАРКИ -->
+    <div class="avatar-container">
+        <div class="avatar-placeholder">
+            <div class="avatar-icon">👤</div>
+            <span>Место для аватара</span>
+        </div>
+    </div>
+
+    <!-- СПИСОК КНОПОК ИЗ СКРИНШОТА -->
+    <div class="menu-container">
+        <a href="hero.html" class="menu-link"><span>🤠 Детали</span><span class="menu-arrow">»»</span></a>
+        <a href="anketa.html" class="menu-link"><span>📝 Анкета (редактирование)</span><span class="menu-arrow">»»</span></a>
+        <a href="hero.html" class="menu-link"><span>👤 Профиль</span><span class="menu-arrow">»»</span></a>
+        <a href="training.html" class="menu-link"><span>💪 Тренировка</span><span class="menu-arrow">»»</span></a>
+        <a href="equipment.html" class="menu-link"><span>⚔️ Экипировка</span><span class="menu-arrow">»»</span></a>
+        <a href="titles.html" class="menu-link"><span>📜 Надписи</span><span class="menu-arrow">»»</span></a>
+        <a href="avatar_change.html" class="menu-link"><span>🖼️ Аватарка</span><span class="menu-arrow">»»</span></a>
+        <a href="invite.html" class="menu-link"><span>👥 Пригласить</span><span class="menu-arrow">»»</span></a>
+        <a href="index.html" class="menu-link"><span>↩️ Назад</span><span class="menu-arrow">»»</span></a>
+        <a href="index.html" class="menu-link"><span>🏠 Главная</span><span class="menu-arrow">»»</span></a>
+    </div>
+    <script>
+        function loadProfileData() {
+            const savedName = localStorage.getItem('barbarians_username') || "Воин";
+
+            let userSilver = parseInt(localStorage.getItem('barb_silver') || '10000');
+            let lvl = localStorage.getItem('barb_lvl') || '1';
+            let gold = localStorage.getItem('barb_gold') || '15';
+            let def = parseInt(localStorage.getItem('barb_def') || '5');
+            let vit = parseInt(localStorage.getItem('barb_vit') || '5');
+
+            let maxHp = 250 + (vit * 20);
+
+            // Заполнение верхней панели ресурсов
+            document.getElementById('header-player-name').innerText = savedName;
+            document.getElementById('header-lvl').innerHTML = `👑 ${lvl}`;
+            document.getElementById('header-hp').innerText = maxHp;
+            document.getElementById('header-def').innerText = def;
+            document.getElementById('header-silver').innerText = `🪙 ${userSilver}`;
+            document.getElementById('header-gold').innerText = `💰 ${gold}`;
+        }
+
+        document.addEventListener("DOMContentLoaded", loadProfileData);
+    </script>
+</body>
+</html>
