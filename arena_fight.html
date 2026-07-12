@@ -6,18 +6,8 @@
     <title>Варвары — Сражения</title>
     <style>
         body { background-color: #061118; color: #ffffff; font-family: Arial, sans-serif; margin: 0; padding: 0; user-select: none; }
-        .game-banner { background: linear-gradient(to bottom, #112d3e, #091a26); border-bottom: 2px solid #1c8cd1; padding: 8px; text-align: center; font-size: 16px; font-weight: bold; color: #ffffff; text-shadow: 1px 1px 3px #000; }
-        .game-header { background: linear-gradient(to bottom, #091a26, #051017); border-bottom: 2px solid #142a3a; padding: 8px 5px; font-size: 12px; color: #b0cbdc; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
-        .header-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px; line-height: 1.4; }
-        .header-item { display: flex; align-items: center; gap: 2px; }
-        .nickname { font-weight: bold; color: #e2f2ff; cursor: pointer; }
-        .lvl { color: #ff9900; font-weight: bold; cursor: pointer; }
-        .hp { color: #ff4d4d; }
-        .armor { color: #a0b0b8; }
-        .silver { color: #e5e5e5; }
-        .gold { color: #ffcc00; font-weight: bold; }
-        .gems { color: #00ccff; }
-
+        
+        /* Специфичные стили только для экрана поединка */
         .category-bar { background: linear-gradient(to bottom, #123524, #05140d); color: #00ffaa; font-size: 14px; font-weight: bold; text-align: center; padding: 6px 15px; border-top: 1px solid #1d5339; border-bottom: 1px solid #040f0a; box-shadow: inset 0 1px 2px rgba(255,255,255,0.1); text-transform: uppercase; }
         
         .vs-container { background-color: #050d12; padding: 15px 10px; text-align: center; border-bottom: 1px solid #0f2231; }
@@ -48,6 +38,8 @@
     </style>
 </head>
 <body>
+
+    <!-- Шапка добавится автоматически из global_core.js -->
 
     <div class="category-bar">Сражения</div>
 
@@ -175,23 +167,23 @@
                 return;
             }
 
-            // Накатываем списание боя
+            // Списываем 1 бой
             battles -= 1;
             localStorage.setItem('barb_battle_count', battles);
 
-            // КРИТИЧЕСКОЕ ИСПРАВЛЕНИЕ: если боев стало меньше максимума,
-            // заводим точку отсчета 5-минутного таймера прямо сейчас, если её не было
+            // Если боев стало меньше максимума, заводим точку отсчета таймера
             if (battles === 2) {
                 localStorage.setItem('barb_last_regen', Date.now());
             }
 
-            // Передаем параметры сгенерированного бота на страницу расчета результатов
+            // Передаем данные врага на страницу симуляции боя
             localStorage.setItem('current_enemy_data', JSON.stringify(currentEnemy));
-            window.location.href = 'battle_result.html';
+            window.location.href = `battle_result.html?type=${fightType}`;
         }
 
         document.addEventListener("DOMContentLoaded", generateEnemy);
     </script>
+    <!-- Подключаем наше единое автоматическое ядро интерфейса и времени -->
     <script src="global_core.js"></script>
 </body>
 </html>
