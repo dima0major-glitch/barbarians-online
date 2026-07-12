@@ -6,17 +6,8 @@
     <title>Варвары — Профиль героя</title>
     <style>
         body { background-color: #061118; color: #ffffff; font-family: Arial, sans-serif; margin: 0; padding: 0; user-select: none; }
-        .game-banner { background: linear-gradient(to bottom, #112d3e, #091a26); border-bottom: 2px solid #1c8cd1; padding: 8px; text-align: center; font-size: 16px; font-weight: bold; color: #ffffff; text-shadow: 1px 1px 3px #000; }
-        .game-header { background: linear-gradient(to bottom, #091a26, #051017); border-bottom: 2px solid #142a3a; padding: 8px 5px; font-size: 12px; color: #b0cbdc; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
-        .header-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px; line-height: 1.4; }
-        .header-item { display: flex; align-items: center; gap: 2px; }
-        .nickname { font-weight: bold; color: #e2f2ff; }
-        .lvl { color: #ff9900; font-weight: bold; }
-        .hp { color: #ff4d4d; }
-        .armor { color: #a0b0b8; }
-        .silver { color: #e5e5e5; }
-        .gold { color: #ffcc00; font-weight: bold; }
-        .gems { color: #00ccff; }
+        
+        /* Специфичные стили только для карточки характеристик */
         .category-bar { background: linear-gradient(to bottom, #d4c2a8, #bba78c); color: #3d240e; font-size: 14px; font-weight: bold; text-align: center; padding: 5px 15px; margin: 10px 0 5px 0; border-top: 1px solid #ebd9c0; border-bottom: 1px solid #8e785d; box-shadow: inset 0 1px 2px rgba(255,255,255,0.4); display: flex; justify-content: space-between; align-items: center; }
         .category-bar::before, .category-bar::after { content: "⚜️"; font-size: 12px; color: #6a4f31; }
         .stats-block { padding: 8px 15px; font-size: 14px; line-height: 1.6; }
@@ -30,23 +21,7 @@
 </head>
 <body>
 
-    <div class="game-banner">🛡️ Варвары ⚔️</div>
-
-    <div class="game-header">
-        <div class="header-row">
-            <div class="header-item">✉️</div>
-            <div class="header-item nickname" onclick="window.location.href='profile.html'" style="cursor: pointer; text-decoration: underline;">🪓 <span id="header-player-name">Загрузка...</span></div>
-            <div class="header-item lvl"><span id="header-lvl">👑 1</span></div>
-            <div class="header-item hp">❤️ <span id="header-hp">250</span></div>
-            <div class="header-item armor">🛡️ <span id="header-def">5</span></div>
-            <div class="header-item silver"><span id="header-silver">🪙 10000</span></div>
-            <div class="header-item gems">💎 0</div>
-            <div class="header-item gold"><span id="header-gold">💰 15</span></div>
-            <div class="header-item">⚔️ 3/3</div>
-            <div class="header-item">⏳ 00:00:00</div>
-            <div class="header-item">🕒 15:27:52</div>
-        </div>
-    </div>
+    <!-- Шапка игры вставится сюда автоматически из global_core.js -->
 
     <div class="category-bar">Параметры</div>
     <div class="stats-block">
@@ -70,7 +45,6 @@
         <div>💚 <span class="highlight-title">Здор. макс.:</span> <span id="char-hp-max">250</span></div>
         <div>❤️ <span class="highlight-title">Здор. восст.:</span> <span id="char-hp-reg">30</span> в час</div>
     </div>
-
     <div class="category-bar">Бонусы</div>
     <div class="stats-block" style="color: #8faec4;">
         <div>Одежда: 💪 +0 🛡️ +0 🏃 +0 ⚡ +0 ➕ +0</div>
@@ -78,11 +52,12 @@
         <div>Братский Дух: 💪 +0 🛡️ +0 🏃 +0 ⚡ +0</div>
         <div>Забор: 🛡️ +0</div>
     </div>
+
     <div class="category-bar">Статистика</div>
     <div class="stats-block">
         <div>👥 <span class="highlight-title">Друзей:</span> 0</div>
         <div class="green-text">👑 <span class="highlight-title" style="color:#00ffaa;">Уровень:</span> <span id="char-lvl">1</span></div>
-        <div>⭐ <span class="highlight-title">Опыт:</span> <span id="char-exp">0</span> / <span id="char-exp-max">30</span></div>
+        <div>⭐ <span class="highlight-title">Опыт:</span> <span id="char-exp">0</span></div>
         <div class="yellow-text">🏆 <span class="highlight-title" style="color:#ffff00;">Слава:</span> <span id="char-fame">0</span></div>
         <div>🏰 <span class="highlight-title">Клан:</span> Не состоит в клане</div>
         <div>🛡️ <span class="highlight-title">Братство:</span> <span class="yellow-text">Нет</span></div>
@@ -90,7 +65,7 @@
         <div>💀 <span class="highlight-title">Проигрышей:</span> 0</div>
         <div class="yellow-text">🪙 <span class="highlight-title" style="color:#ffff00;">Серебро в сумке:</span> <span id="char-silver">10000</span></div>
         <div>💰 <span class="highlight-title">Золото в сумке:</span> <span id="char-gold">15</span></div>
-        <div>💎 <span class="highlight-title">Кристаллы:</span> 0</div>
+        <div>💎 <span class="highlight-title">Кристаллы:</span> <span id="char-gems">0</span></div>
         <div>👹 <span class="highlight-title">Убито гоблинов:</span> 0</div>
     </div>
 
@@ -98,14 +73,13 @@
         <span>🏠 Вернуться на главную</span>
         <span class="menu-arrow">»»</span>
     </a>
+
     <script>
         function loadHeroData() {
-            const savedName = localStorage.getItem('barbarians_username');
-            if (!savedName) { window.location.href = "start.html"; return; }
-
-            let userSilver = parseInt(localStorage.getItem('barb_silver') || '10000');
+            let userSilver = localStorage.getItem('barb_silver') || '10000';
             let lvl = localStorage.getItem('barb_lvl') || '1';
             let gold = localStorage.getItem('barb_gold') || '15';
+            let gems = localStorage.getItem('barb_gems') || '0';
             let fame = localStorage.getItem('barb_fame') || '0';
             let exp = localStorage.getItem('barb_exp') || '0';
 
@@ -117,13 +91,7 @@
 
             let maxHp = 250 + (vit * 20);
 
-            document.getElementById('header-player-name').innerText = savedName;
-            document.getElementById('header-lvl').innerHTML = `👑 ${lvl}`;
-            document.getElementById('header-hp').innerText = maxHp;
-            document.getElementById('header-def').innerText = def;
-            document.getElementById('header-silver').innerText = `🪙 ${userSilver}`;
-            document.getElementById('header-gold').innerText = `💰 ${gold}`;
-
+            // Наполнение текстовых блоков профиля данными персонажа
             document.getElementById('stat-str').innerText = str;
             document.getElementById('stat-def').innerText = def;
             document.getElementById('stat-agi').innerText = agi;
@@ -132,15 +100,18 @@
 
             document.getElementById('char-hp').innerText = maxHp;
             document.getElementById('char-hp-max').innerText = maxHp;
-
+            
             document.getElementById('char-lvl').innerText = lvl;
             document.getElementById('char-exp').innerText = exp;
             document.getElementById('char-fame').innerText = fame;
             document.getElementById('char-silver').innerText = userSilver;
             document.getElementById('char-gold').innerText = gold;
+            document.getElementById('char-gems').innerText = gems;
         }
 
         document.addEventListener("DOMContentLoaded", loadHeroData);
     </script>
+    <!-- Подключаем сквозное автоматическое ядро интерфейса, боев и времени -->
+    <script src="global_core.js"></script>
 </body>
 </html>
