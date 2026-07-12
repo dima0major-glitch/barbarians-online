@@ -6,6 +6,8 @@
     <title>Варвары — Главная</title>
     <style>
         body { background-color: #061118; color: #ffffff; font-family: Arial, sans-serif; margin: 0; padding: 0; user-select: none; }
+        
+        /* Стили для глобальной шапки (оставляем здесь, так как ядро генерирует только HTML) */
         .game-banner { background: linear-gradient(to bottom, #112d3e, #091a26); border-bottom: 2px solid #1c8cd1; padding: 8px; text-align: center; font-size: 16px; font-weight: bold; color: #ffffff; text-shadow: 1px 1px 3px #000; }
         .game-header { background: linear-gradient(to bottom, #091a26, #051017); border-bottom: 2px solid #142a3a; padding: 8px 5px; font-size: 12px; color: #b0cbdc; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
         .header-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px; line-height: 1.4; }
@@ -17,6 +19,8 @@
         .silver { color: #e5e5e5; }
         .gold { color: #ffcc00; font-weight: bold; }
         .gems { color: #00ccff; }
+        
+        /* Стили контента главной страницы */
         .welcome-block { text-align: center; padding: 12px 5px 6px 5px; }
         .welcome-title { font-size: 18px; font-weight: bold; color: #ffffff; margin-bottom: 4px; }
         .welcome-sub { font-size: 12px; color: #799bb3; }
@@ -32,35 +36,16 @@
 </head>
 <body>
 
-    <div class="game-banner">🛡️ Варвары ⚔️</div>
-
-    <div class="game-header">
-        <div class="header-row">
-            <div class="header-item">✉️</div>
-            <div class="header-item nickname" onclick="window.location.href='profile.html'" style="cursor: pointer; text-decoration: underline;">🪓 <span id="player-name">Загрузка...</span></div>
-            <div class="header-item lvl" id="header-lvl">👑 1</div>
-            <div class="header-item hp">❤️ <span id="header-hp">250</span></div>
-            <div class="header-item armor">🛡️ <span id="header-def">5</span></div>
-            <div class="header-item silver"><span id="header-silver">🪙 10000</span></div>
-            <div class="header-item gems">💎 <span id="header-gems">0</span></div>
-            <div class="header-item gold"><span id="header-gold">💰 15</span></div>
-            <!-- Счетчик боев теперь кликабелен и ведет на Арену -->
-            <div class="header-item" onclick="window.location.href='duel.html'" style="cursor: pointer; text-decoration: underline;">⚔️ <span id="header-battles">3/3</span></div>
-            <div class="header-item">⏳ 00:00:00</div>
-            <div class="header-item">🕒 15:27:52</div>
-            <div class="header-item">🔍</div>
-            <div class="header-item">📜</div>
-        </div>
-    </div>
+    <!-- Шапка игры сюда вставится автоматически из global_core.js -->
 
     <div class="welcome-block">
         <div class="welcome-title">Добро пожаловать!</div>
         <div class="welcome-sub">Рядом с тобой 1080 варваров (онлайн)</div>
     </div>
+    
     <div class="menu-container">
         <a href="events.html" class="menu-link"><span>⭐ События</span><span class="menu-arrow">»»</span></a>
         <a href="quests.html" class="menu-link"><span>📜 Задания</span><span class="menu-arrow">»»</span></a>
-        <!-- Ссылка Дуэль ведет на duel.html -->
         <a href="duel.html" class="menu-link"><span>⚔️ Дуэль</span><span class="menu-arrow">»»</span></a>
         <a href="village.html" class="menu-link"><span>🏡 Поселок</span><span class="menu-arrow">»»</span></a>
         <a href="raid.html" class="menu-link"><span>🛡️ Поход</span><span class="menu-arrow">»»</span></a>
@@ -95,41 +80,15 @@
     </div>
 
     <script>
-        function checkAndLoad() {
-            const savedName = localStorage.getItem('barbarians_username') || "Воин";
-            
-            const lvl = localStorage.getItem('barb_lvl') || '1';
-            const silver = localStorage.getItem('barb_silver') || '10000';
-            const gold = localStorage.getItem('barb_gold') || '15';
-            const def = localStorage.getItem('barb_def') || '5';
-            const gems = localStorage.getItem('barb_gems') || '0';
-            const battles = localStorage.getItem('barb_battle_count') ?? '3';
-            
-            const vit = parseInt(localStorage.getItem('barb_vit') || '5');
-            const maxHp = 250 + (vit * 20);
-
-            if (document.getElementById('player-name')) document.getElementById('player-name').innerText = savedName;
-            
-            const lvlElement = document.getElementById('header-lvl');
-            if (lvlElement) {
-                lvlElement.setAttribute('onclick', "window.location.href='hero.html'");
-                lvlElement.innerText = `👑 ${lvl}`;
-            }
-            
-            if (document.getElementById('header-silver')) document.getElementById('header-silver').innerText = `🪙 ${silver}`;
-            if (document.getElementById('header-gold')) document.getElementById('header-gold').innerText = `💰 ${gold}`;
-            if (document.getElementById('header-gems')) document.getElementById('header-gems').innerText = gems;
-            if (document.getElementById('header-def')) document.getElementById('header-def').innerText = def;
-            if (document.getElementById('header-hp')) document.getElementById('header-hp').innerText = maxHp;
-            if (document.getElementById('header-battles')) document.getElementById('header-battles').innerText = `${battles}/3`;
-        }
-        
         function logout() {
-            localStorage.clear();
-            location.reload();
+            if (confirm("Вы уверены, что хотите выйти?")) {
+                localStorage.removeItem('barbarians_username');
+                window.location.href = "start.html";
+            }
         }
-        
-        document.addEventListener("DOMContentLoaded", checkAndLoad);
     </script>
+    
+    <!-- Подключаем наше единое автоматическое ядро шапки и времени -->
+    <script src="global_core.js"></script>
 </body>
 </html>

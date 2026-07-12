@@ -34,24 +34,6 @@
 </head>
 <body>
 
-    <div class="game-banner">🛡️ Варвары ⚔️</div>
-
-    <div class="game-header">
-        <div class="header-row">
-            <div class="header-item">✉️</div>
-            <div class="header-item nickname" onclick="window.location.href='profile.html'">🪓 <span id="header-player-name">Загрузка...</span></div>
-            <div class="header-item lvl" onclick="window.location.href='hero.html'"><span id="header-lvl">👑 1</span></div>
-            <div class="header-item hp">❤️ <span id="header-hp">250</span></div>
-            <div class="header-item armor">🛡️ <span id="header-def">5</span></div>
-            <div class="header-item silver"><span id="header-silver">🪙 10000</span></div>
-            <div class="header-item gems">💎 <span id="header-gems">0</span></div>
-            <div class="header-item gold"><span id="header-gold">💰 15</span></div>
-            <div class="header-item" onclick="window.location.href='duel.html'" style="cursor: pointer; text-decoration: underline;">⚔️ <span id="header-battles">3/3</span></div>
-            <div class="header-item">⏳ 00:00:00</div>
-            <div class="header-item">🕒 15:27:52</div>
-        </div>
-    </div>
-
     <div class="category-bar">Итог боя</div>
 
     <div class="result-container">
@@ -82,11 +64,10 @@
     <script>
         function runBattleSimulation() {
             const savedName = localStorage.getItem('barbarians_username') || "Воин";
-            const enemyData = JSON.parse(localStorage.getItem('current_arena_enemy'));
+            // ИСПРАВЛЕНИЕ: Читаем правильный ключ, созданный страницей arena_fight.html
+            const enemyData = JSON.parse(localStorage.getItem('current_enemy_data'));
             
             if (!enemyData) { window.location.href = 'duel.html'; return; }
-
-            let fightType = enemyData.type || "equal";
 
             let pLvl = parseInt(localStorage.getItem('barb_lvl') || '1');
             let pSilver = parseInt(localStorage.getItem('barb_silver') || '10000');
@@ -100,12 +81,6 @@
             let pAgi = parseInt(localStorage.getItem('barb_agi') || '5');
             let pMst = parseInt(localStorage.getItem('barb_mst') || '5');
             let pVit = parseInt(localStorage.getItem('barb_vit') || '5');
-
-            let currentBattles = parseInt(localStorage.getItem('barb_battle_count') ?? '3');
-            if (currentBattles > 0) {
-                currentBattles -= 1;
-                localStorage.setItem('barb_battle_count', currentBattles);
-            }
 
             let pMaxHp = 250 + (pVit * 20);
             let eMaxHp = 250 + (enemyData.vit * 20);
@@ -121,6 +96,7 @@
 
                 logHtml += `<b>Раунд ${round}:</b><br/>`;
 
+                // Ход игрока
                 let pIsDodge = Math.random() < (enemyData.agi * 0.005);
                 if (pIsDodge) {
                     logHtml += `• ${enemyData.name} ловко увернулся от твоего удара!<br/>`;
@@ -137,99 +113,103 @@
 
                 if (eCurrentHp <= 0) break;
 
+                // Ход бота
                 let eIsDodge = Math.random() < (pAgi * 0.005);
                 if (eIsDodge) {
-                    logHtml += `• Ты увернулся от яростной атаки противника!<br/>`;
+                    logHtml += `• Ты ловко увернулся от удара противника!<br/>`;
                 } else {
                     let eIsCrit = Math.random() < (enemyData.mst * 0.01);
-                    let baseDmgEnemy = Math.max(10, enemyData.str * 3 - pDef);
-                    let finalDmgEnemy = eIsCrit ? Math.floor(baseDmgEnemy * 1.5) : baseDmgEnemy;
-                    finalDmgEnemy = Math.floor(finalDmgEnemy * (1 + (Math.random() * 0.2 - 0.1)));
+                    let baseDmgE = Math.max(10, enemyData.str * 3 - pDef);
+                    let finalDmgE = eIsCrit ? Math.floor(baseDmgE * 1.5) : baseDmgE;
+                    finalDmgE = Math.floor(finalDmgE * (1 + (Math.random() * 0.2 - 0.1)));
 
-                    pCurrentHp -= finalDmgEnemy;
-                    eDmgSum += finalDmgEnemy;
-                    logHtml += `• ${enemyData.name} ударил тебя на <span style="color:#ff4d4d">${finalDmgEnemy}</span> ${eIsCrit?'💥 КРИТ!':''}<br/>`;
+                    pCurrentHp -= finalDmgE;
+                    eDmgSum += finalDmgE;
+                    logHtml += `• ${enemyData.name} нанес тебе удар на <span style="color:#ffbfcc">${finalDmgE}</span> ${eIsCrit?'💥 КРИТ!':''}<br/>`;
                 }
             }
 
-            let playerWon = pCurrentHp > 0 && (eCurrentHp <= 0 || pDmgSum >= eDmgSum);
+            // Определение победителя
+            let isWin = false;
+            let outcomeText = "";
+            let reasonText = "";
             
-            let silverReward = 0;
-            let expReward = 0;
-            let fameReward = 0;
-            let gemReward = 0;
-
-            if (playerWon) {
-                document.getElementById('battle-outcome').className = "win-text";
-                document.getElementById('battle-outcome').innerText = "Ты победил";
-                document.getElementById('battle-reason').innerText = eCurrentHp <= 0 ? "Причина - противник повержен полностью!" : "Причина - победитель нанес больше суммарного урона";
-                
-                if (fightType === "senior") {
-                    silverReward = Math.floor(Math.random() * 500) + 400;
-                    expReward = 2;
-                    fameReward = 1;
-                    if(Math.random() < 0.2) gemReward = 1;
-                } else if (fightType === "boss") {
-                    silverReward = Math.floor(Math.random() * 1500) + 1000;
-                    expReward = 4;
-                    fameReward = 3;
-                    gemReward = Math.floor(Math.random() * 2) + 1;
-                } else if (fightType === "junior") {
-                    silverReward = Math.floor(Math.random() * 100) + 50;
-                    expReward = 1;
-                } else if (fightType === "mercenaries") {
-                    silverReward = Math.floor(Math.random() * 300) + 200;
-                    expReward = 1;
-                    gemReward = 1; // Гарантированный синий камень
-                } else {
-                    silverReward = Math.floor(Math.random() * 250) + 150;
-                    expReward = 1;
-                    if(Math.random() < 0.05) gemReward = 1;
-                }
-
-                localStorage.setItem('barb_silver', pSilver + silverReward);
-                localStorage.setItem('barb_exp', pExp + expReward);
-                localStorage.setItem('barb_fame', pFame + fameReward);
-                localStorage.setItem('barb_gems', pGems + gemReward);
+            if (eCurrentHp <= 0 && pCurrentHp > 0) {
+                isWin = true;
+                outcomeText = `<div class="win-text">🏆 ПОБЕДА!</div>`;
+                reasonText = `Ты поверг врага ${enemyData.name} на землю!`;
+            } else if (pCurrentHp <= 0 && eCurrentHp > 0) {
+                outcomeText = `<div class="lose-text">💀 ПОРАЖЕНИЕ</div>`;
+                reasonText = `${enemyData.name} оказался сильнее в этом бою...`;
             } else {
-                document.getElementById('battle-outcome').className = "lose-text";
-                document.getElementById('battle-outcome').innerText = "Ты проиграл";
-                document.getElementById('battle-reason').innerText = pCurrentHp <= 0 ? "Причина - ты потерял сознание от ран" : "Причина - враг нанес больше суммарного урона";
-                
-                silverReward = Math.floor(Math.random() * 20) + 10;
-                localStorage.setItem('barb_silver', pSilver + silverReward);
+                // Если оба живы или оба упали
+                if (pCurrentHp <= 0 && eCurrentHp <= 0) {
+                    outcomeText = `<div class="lose-text">🤝 ОБОЮДНАЯ СМЕРТЬ</div>`;
+                    reasonText = "Вы нанесли друг другу смертельные раны одновременно.";
+                } else {
+                    isWin = pCurrentHp >= eCurrentHp;
+                    outcomeText = isWin ? `<div class="win-text">🏆 ПОБЕДА (ПО ОЧКАМ)</div>` : `<div class="lose-text">💀 ПОРАЖЕНИЕ (ПО ОЧКАМ)</div>`;
+                    reasonText = "Время раундов истекло. Судьи подсчитали остаток здоровья.";
+                }
             }
 
-            let rewardText = `Серебро: 🪙+${silverReward}<br/>Опыт: ⭐+${expReward}`;
-            if (fameReward > 0) rewardText += `<br/>Слава: 🏆+${fameReward}`;
-            if (gemReward > 0) rewardText += `<br/>Кристаллы: 💎+${gemReward}`;
-            document.getElementById('battle-rewards').innerHTML = rewardText;
+            // Расчет наград
+            let rewSilver = 0;
+            let rewExp = 0;
+            let rewFame = 0;
+            let rewGems = 0;
+
+            if (isWin) {
+                rewSilver = Math.floor(15 + Math.random() * 20) * enemyData.lvl;
+                rewExp = Math.floor(5 + Math.random() * 5) * enemyData.lvl;
+                rewFame = Math.floor(2 + Math.random() * 3);
+                // Шанс 10% выбить кристалл
+                if (Math.random() < 0.1) rewGems = 1; 
+            } else {
+                rewSilver = Math.floor(5 + Math.random() * 5) * enemyData.lvl;
+                rewExp = Math.floor(2 + Math.random() * 2) * enemyData.lvl;
+            }
+
+            // Сохранение результатов в Local Storage
+            localStorage.setItem('barb_silver', pSilver + rewSilver);
+            localStorage.setItem('barb_exp', pExp + rewExp);
+            localStorage.setItem('barb_fame', pFame + rewFame);
+            localStorage.setItem('barb_gems', pGems + rewGems);
+
+            // Вывод данных в HTML
+            document.getElementById('battle-outcome').innerHTML = outcomeText;
+            document.getElementById('battle-reason').innerText = reasonText;
+            
+            document.getElementById('battle-rewards').innerHTML = `
+                🪙 Серебро: +${rewSilver}<br/>
+                👑 Опыт: +${rewExp}<br/>
+                ⭐ Слава: +${rewFame}<br/>
+                ${rewGems > 0 ? '💎 Кристаллы: +1<br/>' : ''}
+            `;
 
             document.getElementById('p-name-dmg').innerText = savedName;
-            document.getElementById('p-total-dmg').innerText = pDmgSum;
             document.getElementById('e-name-dmg').innerText = enemyData.name;
+            document.getElementById('p-total-dmg').innerText = pDmgSum;
             document.getElementById('e-total-dmg').innerText = eDmgSum;
 
             document.getElementById('p-name-hp').innerText = savedName;
-            document.getElementById('p-final-hp').innerText = Math.max(0, pCurrentHp);
             document.getElementById('e-name-hp').innerText = enemyData.name;
+            document.getElementById('p-final-hp').innerText = Math.max(0, pCurrentHp);
             document.getElementById('e-final-hp').innerText = Math.max(0, eCurrentHp);
 
             document.getElementById('log-box').innerHTML = logHtml;
 
-            document.getElementById('header-player-name').innerText = savedName;
-            document.getElementById('header-lvl').innerHTML = `👑 ${pLvl}`;
-            document.getElementById('header-hp').innerText = pMaxHp;
-            document.getElementById('header-def').innerText = pDef;
-            document.getElementById('header-silver').innerText = `🪙 ${pSilver + silverReward}`;
-            document.getElementById('header-gold').innerText = `💰 ${pGold}`;
-            document.getElementById('header-gems').innerText = pGems + gemReward;
-            document.getElementById('header-battles').innerText = `${currentBattles}/3`;
-
+            // Настройка кнопки "Следующий" (чтобы сохранить тип боя)
+            const urlParams = new URLSearchParams(window.location.search);
+            const fightType = urlParams.get('type') || 'equal';
             document.getElementById('next-fight-btn').href = `arena_fight.html?type=${fightType}`;
+            
+            // Чистим временные данные соперника
+            localStorage.removeItem('current_enemy_data');
         }
 
         document.addEventListener("DOMContentLoaded", runBattleSimulation);
     </script>
+    <script src="global_core.js"></script>
 </body>
 </html>

@@ -49,24 +49,6 @@
 </head>
 <body>
 
-    <div class="game-banner">🛡️ Варвары ⚔️</div>
-
-    <div class="game-header">
-        <div class="header-row">
-            <div class="header-item">✉️</div>
-            <div class="header-item nickname" onclick="window.location.href='profile.html'">🪓 <span id="header-player-name">Загрузка...</span></div>
-            <div class="header-item lvl" onclick="window.location.href='hero.html'"><span id="header-lvl">👑 1</span></div>
-            <div class="header-item hp">❤️ <span id="header-hp">250</span></div>
-            <div class="header-item armor">🛡️ <span id="header-def">5</span></div>
-            <div class="header-item silver"><span id="header-silver">🪙 10000</span></div>
-            <div class="header-item gems">💎 <span id="header-gems">0</span></div>
-            <div class="header-item gold"><span id="header-gold">💰 15</span></div>
-            <div class="header-item" onclick="window.location.href='duel.html'" style="cursor: pointer; text-decoration: underline;">⚔️ <span id="header-battles">3/3</span></div>
-            <div class="header-item">⏳ 00:00:00</div>
-            <div class="header-item">🕒 15:27:52</div>
-        </div>
-    </div>
-
     <div class="category-bar">Сражения</div>
 
     <div class="vs-container">
@@ -131,44 +113,47 @@
         const urlParams = new URLSearchParams(window.location.search);
         const fightType = urlParams.get('type') || 'equal';
 
+        const phrases = [
+            "Твои кости украсят мои ворота!",
+            "Сегодня вороны будут пировать твоей плотью!",
+            "Твой топор слишком легок для настоящего воина!",
+            "Сдавайся сразу, сэкономь мне время!",
+            "Я раздавлю тебя одним ударом щита!",
+            "Одинхейм ждет тебя, слабак!"
+        ];
+
+        const botNames = ["Ульф", "Торстейн", "Хакон", "Бьорн", "Гудмунд", "Рагнар", "Ивар", "Сигурд"];
+
         function generateEnemy() {
             const pStr = parseInt(localStorage.getItem('barb_str') || '5');
             const pDef = parseInt(localStorage.getItem('barb_def') || '5');
             const pAgi = parseInt(localStorage.getItem('barb_agi') || '5');
             const pMst = parseInt(localStorage.getItem('barb_mst') || '5');
             const pVit = parseInt(localStorage.getItem('barb_vit') || '5');
+            const pLvl = parseInt(localStorage.getItem('barb_lvl') || '1');
 
-            let modifier = 1.0;
-            let name = "Серебряный наемник";
-            let phrase = "Я обычный наемник, которого легко победить. В награду можешь получить только серебро.";
+            document.getElementById('p-name-vs').innerText = localStorage.getItem('barbarians_username') || "Ты";
+            document.getElementById('p-str').innerText = pStr;
+            document.getElementById('p-def').innerText = pDef;
+            document.getElementById('p-agi').innerText = pAgi;
+            document.getElementById('p-mst').innerText = pMst;
+            document.getElementById('p-vit').innerText = pVit;
 
-            if (fightType === 'junior') {
-                modifier = 0.8;
-                name = "Молодой гладиатор";
-                phrase = "Пощади, великий воин! Я только учусь держать топор.";
-            } else if (fightType === 'senior') {
-                modifier = 1.3;
-                name = "Ветеран Арены";
-                phrase = "Твои кости останутся сохнуть на этом песке, щенок!";
-            } else if (fightType === 'boss') {
-                modifier = 1.8;
-                name = "Владыка Наемников";
-                phrase = "Ха-ха! Ты бросил вызов самому королю подземных бойцов?!";
-            } else if (fightType === 'mercenaries') {
-                modifier = 1.1;
-                name = "Кристальный наемник";
-                phrase = "Моя броня крепка, но в карманах звенят редкие синие камни!";
-            }
+            let mod = 0;
+            let typeName = "Воин";
+            if (fightType === 'junior') { mod = -2; typeName = "Ополченец"; }
+            if (fightType === 'senior') { mod = 3; typeName = "Ветеран"; }
+            if (fightType === 'mercenaries') { mod = 5; typeName = "Наемник"; }
+            if (fightType === 'boss') { mod = 12; typeName = "Владыка"; }
 
             currentEnemy = {
-                name: name,
-                phrase: phrase,
-                type: fightType,
-                str: Math.max(5, Math.floor(pStr * modifier + (Math.random() * 4 - 2))),
-                def: Math.max(5, Math.floor(pDef * modifier + (Math.random() * 4 - 2))),
-                agi: Math.max(5, Math.floor(pAgi * modifier + (Math.random() * 4 - 2))),
-                mst: Math.max(5, Math.floor(pMst * modifier + (Math.random() * 4 - 2))),
-                vit: Math.max(5, Math.floor(pVit * modifier + (Math.random() * 4 - 2)))
+                name: botNames[Math.floor(Math.random() * botNames.length)] + ` [${typeName}]`,
+                str: Math.max(1, pStr + mod + Math.floor(Math.random() * 3) - 1),
+                def: Math.max(1, pDef + mod + Math.floor(Math.random() * 3) - 1),
+                agi: Math.max(1, pAgi + mod + Math.floor(Math.random() * 3) - 1),
+                mst: Math.max(1, pMst + mod + Math.floor(Math.random() * 3) - 1),
+                vit: Math.max(1, pVit + mod + Math.floor(Math.random() * 3) - 1),
+                lvl: Math.max(1, pLvl + Math.floor(mod/2))
             };
 
             document.getElementById('e-name-vs').innerText = currentEnemy.name;
@@ -177,52 +162,36 @@
             document.getElementById('e-agi').innerText = currentEnemy.agi;
             document.getElementById('e-mst').innerText = currentEnemy.mst;
             document.getElementById('e-vit').innerText = currentEnemy.vit;
-            document.getElementById('bot-phrase').innerText = currentEnemy.phrase;
-        }
 
-        function loadFightScreen() {
-            const savedName = localStorage.getItem('barbarians_username') || "Воин";
-            if (!localStorage.getItem('barbarians_username')) { window.location.href = "start.html"; return; }
-
-            let userSilver = parseInt(localStorage.getItem('barb_silver') || '10000');
-            let lvl = localStorage.getItem('barb_lvl') || '1';
-            let gold = localStorage.getItem('barb_gold') || '15';
-            let gems = localStorage.getItem('barb_gems') || '0';
-            let def = parseInt(localStorage.getItem('barb_def') || '5');
-            let vit = parseInt(localStorage.getItem('barb_vit') || '5');
-            let battles = localStorage.getItem('barb_battle_count') ?? '3';
-            let maxHp = 250 + (vit * 20);
-
-            document.getElementById('header-player-name').innerText = savedName;
-            document.getElementById('header-lvl').innerHTML = `👑 ${lvl}`;
-            document.getElementById('header-hp').innerText = maxHp;
-            document.getElementById('header-def').innerText = def;
-            document.getElementById('header-silver').innerText = `🪙 ${userSilver}`;
-            document.getElementById('header-gold').innerText = `💰 ${gold}`;
-            document.getElementById('header-gems').innerText = gems;
-            document.getElementById('header-battles').innerText = `${battles}/3`;
-
-            document.getElementById('p-name-vs').innerText = savedName;
-            document.getElementById('p-str').innerText = localStorage.getItem('barb_str') || '5';
-            document.getElementById('p-def').innerText = def;
-            document.getElementById('p-agi').innerText = localStorage.getItem('barb_agi') || '5';
-            document.getElementById('p-mst').innerText = localStorage.getItem('barb_mst') || '5';
-            document.getElementById('p-vit').innerText = vit;
-
-            generateEnemy();
+            document.getElementById('bot-phrase').innerText = phrases[Math.floor(Math.random() * phrases.length)];
         }
 
         function startBattle() {
-            let battles = parseInt(localStorage.getItem('barb_battle_count') ?? '3');
+            let battles = localStorage.getItem('barb_battle_count') !== null ? parseInt(localStorage.getItem('barb_battle_count')) : 3;
+            
             if (battles <= 0) {
-                alert("🛑 Не осталось попыток боя! Дождись восстановления.");
+                alert("У вас нет доступных боев! Подождите регенерации.");
+                window.location.href = 'duel.html';
                 return;
             }
-            localStorage.setItem('current_arena_enemy', JSON.stringify(currentEnemy));
+
+            // Накатываем списание боя
+            battles -= 1;
+            localStorage.setItem('barb_battle_count', battles);
+
+            // КРИТИЧЕСКОЕ ИСПРАВЛЕНИЕ: если боев стало меньше максимума,
+            // заводим точку отсчета 5-минутного таймера прямо сейчас, если её не было
+            if (battles === 2) {
+                localStorage.setItem('barb_last_regen', Date.now());
+            }
+
+            // Передаем параметры сгенерированного бота на страницу расчета результатов
+            localStorage.setItem('current_enemy_data', JSON.stringify(currentEnemy));
             window.location.href = 'battle_result.html';
         }
 
-        document.addEventListener("DOMContentLoaded", loadFightScreen);
+        document.addEventListener("DOMContentLoaded", generateEnemy);
     </script>
+    <script src="global_core.js"></script>
 </body>
 </html>
