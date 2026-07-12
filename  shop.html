@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Варвары — Лавка</title>
+    <style>
+        body { background-color: #061118; color: #ffffff; font-family: Arial, sans-serif; margin: 0; padding: 0; user-select: none; }
+        
+        .category-bar { background: linear-gradient(to bottom, #092429, #040f12); color: #00ffcc; font-size: 14px; font-weight: bold; text-align: center; padding: 6px 15px; border-top: 1px solid #144b54; border-bottom: 1px solid #040e10; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .shop-banner-container { background-color: #040b0f; padding: 10px; text-align: center; border-bottom: 1px solid #0f2231; }
+        .shop-art { width: 90%; max-width: 320px; height: 130px; margin: 0 auto; border: 1px solid #1c8cd1; background: linear-gradient(45deg, #2b1d11, #130d08); border-radius: 4px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #bca085; box-shadow: 0 4px 8px rgba(0,0,0,0.5); }
+        .art-icon { font-size: 45px; margin-bottom: 5px; }
+        .shop-subtitle { font-size: 12px; color: #799bb3; line-height: 1.4; padding: 8px 15px 0 15px; text-align: center; }
+
+        .menu-container { margin-top: 2px; }
+        .menu-link { background: linear-gradient(to bottom, #091b29, #050e16); padding: 13px 15px; margin-bottom: 2px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #0f2231; text-decoration: none; color: #adc8d9; font-size: 14px; font-weight: bold; cursor: pointer; }
+        .menu-link:active { background: #0d273d; }
+        .menu-arrow { color: #1c8cd1; font-weight: bold; letter-spacing: -2px; font-size: 15px; }
+        .menu-divider { height: 4px; background: repeating-linear-gradient(90deg, #3d240e, #1f1207 20px); border-top: 1px solid #5c3716; border-bottom: 1px solid #5c3716; margin: 6px 0; }
+
+        /* Стили для раскрывающихся списков предметов */
+        .items-block { background-color: #030a0e; border-bottom: 1px solid #0f2231; display: none; padding: 5px 0; }
+        .product-card { background: #07151f; margin: 3px 10px; padding: 10px; border-left: 3px solid #1c8cd1; border-radius: 2px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+        .product-info b { color: #ffffff; }
+        .product-info span { display: block; font-size: 11px; color: #799bb3; margin-top: 2px; }
+        .buy-btn { background: linear-gradient(to bottom, #113824, #05140d); border: 1px solid #00ffaa; color: #00ffaa; padding: 5px 12px; font-size: 12px; font-weight: bold; border-radius: 3px; cursor: pointer; text-shadow: 1px 1px 1px #000; }
+        .buy-btn:active { background: #0a2417; }
+    </style>
+</head>
+<body>
+
+    <!-- Шапка добавится автоматически из global_core.js -->
+
+    <div class="category-bar">Лавка</div>
+
+    <div class="shop-banner-container">
+        <div class="shop-art">
+            <span class="art-icon">⛺🪓🛡️</span>
+            <span style="font-size: 11px; text-transform: uppercase; font-weight: bold; letter-spacing: 1px;">Торговый Шатер</span>
+        </div>
+        <div class="shop-subtitle">Тут ты можешь приобрести необходимые для сражений вещи: оружие, амуницию, свитки и т.д.</div>
+    </div>
+
+    <div class="menu-container">
+        <!-- Категории товаров с вызовом функции раскрытия списков -->
+        <div class="menu-link" onclick="toggleCategory('cat-potions')"><span>🧪 Зелья</span><span class="menu-arrow">»»</span></div>
+        <div id="cat-potions" class="items-block">
+            <div class="product-card">
+                <div class="product-info"><b>Кровь Одина</b><span>❤️ Мгновенно восстанавливает 30 боев (заглушка)</span></div>
+                <button class="buy-btn" onclick="buyItem('Кровь Одина', 500, 'silver')">🪙 500</button>
+            </div>
+        </div>
+
+        <div class="menu-link" onclick="toggleCategory('cat-scrolls')"><span>📜 Свитки</span><span class="menu-arrow">»»</span></div>
+        <div id="cat-scrolls" class="items-block">
+            <div class="product-card">
+                <div class="product-info"><b>Свиток Ярости</b><span>⚡ Мастерство +2 в бою</span></div>
+                <button class="buy-btn" onclick="buyItem('Свиток Ярости', 300, 'silver')">🪙 300</button>
+            </div>
+        </div>
+
+        <div class="menu-link" onclick="toggleCategory('cat-helmets')"><span>🪖 Шлемы</span><span class="menu-arrow">»»</span></div>
+        <div id="cat-helmets" class="items-block">
+            <div class="product-card">
+                <div class="product-info"><b>Кожаный шлем норманна</b><span>🛡️ Защита +1, ➕ Живучесть +1</span></div>
+                <button class="buy-btn" onclick="buyItem('Кожаный шлем норманна', 1000, 'silver')">🪙 1000</button>
+            </div>
+        </div>
+        <div class="menu-link" onclick="toggleCategory('cat-weapons')"><span>⚔️ Оружие</span><span class="menu-arrow">»»</span></div>
+        <div id="cat-weapons" class="items-block">
+            <div class="product-card">
+                <div class="product-info"><b>Топор Налётчика</b><span>💪 Сила +3, 🏃 Ловкость +1</span></div>
+                <button class="buy-btn" onclick="buyItem('Топор Налётчика', 2500, 'silver')">🪙 2500</button>
+            </div>
+            <div class="product-card">
+                <div class="product-info"><b>Меч Конунга</b><span>💪 Сила +8, ⚡ Мастерство +4</span></div>
+                <button class="buy-btn" onclick="buyItem('Меч Конунга', 15, 'gold')">💰 15</button>
+            </div>
+        </div>
+
+        <div class="menu-link" onclick="toggleCategory('cat-armor')"><span>🛡️ Доспехи</span><span class="menu-arrow">»»</span></div>
+        <div id="cat-armor" class="items-block">
+            <div class="product-card">
+                <div class="product-info"><b>Кольчуга Ветерана</b><span>🛡️ Защита +4, ➕ Живучесть +3</span></div>
+                <button class="buy-btn" onclick="buyItem('Кольчуга Ветерана', 4000, 'silver')">🪙 4000</button>
+            </div>
+        </div>
+
+        <div class="menu-link" onclick="toggleCategory('cat-shields')"><span>🛡️ Щиты</span><span class="menu-arrow">»»</span></div>
+        <div id="cat-shields" class="items-block">
+            <div class="product-card">
+                <div class="product-info"><b>Дубовый круглый щит</b><span>🛡️ Защита +2</span></div>
+                <button class="buy-btn" onclick="buyItem('Дубовый круглый щит', 1200, 'silver')">🪙 1200</button>
+            </div>
+        </div>
+
+        <div class="menu-divider"></div>
+
+        <!-- Переходы назад -->
+        <a href="village.html" class="menu-link"><span>🏡 Поселок (Назад)</span><span class="menu-arrow">»»</span></a>
+        <a href="index.html" class="menu-link"><span>🏠 Главная</span><span class="menu-arrow">»»</span></a>
+    </div>
+
+    <script>
+        // Функция раскрытия/скрытия подкатегорий лавки
+        function toggleCategory(id) {
+            const block = document.getElementById(id);
+            if (block.style.display === "block") {
+                block.style.display = "none";
+            } else {
+                // Закрываем все остальные блоки перед открытием нового
+                const allBlocks = document.querySelectorAll('.items-block');
+                allBlocks.forEach(b => b.style.display = "none");
+                block.style.display = "block";
+            }
+        }
+
+        // Логика покупки предметов лавки
+        function buyItem(name, price, currency) {
+            let userSilver = parseInt(localStorage.getItem('barb_silver') || '10000');
+            let userGold = parseInt(localStorage.getItem('barb_gold') || '15');
+
+            if (currency === 'silver') {
+                if (userSilver < price) { alert("Недостаточно серебра!"); return; }
+                localStorage.setItem('barb_silver', userSilver - price);
+            } else if (currency === 'gold') {
+                if (userGold < price) { alert("Недостаточно золота!"); return; }
+                localStorage.setItem('barb_gold', userGold - price);
+            }
+
+            // Получаем или создаем массив купленного инвентаря в LocalStorage
+            let inventory = JSON.parse(localStorage.getItem('barb_inventory') || '[]');
+            inventory.push({ name: name, buyDate: Date.now() });
+            localStorage.setItem('barb_inventory', JSON.stringify(inventory));
+
+            alert(`Вы успешно купили: ${name}! Вещь отправлена в инвентарь.`);
+            
+            // Перезагружаем интерфейс для обновления кошелька в шапке
+            location.reload();
+        }
+    </script>
+
+    <!-- Подключаем ядро игры для авто-шапки -->
+    <script src="global_core.js"></script>
+</body>
+</html>

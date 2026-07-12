@@ -1,0 +1,134 @@
+    <div class="menu-container">
+        <a href="shop.html" class="menu-link"><span>↩️ Назад в Лавку</span><span class="menu-arrow">»»</span></a>
+        <a href="village.html" class="menu-link"><span>🏡 Поселок</span><span class="menu-arrow">»»</span></a>
+    </div>
+
+    <script>
+        // Обновленная база данных лавки: расчет СТРОГО в серебре по прогрессии уровня
+        const shopDatabase = {
+            potions: {
+                title: "Зелья",
+                desc: "Редкие отвары шаманов. Зелья боёв мгновенно восстанавливают энергию для поединков на Арене, не заставляя ждать таймер.",
+                items: [
+                    { id: "p1", icon: "🧪", name: "Настойка Гьяллархорна", level: 1, text: "Восстановление боев: +1 бой", bonus: { battles: 1 }, price: 150, currency: "silver" },
+                    { id: "p2", icon: "🧪", name: "Кровь Одина", level: 3, text: "Восстановление боев: Полное восстановление (3/3 боев)", bonus: { battles: 3 }, price: 650, currency: "silver" }
+                ]
+            },
+            scrolls: {
+                title: "Свитки",
+                desc: "Древние пергаменты с руническими заклинаниями, дарующие временное превосходство в боевом мастерстве.",
+                items: [
+                    { id: "sc1", icon: "📜", name: "Руна Ярости", level: 1, text: "Мастерство: +2 в бою (заглушка)", bonus: {}, price: 200, currency: "silver" },
+                    { id: "sc2", icon: "📜", name: "Знамение Одина", level: 4, text: "Мастерство: +6 в бою (заглушка)", bonus: {}, price: 1800, currency: "silver" }
+                ]
+            },
+            helmets: {
+                title: "Шлемы",
+                desc: "Защита твоей головы от сокрушительных ударов вражеских топоров. Увеличивает параметры защиты и живучести.",
+                items: [
+                    { id: "h1", icon: "🪖", name: "Кожаный капюшон", level: 1, text: "Защита: +1<br/>Живучесть: +1", bonus: { def: 1, vit: 1 }, price: 250, currency: "silver" },
+                    { id: "h2", icon: "🪖", name: "Норманнский шлем", level: 3, text: "Защита: +3<br/>Живучесть: +2", bonus: { def: 3, vit: 2 }, price: 1150, currency: "silver" },
+                    { id: "h3", icon: "🪖", name: "Тяжелый шлем Одина", level: 5, text: "Защита: +7<br/>Живучесть: +5", bonus: { def: 7, vit: 5 }, price: 7800, currency: "silver" }
+                ]
+            },
+            weapons: {
+                title: "Оружие",
+                desc: "Сталь решает любые споры. Хорошее оружие значительно поднимает твою атакующую Силу и Ловкость на Арене.",
+                items: [
+                    { id: "w1", icon: "🪓", name: "Охотничий нож", level: 1, text: "Сила: +1", bonus: { str: 1 }, price: 300, currency: "silver" },
+                    { id: "w2", icon: "🪓", name: "Топор Налётчика", level: 3, text: "Сила: +4<br/>Ловкость: +1", bonus: { str: 4, agi: 1 }, price: 2200, currency: "silver" },
+                    { id: "w3", icon: "⚔️", name: "Меч Конунга", level: 5, text: "Сила: +12<br/>Мастерство: +5", bonus: { str: 12, mst: 5 }, price: 12400, currency: "silver" }
+                ]
+            },
+            armor: {
+                title: "Доспехи",
+                desc: "Не жалей серебра для покупки доспехов высшего уровня, так как бонусы к характеристикам героя от доспехов самые большие среди всей экипировки.",
+                items: [
+                    { id: "a1", icon: "👕", name: "Туника", level: 1, text: "Сила: +2<br/>Защита: +5", bonus: { str: 2, def: 5 }, price: 180, currency: "silver" },
+                    { id: "a2", icon: "🛡️", name: "Деревник", level: 3, text: "Сила: +4<br/>Защита: +8", bonus: { str: 4, def: 8 }, price: 1620, currency: "silver" },
+                    { id: "a3", icon: "🦺", name: "Панцирь", level: 5, text: "Сила: +8<br/>Защита: +10", bonus: { str: 8, def: 10 }, price: 15500, currency: "silver" }
+                ]
+            },
+            shields: {
+                title: "Щиты",
+                desc: "Крепкий щит — залог выживания варвара под стрелами и тяжелыми секирами наемников.",
+                items: [
+                    { id: "sh1", icon: "🛡️", name: "Плетеный баклер", level: 1, text: "Защита: +1", bonus: { def: 1 }, price: 150, currency: "silver" },
+                    { id: "sh2", icon: "🛡️", name: "Дубовый круглый щит", level: 3, text: "Защита: +4", bonus: { def: 4 }, price: 1400, currency: "silver" },
+                    { id: "sh3", icon: "🛡️", name: "Окованный ростовой щит", level: 5, text: "Защита: +9", bonus: { def: 9 }, price: 9200, currency: "silver" }
+                ]
+            },
+            gifts: {
+                title: "Подарки",
+                desc: "Прекрасные сувениры и трофеи для демонстрации своей щедрости и высокого статуса в племени.",
+                items: [
+                    { id: "g1", icon: "🎁", name: "Деревянная фигурка", level: 1, text: "Описание: Простой оберег", bonus: {}, price: 100, currency: "silver" },
+                    { id: "g2", icon: "🎁", name: "Рог Медовухи", level: 3, text: "Описание: Старинный кубок славы племени", bonus: {}, price: 900, currency: "silver" }
+                ]
+            }
+        };
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentCatKey = urlParams.get('cat') || 'armor';
+        const currentCategory = shopDatabase[currentCatKey];
+
+        function renderCategoryPage() {
+            if (!currentCategory) { window.location.href = 'shop.html'; return; }
+            
+            document.getElementById('cat-title').innerText = currentCategory.title;
+            document.getElementById('cat-info').innerHTML = currentCategory.desc;
+
+            let html = "";
+            currentCategory.items.forEach(item => {
+                html += `
+                    <div class="item-card">
+                        <div class="item-icon-frame">${item.icon}</div>
+                        <div class="item-details">
+                            <div class="item-title">${item.name}</div>
+                            <b>Уровень: ${item.level}</b><br/>
+                            ${item.text}<br/>
+                            Цена: ${item.price} серебра
+                        </div>
+                    </div>
+                    <div class="buy-action-row">
+                        <button class="wap-buy-btn" onclick="executeWapPurchase('${currentCatKey}', '${item.id}')">Купить</button>
+                    </div>
+                `;
+            });
+            document.getElementById('products-list-container').innerHTML = html;
+        }
+
+        function executeWapPurchase(catKey, itemId) {
+            const category = shopDatabase[catKey];
+            const item = category.items.find(i => i.id === itemId);
+            if (!item) return;
+
+            let userSilver = parseInt(localStorage.getItem('barb_silver') || '10000');
+
+            if (userSilver < item.price) { 
+                alert("Недостаточно серебра воину!"); 
+                return; 
+            }
+            
+            localStorage.setItem('barb_silver', userSilver - item.price);
+
+            if (catKey === 'potions' && item.bonus.battles) {
+                let currentBattles = parseInt(localStorage.getItem('barb_battle_count') ?? '3');
+                let newBattles = Math.min(3, currentBattles + item.bonus.battles);
+                localStorage.setItem('barb_battle_count', newBattles);
+                alert(`Вы выпили ${item.name}! Количество боев восстановлено до: ${newBattles}/3.`);
+            } else {
+                let inventory = JSON.parse(localStorage.getItem('barb_inventory') || '[]');
+                inventory.push({ id: item.id, name: item.name, icon: item.icon, type: catKey, bonus: item.bonus });
+                localStorage.setItem('barb_inventory', JSON.stringify(inventory));
+                alert(`Вы приобрели: ${item.name}! Предмет отправлен в Экипировку.`);
+            }
+
+            location.reload();
+        }
+
+        document.addEventListener("DOMContentLoaded", renderCategoryPage);
+    </script>
+    <script src="global_core.js"></script>
+</body>
+</html>

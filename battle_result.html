@@ -7,7 +7,6 @@
     <style>
         body { background-color: #061118; color: #ffffff; font-family: Arial, sans-serif; margin: 0; padding: 0; user-select: none; }
         
-        /* Специфичные стили только для экрана итогов поединка */
         .category-bar { background: linear-gradient(to bottom, #123524, #05140d); color: #00ffaa; font-size: 14px; font-weight: bold; text-align: center; padding: 6px 15px; border-top: 1px solid #1d5339; border-bottom: 1px solid #040f0a; box-shadow: inset 0 1px 2px rgba(255,255,255,0.1); text-transform: uppercase; }
         
         .result-container { background-color: #050d12; padding: 15px; border-bottom: 1px solid #0f2231; font-size: 14px; line-height: 1.5; color: #adc8d9; }
@@ -67,12 +66,27 @@
             let pFame = parseInt(localStorage.getItem('barb_fame') || '0');
             let pGems = parseInt(localStorage.getItem('barb_gems') || '0');
 
+            // 1. Извлекаем базовые прокачанные статы игрока
             let pStr = parseInt(localStorage.getItem('barb_str') || '5');
             let pDef = parseInt(localStorage.getItem('barb_def') || '5');
             let pAgi = parseInt(localStorage.getItem('barb_agi') || '5');
             let pMst = parseInt(localStorage.getItem('barb_mst') || '5');
             let pVit = parseInt(localStorage.getItem('barb_vit') || '5');
 
+            // 2. УЧЕТ ЭКИПИРОВКИ: Считываем надетые вещи и суммируем их бонусы к статам
+            let equipped = JSON.parse(localStorage.getItem('barb_equipped') || '{}');
+            for (let slot in equipped) {
+                let item = equipped[slot];
+                if (item.bonus) {
+                    if (item.bonus.str) pStr += item.bonus.str;
+                    if (item.bonus.def) pDef += item.bonus.def;
+                    if (item.bonus.agi) pAgi += item.bonus.agi;
+                    if (item.bonus.mst) pMst += item.bonus.mst;
+                    if (item.bonus.vit) pVit += item.bonus.vit;
+                }
+            }
+
+            // Пересчитываем здоровье игрока прямо на старте боя с учетом Живучести от вещей
             let pMaxHp = 250 + (pVit * 20);
             let eMaxHp = 250 + (enemyData.vit * 20);
             let pCurrentHp = pMaxHp;
@@ -87,7 +101,7 @@
 
                 logHtml += `<b>Раунд ${round}:</b><br/>`;
 
-                // Ход игрока
+                // ХОД ИГРОКА (Учитываем Ловкость врага и Мастерство/Силу игрока с бонусами шмоток)
                 let pIsDodge = Math.random() < (enemyData.agi * 0.005);
                 if (pIsDodge) {
                     logHtml += `• ${enemyData.name} ловко увернулся от твоего удара!<br/>`;
@@ -104,7 +118,7 @@
 
                 if (eCurrentHp <= 0) break;
 
-                // Ход бота
+                // ХОД БОТА (Тут бонусы к Защите и Ловкости от шмоток защищают игрока)
                 let eIsDodge = Math.random() < (pAgi * 0.005);
                 if (eIsDodge) {
                     logHtml += `• Ты ловко увернулся от удара противника!<br/>`;
@@ -120,7 +134,7 @@
                 }
             }
 
-            // Определение победителя
+            // Определение победителя по раундам
             let isWin = false;
             let outcomeText = "";
             let reasonText = "";
@@ -143,7 +157,7 @@
                 }
             }
 
-            // Расчет наград
+            // Расчет и выдача наград
             let rewSilver = 0;
             let rewExp = 0;
             let rewFame = 0;
@@ -159,13 +173,11 @@
                 rewExp = Math.floor(2 + Math.random() * 2) * enemyData.lvl;
             }
 
-            // Сохранение результатов в Local Storage
             localStorage.setItem('barb_silver', pSilver + rewSilver);
             localStorage.setItem('barb_exp', pExp + rewExp);
             localStorage.setItem('barb_fame', pFame + rewFame);
             localStorage.setItem('barb_gems', pGems + rewGems);
 
-            // Вывод данных в HTML
             document.getElementById('battle-outcome').innerHTML = outcomeText;
             document.getElementById('battle-reason').innerText = reasonText;
             
@@ -188,18 +200,15 @@
 
             document.getElementById('log-box').innerHTML = logHtml;
 
-            // Настройка кнопки повторного боя (сохраняем тип сложности)
             const urlParams = new URLSearchParams(window.location.search);
             const fightType = urlParams.get('type') || 'equal';
             document.getElementById('next-fight-btn').href = `arena_fight.html?type=${fightType}`;
             
-            // Чистим временные данные соперника
             localStorage.removeItem('current_enemy_data');
         }
 
         document.addEventListener("DOMContentLoaded", runBattleSimulation);
     </script>
-    <!-- Подключаем наше единое автоматическое ядро интерфейса и времени -->
     <script src="global_core.js"></script>
 </body>
 </html>
