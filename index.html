@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Варвары — Профиль героя</title>
+    <title>Варвары — Главная</title>
     <style>
         body { background-color: #061118; color: #ffffff; font-family: Arial, sans-serif; margin: 0; padding: 0; user-select: none; }
         .game-banner { background: linear-gradient(to bottom, #112d3e, #091a26); border-bottom: 2px solid #1c8cd1; padding: 8px; text-align: center; font-size: 16px; font-weight: bold; color: #ffffff; text-shadow: 1px 1px 3px #000; }
-        
-        /* Та самая общая шапка ресурсов для страницы героя */
         .game-header { background: linear-gradient(to bottom, #091a26, #051017); border-bottom: 2px solid #142a3a; padding: 8px 5px; font-size: 12px; color: #b0cbdc; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
         .header-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px; line-height: 1.4; }
         .header-item { display: flex; align-items: center; gap: 2px; }
@@ -19,29 +17,27 @@
         .silver { color: #e5e5e5; }
         .gold { color: #ffcc00; font-weight: bold; }
         .gems { color: #00ccff; }
-
-        .category-bar { background: linear-gradient(to bottom, #d4c2a8, #bba78c); color: #3d240e; font-size: 14px; font-weight: bold; text-align: center; padding: 5px 15px; margin: 10px 0 5px 0; border-top: 1px solid #ebd9c0; border-bottom: 1px solid #8e785d; box-shadow: inset 0 1px 2px rgba(255,255,255,0.4); display: flex; justify-content: space-between; align-items: center; }
-        .category-bar::before, .category-bar::after { content: "⚜️"; font-size: 12px; color: #6a4f31; }
-        .stats-block { padding: 8px 15px; font-size: 14px; line-height: 1.6; }
-        .stat-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
-        .highlight-title { font-weight: bold; color: #adc8d9; }
-        .yellow-text { color: #ffff00; }
-        .green-text { color: #00ffaa; }
-        .btn-plus { background: linear-gradient(to bottom, #113824, #081c12); border: 1px solid #00ffaa; color: #00ffaa; font-size: 11px; font-weight: bold; padding: 3px 8px; border-radius: 3px; cursor: pointer; }
-        .btn-plus:disabled { background: #111a15; border-color: #44554d; color: #55665e; cursor: not-allowed; }
-        .menu-link { background: linear-gradient(to bottom, #091b29, #050e16); padding: 13px 15px; margin-top: 15px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #0f2231; border-bottom: 1px solid #0f2231; text-decoration: none; color: #adc8d9; font-size: 14px; font-weight: bold; }
-        .menu-arrow { color: #1c8cd1; font-weight: bold; letter-spacing: -2px; }
+        .welcome-block { text-align: center; padding: 12px 5px 6px 5px; }
+        .welcome-title { font-size: 18px; font-weight: bold; color: #ffffff; margin-bottom: 4px; }
+        .welcome-sub { font-size: 12px; color: #799bb3; }
+        .menu-container { margin-top: 5px; }
+        .menu-link { background: linear-gradient(to bottom, #091b29, #050e16); padding: 13px 15px; margin-bottom: 2px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #0f2231; text-decoration: none; color: #adc8d9; font-size: 14px; font-weight: bold; }
+        .menu-link:active { background: #0d273d; }
+        .menu-arrow { color: #1c8cd1; font-weight: bold; letter-spacing: -2px; font-size: 15px; }
+        .menu-divider { height: 4px; background: repeating-linear-gradient(90deg, #3d240e, #1f1207 20px); border-top: 1px solid #5c3716; border-bottom: 1px solid #5c3716; margin: 6px 0; }
+        .footer-links { display: flex; justify-content: center; gap: 15px; padding: 15px 0 10px 0; font-size: 12px; }
+        .footer-links a { color: #7ba2bd; text-decoration: none; cursor: pointer; }
+        .legal-info { text-align: center; font-size: 10px; color: #4a6273; padding: 0 15px 25px 15px; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
     <div class="game-banner">🛡️ Варвары ⚔️</div>
 
-    <!-- ВЕРХНЯЯ ПАНЕЛЬ ТЕПЕРЬ ВСЕГДА ТУТ -->
     <div class="game-header">
         <div class="header-row">
             <div class="header-item">✉️</div>
-            <div class="header-item nickname">🪓 <span id="header-player-name">Загрузка...</span></div>
+            <div class="header-item nickname">🪓 <span id="player-name">Загрузка...</span></div>
             <div class="header-item lvl" onclick="window.location.href='hero.html'"><span id="header-lvl">👑 1</span></div>
             <div class="header-item hp">❤️ <span id="header-hp">250</span></div>
             <div class="header-item armor">🛡️ <span id="header-def">5</span></div>
@@ -51,138 +47,80 @@
             <div class="header-item">⚔️ 3/3</div>
             <div class="header-item">⏳ 00:00:00</div>
             <div class="header-item">🕒 15:27:52</div>
+            <div class="header-item">🔍</div>
+            <div class="header-item">📜</div>
         </div>
     </div>
 
-    <!-- Синяя кнопка тренировки успешно удалена! -->
+    <div class="welcome-block">
+        <div class="welcome-title">Добро пожаловать!</div>
+        <div class="welcome-sub">Рядом с тобой 1080 варваров (онлайн)</div>
+    </div>
+    <div class="menu-container">
+        <a href="events.html" class="menu-link"><span>⭐ События</span><span class="menu-arrow">»»</span></a>
+        <a href="quests.html" class="menu-link"><span>📜 Задания</span><span class="menu-arrow">»»</span></a>
+        <a href="duel.html" class="menu-link"><span>⚔️ Дуэль</span><span class="menu-arrow">»»</span></a>
+        <a href="village.html" class="menu-link"><span>🏡 Поселок</span><span class="menu-arrow">»»</span></a>
+        <a href="raid.html" class="menu-link"><span>🛡️ Поход</span><span class="menu-arrow">»»</span></a>
+        <a href="fafnir.html" class="menu-link"><span>🐉 Фафнир</span><span class="menu-arrow">»»</span></a>
+        <a href="dungeon.html" class="menu-link"><span>🌋 Подземелье</span><span class="menu-arrow">»»</span></a>
+        <a href="undead.html" class="menu-link"><span>💀 Нежить</span><span class="menu-arrow">»»</span></a>
+        <a href="port.html" class="menu-link"><span>⚓ Порт</span><span class="menu-arrow">»»</span></a>
+        <a href="clan.html" class="menu-link"><span>👑 Клан</span><span class="menu-arrow">»»</span></a>
+        <a href="brotherhood.html" class="menu-link"><span>🛡️ Братство</span><span class="menu-arrow">»»</span></a>
+        <a href="beast.html" class="menu-link"><span>🐾 Зверь</span><span class="menu-arrow">»»</span></a>
+        <a href="rating.html" class="menu-link"><span>🏆 Рейтинг</span><span class="menu-arrow">»»</span></a>
 
-    <div class="category-bar">Параметры</div>
-    <div class="stats-block">
-        <div class="stat-row">
-            <div>💪 <span class="highlight-title">Сила:</span> <span id="stat-str">5</span></div>
-            <button class="btn-plus" id="buy-str" onclick="buyStat('str')">Улучшить (<span id="cost-str">10</span>🪙)</button>
-        </div>
-        <div class="stat-row">
-            <div>🛡️ <span class="highlight-title">Защита:</span> <span id="stat-def">5</span></div>
-            <button class="btn-plus" id="buy-def" onclick="buyStat('def')">Улучшить (<span id="cost-def">10</span>🪙)</button>
-        </div>
-        <div class="stat-row">
-            <div>🏃 <span class="highlight-title">Ловкость:</span> <span id="stat-agi">5</span></div>
-            <button class="btn-plus" id="buy-agi" onclick="buyStat('agi')">Улучшить (<span id="cost-agi">10</span>🪙)</button>
-        </div>
-        <div class="stat-row">
-            <div>⚡ <span class="highlight-title">Мастерство:</span> <span id="stat-mst">5</span></div>
-            <button class="btn-plus" id="buy-mst" onclick="buyStat('mst')">Улучшить (<span id="cost-mst">10</span>🪙)</button>
-        </div>
-        <div class="stat-row">
-            <div>➕ <span class="highlight-title">Живучесть:</span> <span id="stat-vit">5</span></div>
-            <button class="btn-plus" id="buy-vit" onclick="buyStat('vit')">Улучшить (<span id="cost-vit">10</span>🪙)</button>
-        </div>
-        <hr style="border-color: #0f2231; margin: 8px 0;">
-        <div>❤️ <span class="highlight-title">Здоровье:</span> <span id="char-hp">250</span></div>
-        <div>💚 <span class="highlight-title">Здор. макс.:</span> <span id="char-hp-max">250</span></div>
-        <div>❤️ <span class="highlight-title">Здор. восст.:</span> <span id="char-hp-reg">30</span> в час</div>
+        <div class="menu-divider"></div>
+
+        <a href="index.html" class="menu-link"><span>🏠 Главная</span><span class="menu-arrow">»»</span></a>
+        <a href="hero.html" class="menu-link"><span>🤠 Герой</span><span class="menu-arrow">»»</span></a>
+        <a href="mail.html" class="menu-link"><span>✉️ Почта</span><span class="menu-arrow">»»</span></a>
+        <a href="chat.html" class="menu-link"><span>💬 Чат</span><span class="menu-arrow">»»</span></a>
+        <a href="forum.html" class="menu-link"><span>🗣️ Форум</span><span class="menu-arrow">»»</span></a>
+        <a href="donate.html" class="menu-link"><span>💰 Золото</span><span class="menu-arrow">»»</span></a>
     </div>
 
-    <div class="category-bar">Бонусы</div>
-    <div class="stats-block" style="color: #8faec4;">
-        <div>Одежда: 💪 +0 🛡️ +0 🏃 +0 ⚡ +0 ➕ +0</div>
-        <div>Бонусы одежды: 💪 +0 🛡️ +0 🏃 +0 ⚡ +0</div>
-        <div>Братский Дух: 💪 +0 🛡️ +0 🏃 +0 ⚡ +0</div>
-        <div>Забор: 🛡️ +0</div>
-    </div>
-    <div class="category-bar">Статистика</div>
-    <div class="stats-block">
-        <div>👥 <span class="highlight-title">Друзей:</span> 0</div>
-        <div class="green-text">👑 <span class="highlight-title" style="color:#00ffaa;">Уровень:</span> <span id="char-lvl">1</span></div>
-        <div>⭐ <span class="highlight-title">Опыт:</span> <span id="char-exp">0</span> / <span id="char-exp-max">30</span></div>
-        <div class="yellow-text">🏆 <span class="highlight-title" style="color:#ffff00;">Слава:</span> <span id="char-fame">0</span></div>
-        <div>🏰 <span class="highlight-title">Клан:</span> Не состоит в клане</div>
-        <div>🛡️ <span class="highlight-title">Братство:</span> <span class="yellow-text">Нет</span></div>
-        <div>⚔️ <span class="highlight-title">Побед:</span> 0</div>
-        <div>💀 <span class="highlight-title">Проигрышей:</span> 0</div>
-        <div class="yellow-text">🪙 <span class="highlight-title" style="color:#ffff00;">Серебро в сумке:</span> <span id="char-silver">10000</span></div>
-        <div>💰 <span class="highlight-title">Золото в сумке:</span> <span id="char-gold">15</span></div>
-        <div>💎 <span class="highlight-title">Кристаллы:</span> 0</div>
-        <div>👹 <span class="highlight-title">Убито гоблинов:</span> 0</div>
+    <div class="footer-links">
+        <a href="about.html">Об игре</a>
+        <a href="support.html">Поддержка</a>
+        <a href="settings.html">Настройки</a>
+        <a onclick="logout()">Выйти</a>
     </div>
 
-    <a href="index.html" class="menu-link">
-        <span>🏠 Вернуться на главную</span>
-        <span class="menu-arrow">»»</span>
-    </a>
+    <div class="legal-info">
+        MISUTECH LIMITED SUITE C, LEVEL 7, WORLD TRUST TOWER, 50 STANLEY STREET, CENTRAL, HONG KONG
+    </div>
 
     <script>
-        function calculateStatCost(currentStatValue) {
-            return 10 + (currentStatValue - 5) * 5;
-        }
-
-        function loadHeroData() {
+        function checkAndLoad() {
             const savedName = localStorage.getItem('barbarians_username');
-            if (!savedName) { window.location.href = "start.html"; return; }
+            if (!savedName) {
+                window.location.href = "start.html";
+                return;
+            }
+            
+            const lvl = localStorage.getItem('barb_lvl') || '1';
+            const silver = localStorage.getItem('barb_silver') || '10000';
+            const gold = localStorage.getItem('barb_gold') || '15';
+            const def = localStorage.getItem('barb_def') || '5';
+            const vit = parseInt(localStorage.getItem('barb_vit') || '5');
+            const maxHp = 250 + (vit * 20);
 
-            let userSilver = parseInt(localStorage.getItem('barb_silver') || '10000');
-            let lvl = localStorage.getItem('barb_lvl') || '1';
-            let gold = localStorage.getItem('barb_gold') || '15';
-
-            let str = parseInt(localStorage.getItem('barb_str') || '5');
-            let def = parseInt(localStorage.getItem('barb_def') || '5');
-            let agi = parseInt(localStorage.getItem('barb_agi') || '5');
-            let mst = parseInt(localStorage.getItem('barb_mst') || '5');
-            let vit = parseInt(localStorage.getItem('barb_vit') || '5');
-
-            let costStr = calculateStatCost(str); let costDef = calculateStatCost(def);
-            let costAgi = calculateStatCost(agi); let costMst = calculateStatCost(mst);
-            let costVit = calculateStatCost(vit);
-
-            document.getElementById('stat-str').innerText = str; document.getElementById('stat-def').innerText = def;
-            document.getElementById('stat-agi').innerText = agi; document.getElementById('stat-mst').innerText = mst;
-            document.getElementById('stat-vit').innerText = vit;
-
-            document.getElementById('cost-str').innerText = costStr; document.getElementById('cost-def').innerText = costDef;
-            document.getElementById('cost-agi').innerText = costAgi; document.getElementById('cost-mst').innerText = costMst;
-            document.getElementById('cost-vit').innerText = costVit;
-
-            document.getElementById('buy-str').disabled = (userSilver < costStr); document.getElementById('buy-def').disabled = (userSilver < costDef);
-            document.getElementById('buy-agi').disabled = (userSilver < costAgi); document.getElementById('buy-mst').disabled = (userSilver < costMst);
-            document.getElementById('buy-vit').disabled = (userSilver < costVit);
-
-            document.getElementById('char-lvl').innerText = lvl;
-            document.getElementById('char-exp').innerText = localStorage.getItem('barb_exp') || '0';
-            document.getElementById('char-exp-max').innerText = localStorage.getItem('barb_exp_max') || '30';
-            document.getElementById('char-fame').innerText = localStorage.getItem('barb_fame') || '0';
-            document.getElementById('char-silver').innerText = userSilver;
-            document.getElementById('char-gold').innerText = gold;
-
-            let maxHp = 250 + (vit * 20);
-            document.getElementById('char-hp').innerText = maxHp; document.getElementById('char-hp-max').innerText = maxHp;
-
-            // СИНХРОНИЗАЦИЯ С ВЕРХНЕЙ ОБЩЕЙ ШАПКОЙ
-            document.getElementById('header-player-name').innerText = savedName;
+            document.getElementById('player-name').innerText = savedName;
             document.getElementById('header-lvl').innerText = `👑 ${lvl}`;
-            document.getElementById('header-silver').innerText = `🪙 ${userSilver}`;
+            document.getElementById('header-silver').innerText = `🪙 ${silver}`;
             document.getElementById('header-gold').innerText = `💰 ${gold}`;
             document.getElementById('header-def').innerText = def;
             document.getElementById('header-hp').innerText = maxHp;
         }
-
-        function buyStat(statName) {
-            let userSilver = parseInt(localStorage.getItem('barb_silver') || '10000');
-            let currentStatValue = parseInt(localStorage.getItem('barb_' + statName) || '5');
-            let currentCost = calculateStatCost(currentStatValue);
-
-            if (userSilver >= currentCost) {
-                localStorage.setItem('barb_silver', userSilver - currentCost);
-                localStorage.setItem('barb_' + statName, currentStatValue + 1);
-                
-                if(statName === 'def') {
-                    localStorage.setItem('barb_def', currentStatValue + 1);
-                }
-                
-                loadHeroData();
-            }
+        
+        function logout() {
+            localStorage.clear();
+            window.location.href = "start.html";
         }
-        loadHeroData();
+        
+        checkAndLoad();
     </script>
 </body>
 </html>
