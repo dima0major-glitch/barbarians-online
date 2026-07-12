@@ -1,175 +1,240 @@
 /* ==========================================
-   БАЛАНС И НАСТРОЙКИ КЛАНОВОЙ СИСТЕМЫ
+   КЛАНОВАЯ СИСТЕМА ПО СТИЛЮ «НОРМАННОВ» — ЧАСТЬ 1
    ========================================== */
-const CLAN_CREATION_COST = 10000;
-const MAX_MEMBERS = 15;
-const UPGRADE_COST_BASE = 5000;
+const CLAN_PRICE = 10000;
+const SLOTS_LIMIT = 15;
+const LVL_UP_COST = 5000;
 
 let hero = JSON.parse(localStorage.getItem('hero_stats')) || { name: "Воин", level: 1, silver: 0, clan: null };
 let clans = JSON.parse(localStorage.getItem('game_clans')) || {};
 
-function renderClanSystem() {
-    const container = document.getElementById('clan-view');
-    if (!container) return;
-    
+function showClanView() {
+    const box = document.getElementById('clan-main-box');
+    if (!box) return;
+
     if (!hero.clan || !clans[hero.clan]) {
-        hero.clan = null; 
-        renderCreateClanForm(container);
+        hero.clan = null;
+        renderCreateForm(box);
     } else {
-        renderClanDashboard(container, hero.clan);
+        renderMainMenu(box, hero.clan);
     }
 }
 
-function renderCreateClanForm(container) {
-    container.innerHTML = `
-        <div style="background-color: #222831; padding: 8px; border: 1px dashed #57687f; margin-bottom: 8px;">
-            Вы не состоите в боевом союзе. Основать свой замок и вести за собой до <b>${MAX_MEMBERS} воинов</b>!
+/* Форма создания, если персонаж без клана */
+function renderCreateForm(box) {
+    box.innerHTML = `
+        <div style="padding: 10px; color: #aaa; font-size: 12px; font-family: sans-serif; text-align: center;">
+            Вы не состоите в клане.<br>Создание союза стоит <span style="color:#ffaa00;">${CLAN_PRICE} серебра</span>.
         </div>
-        <div style="padding: 5px; background: #333a42;">
-            <b>Цена основания:</b> <span style="color: #d4af37;">${CLAN_CREATION_COST} серебра</span><br><br>
-            Название клана (до 12 симв.):<br>
-            <input type="text" id="clan-name-input" maxlength="12" style="background: #1e232a; color: #fff; border: 1px solid #57687f; padding: 3px; width: 90%; margin-top: 4px;"><br><br>
-            <button onclick="createClan()" style="background: #4a5768; color: #fff; border: 1px solid #8da9c4; padding: 4px 10px; cursor: pointer;">🔨 Основать клан</button>
-        </div>
-    `;
-}
-
-function renderClanDashboard(container, clanName) {
-    const clan = clans[clanName];
-    const isLeader = clan.leader === hero.name;
-    const currentBonus = clan.totemLevel * 2;
-
-    container.innerHTML = `
-        <div style="background: #333a42; padding: 6px; margin-bottom: 6px; border-left: 3px solid #8da9c4;">
-            <b>Орден:</b> <span style="color: #8da9c4; font-size: 110%;">${clan.name}</span><br>
-            <b>Вождь:</b> ${clan.leader}<br>
-            <b>Состав:</b> <span style="color: #00ff00;">${clan.members.length}</span> / <b>${MAX_MEMBERS} воинов</b>
-        </div>
-
-        <div style="background: #222831; padding: 6px; margin-bottom: 8px; border: 1px solid #3a4454;">
-            <div style="color: #8da9c4; font-weight: bold; border-bottom: 1px solid #3a4454; padding-bottom: 2px; margin-bottom: 4px;">🐾 Тотем Ледяного Волка</div>
-            Уровень тотема: <b>${clan.totemLevel}</b><br>
-            Текущий бонус: <span style="color: #ffaa00;">+${currentBonus} Силы / +${currentBonus} Защиты</span> всем членам.<br>
-            <div style="margin-top: 5px; background: #2b323a; padding: 4px;">
-                Стоимость улучшения: <b>${(clan.totemLevel + 1) * UPGRADE_COST_BASE}</b> серебра (из казны)<br>
-                <button onclick="upgradeTotem()" style="background: #3a4454; color: #fff; border: 1px solid #57687f; padding: 2px 6px; font-size: 11px; margin-top: 4px; cursor: pointer;">⚡ Качнуть тотем</button>
-            </div>
-        </div>
-
-        <div style="background: #222831; padding: 6px; margin-bottom: 8px; border: 1px solid #3a4454;">
-            💰 <b>Казна:</b> <span style="color: #d4af37;">${clan.treasury} серебра</span><br>
-            <div style="margin-top: 4px;">
-                Пополнить казну (ваше серебро: ${hero.silver}):<br>
-                <input type="number" id="gold-donate" min="1" max="${hero.silver}" style="background: #1e232a; color: #fff; border: 1px solid #57687f; width: 80px; padding: 2px;">
-                <button onclick="donateSilver()" style="background: #4a5768; color: #fff; border: 1px solid #8da9c4; padding: 2px 6px; font-size: 11px; cursor: pointer;">Внести</button>
-            </div>
-        </div>
-
-        <div style="background: #222831; padding: 6px; margin-bottom: 8px;">
-            <div style="color: #8da9c4; font-weight: bold; border-bottom: 1px solid #3a4454; padding-bottom: 2px; margin-bottom: 4px;">👥 Дружина клана:</div>
-            <div id="members-list" style="font-size: 11px; line-height: 1.4;">
-                ${clan.members.map((m, idx) => `<div>${idx + 1}. <b>${m}</b> ${m === clan.leader ? '<span style="color:#d4af37;">[Вождь]</span>' : ''}</div>`).join('')}
-            </div>
-            
-            <div style="margin-top: 8px; padding-top: 6px; border-top: 1px dashed #3a4454;">
-                <button onclick="simulateAddMember()" style="background: #2b323a; color: #aaa; border: 1px solid #444; padding: 2px 4px; font-size: 10px; cursor: pointer;">🤖 Нанять наемника (Тест лимита 15 чел)</button>
-            </div>
-        </div>
-
-        <div style="text-align: right; padding: 4px;">
-            ${isLeader ? 
-                `<button onclick="disbandClan()" style="background: #7a2222; color: #fff; border: 1px solid #a33333; padding: 3px 6px; font-size: 11px; cursor: pointer;">💥 Распустить клан</button>` : 
-                `<button onclick="leaveClan()" style="background: #7a2222; color: #fff; border: 1px solid #a33333; padding: 3px 6px; font-size: 11px; cursor: pointer;">🚪 Покинуть клан</button>`
-            }
+        <div style="padding: 10px; text-align: center;">
+            <input type="text" id="new-clan-title" maxlength="12" placeholder="Название клана" style="background:#0b141d; color:#fff; border:1px solid #1c354d; padding:5px; width:80%; font-size:13px;"><br><br>
+            <button onclick="actionCreateClan()" style="background:#112233; color:#00ffcc; border:1px solid #1c354d; padding:6px 15px; font-size:13px; cursor:pointer;">Основать клан</button>
         </div>
     `;
 }
 
-window.createClan = function() {
-    const input = document.getElementById('clan-name-input');
+/* Генерация списка меню в точности со скриншота */
+function renderMainMenu(box, clanName) {
+    const currentClan = clans[clanName];
+    document.getElementById('clan-welcome-tag').innerText = `Добро пожаловать в ${currentClan.name}`;
+
+    box.innerHTML = `
+        <div class="clan-menu-item" onclick="openSubSection('info')">
+            <span>📊 Информация</span><span class="clan-btn-arrow">»</span>
+        </div>
+        <div class="clan-menu-item" onclick="openSubSection('donate')">
+            <span>💎 Пожертвовать</span><span class="clan-btn-arrow">»</span>
+        </div>
+        <div class="clan-menu-item" onclick="openSubSection('upgrades')">
+            <span>⬆️ Улучшения</span><span class="clan-btn-arrow">»</span>
+        </div>
+        <div class="clan-menu-item" onclick="openSubSection('war')">
+            <span>💀 Война</span><span class="clan-btn-arrow">»</span>
+        </div>
+        <div class="clan-menu-item" onclick="openSubSection('members')">
+            <span>🪓 Воины (${currentClan.members.length}/${SLOTS_LIMIT})</span><span class="clan-btn-arrow">»</span>
+        </div>
+        <div class="clan-menu-item" onclick="openSubSection('chat')">
+            <span>💬 Чат</span><span class="clan-btn-arrow">»</span>
+        </div>
+        <div class="clan-menu-item" onclick="openSubSection('appeal')">
+            <span>🪶 Обращения</span><span class="clan-btn-arrow">»</span>
+        </div>
+        <div class="clan-menu-item" onclick="openSubSection('events')">
+            <span>⭐ События клана</span><span class="clan-btn-arrow">»</span>
+        </div>
+        <div class="clan-menu-item" onclick="openSubSection('leaders')">
+            <span>» Воеводы</span><span class="clan-btn-arrow">»</span>
+        </div>
+        <div class="clan-menu-item" onclick="openSubSection('mail')">
+            <span>🦅 Рассылка</span><span class="clan-btn-arrow">»</span>
+        </div>
+        <div class="clan-menu-item" onclick="openSubSection('requests')">
+            <span>🪓 Заявки (0)</span><span class="clan-btn-arrow">»</span>
+        </div>
+        <div class="clan-menu-item" onclick="openSubSection('edit')">
+            <span>⚙️ Редактирование</span><span class="clan-btn-arrow">»</span>
+        </div>
+        <div class="clan-menu-item" onclick="actionDisband()" style="border-bottom:1px solid #551111;">
+            <span style="color:#ff5555;">❌ Распустить клан</span><span class="clan-btn-arrow">»</span>
+        </div>
+    `;
+}
+
+/* Обработчик отрисовки вкладок */
+window.openSubSection = function(type) {
+    const box = document.getElementById('clan-main-box');
+    const currentClan = clans[hero.clan];
+    let backBtn = `<div onclick="showClanView()" style="background:#0d1a26; padding:8px; text-align:center; color:#00ffcc; font-size:12px; cursor:pointer; margin-top:10px; border:1px solid #1c354d;">↩️ Назад в меню клана</div>`;
+
+    if (type === 'info') {
+        box.innerHTML = `
+            <div class="clan-section-title">📊 ИНФОРМАЦИЯ О КЛАНЕ</div>
+            <div style="padding:10px; font-size:12px; color:#c4d6e2; line-height:1.5;">
+                <b>Название:</b> ${currentClan.name}<br>
+                <b>Глава клана:</b> ${currentClan.leader}<br>
+                <b>Казна клана:</b> <span style="color:#ffd700;">${currentClan.treasury} серебра</span><br>
+                <b>Сила Тотема:</b> Уровень ${currentClan.totemLevel} (+${currentClan.totemLevel * 2} к статам)
+            </div>
+            ${backBtn}
+        `;
+    } 
+    else if (type === 'donate') {
+        box.innerHTML = `
+            <div class="clan-section-title">💎 ПОЖЕРТВОВАТЬ В КАЗНУ</div>
+            <div style="padding:10px; font-size:12px; color:#c4d6e2;">
+                Ваше серебро: <span style="color:#ffd700;">${hero.silver}</span><br><br>
+                Сумма пожертвования:<br>
+                <input type="number" id="cl-gold-in" min="1" max="${hero.silver}" style="background:#0b141d; color:#fff; border:1px solid #1c354d; padding:4px; width:100px; margin-top:5px;"><br><br>
+                <button onclick="actionDonate()" style="background:#112233; color:#00ffcc; border:1px solid #1c354d; padding:4px 10px; cursor:pointer;">Внести серебро</button>
+            </div>
+            ${backBtn}
+        `;
+    }
+    else if (type === 'upgrades') {
+        let cost = (currentClan.totemLevel + 1) * LVL_UP_COST;
+        box.innerHTML = `
+            <div class="clan-section-title">⬆️ УЛУЧШЕНИЯ ТОТЕМА</div>
+            <div style="padding:10px; font-size:12px; color:#c4d6e2;">
+                Текущий уровень тотема: <b>${currentClan.totemLevel}</b><br>
+                Эффект: <span style="color:#ffaa00;">+${currentClan.totemLevel * 2} Силы и Защиты</span> всем воинам.<br><br>
+                Цена следующего улучшения: <b>${cost} серебра</b> (из казны)<br>
+                Текущая казна: <span style="color:#ffd700;">${currentClan.treasury}</span><br><br>
+                <button onclick="actionUpgradeTotem()" style="background:#112233; color:#00ffcc; border:1px solid #1c354d; padding:5px 12px; cursor:pointer;">Прокачать тотем</button>
+            </div>
+            ${backBtn}
+        `;
+    }
+    else if (type === 'members') {
+        box.innerHTML = `
+            <div class="clan-section-title">🪓 ДРУЖИНА КЛАНА (${currentClan.members.length}/${SLOTS_LIMIT})</div>
+            <div style="padding:5px;">
+                ${currentClan.members.map((m, i) => `
+                    <div style="padding:6px; background:#0d1a26; border-bottom:1px solid #1c354d; font-size:12px; color:#fff;">
+                        ${i + 1}. <b>${m}</b> ${m === currentClan.leader ? '<span style="color:#ffd700;">[Вождь]</span>' : ''}
+                    </div>
+                `).join('')}
+            </div>
+            <div style="padding:10px; text-align:center; border-top:1px dashed #1c354d; margin-top:10px;">
+                <button onclick="actionSimulateBot()" style="background:#0b141d; color:#aaa; border:1px solid #222; padding:3px 6px; font-size:11px; cursor:pointer;">🤖 Нанять бота для теста лимита (макс 15)</button>
+            </div>
+            ${backBtn}
+        `;
+    }
+    else {
+        box.innerHTML = `
+            <div class="clan-section-title">🔒 РАЗДЕЛ В РАЗРАБОТКЕ</div>
+            <div style="padding:20px; font-size:12px; color:#aaa; text-align:center;">
+                Этот функционал будет добавлен в будущих походах.
+            </div>
+            ${backBtn}
+        `;
+    }
+};
+
+/* Сразу запускаем инициализацию */
+showClanView();
+/* ==========================================
+   КЛАНОВАЯ СИСТЕМА ПО СТИЛЮ «НОРМАННОВ» — ЧАСТЬ 2
+   ========================================== */
+
+/* Действие: Основать новый союз */
+window.actionCreateClan = function() {
+    const input = document.getElementById('new-clan-title');
     if (!input) return;
     const name = input.value.trim();
 
-    if (!name) return alert("Введите название клана!");
-    if (hero.silver < CLAN_CREATION_COST) return alert("Недостаточно серебра!");
-    if (clans[name]) return alert("Клан с таким именем уже зарегистрирован!");
+    if (!name) return alert("Укажите имя союза!");
+    if (hero.silver < CLAN_PRICE) return alert("Не хватает серебра!");
+    if (clans[name]) return alert("Имя союза уже занято!");
 
-    hero.silver -= CLAN_CREATION_COST;
+    hero.silver -= CLAN_PRICE;
     hero.clan = name;
+    clans[name] = { name: name, leader: hero.name, totemLevel: 0, treasury: 0, members: [hero.name] };
 
-    clans[name] = {
-        name: name,
-        leader: hero.name,
-        totemLevel: 0,
-        treasury: 0,
-        members: [hero.name]
-    };
-
-    saveAndRefresh();
+    saveAll();
 };
 
-window.donateSilver = function() {
-    const input = document.getElementById('gold-donate');
-    const amount = parseInt(input ? input.value : 0);
+/* Действие: Внести серебро в общий банк */
+window.actionDonate = function() {
+    const input = document.getElementById('cl-gold-in');
+    const value = parseInt(input ? input.value : 0);
 
-    if (isNaN(amount) || amount <= 0) return alert("Введите корректное число!");
-    if (hero.silver < amount) return alert("У вас нет столько серебра!");
+    if (isNaN(value) || value <= 0) return alert("Укажите верное число!");
+    if (hero.silver < value) return alert("У вас нет столько серебра!");
 
-    hero.silver -= amount;
-    clans[hero.clan].treasury += amount;
+    hero.silver -= value;
+    clans[hero.clan].treasury += value;
 
-    saveAndRefresh();
+    saveAll();
+    openSubSection('donate');
 };
 
-window.upgradeTotem = function() {
+/* Действие: Прокачка тотема за клановое серебро */
+window.actionUpgradeTotem = function() {
     const clan = clans[hero.clan];
-    const cost = (clan.totemLevel + 1) * UPGRADE_COST_BASE;
+    const cost = (clan.totemLevel + 1) * LVL_UP_COST;
 
-    if (clan.treasury < cost) return alert("В казне не хватает серебра!");
+    if (clan.treasury < cost) return alert("В казне недостаточно средств!");
 
     clan.treasury -= cost;
     clan.totemLevel += 1;
 
-    saveAndRefresh();
+    saveAll();
+    openSubSection('upgrades');
 };
 
-window.simulateAddMember = function() {
+/* Действие: Симуляция добавления ботов с проверкой лимита на 15 человек */
+window.actionSimulateBot = function() {
     const clan = clans[hero.clan];
-    
-    if (clan.members.length >= MAX_MEMBERS) {
-        return alert(`Лимит исчерпан! Клан не вмещает более ${MAX_MEMBERS} воинов.`);
-    }
+    if (clan.members.length >= SLOTS_LIMIT) return alert("Дружина переполнена! Лимит 15 воинов!");
 
-    const pool = ["Ульф", "Торстейн", "Рагнар", "Бьёрн", "Сигурд", "Харальд", "Ивар", "Кнут", "Эгиль", "Олаф"];
-    let randomBot = pool[Math.floor(Math.random() * pool.length)] + "_" + Math.floor(Math.random() * 899 + 100);
-    
-    clan.members.push(randomBot);
-    saveAndRefresh();
+    const names = ["Хакон", "Гуннар", "Тор", "Локи", "Эгиль", "Кнут", "Ульф"];
+    clan.members.push(names[Math.floor(Math.random() * names.length)] + "_" + Math.floor(Math.random() * 800 + 100));
+
+    saveAll();
+    openSubSection('members');
 };
 
-window.disbandClan = function() {
-    if (!confirm("Уничтожить клан навсегда? Прогресс тотема и казна обнулятся!")) return;
-    
+/* Действие: Удаление клана лидером */
+window.actionDisband = function() {
+    if (!confirm("Уничтожить клан? Прогресс аннулируется.")) return;
     delete clans[hero.clan];
     hero.clan = null;
-
-    saveAndRefresh();
+    saveAll();
 };
 
-function saveAndRefresh() {
+/* Метод синхронизации и авто-расчета баффов для Арены */
+function saveAll() {
     localStorage.setItem('hero_stats', JSON.stringify(hero));
     localStorage.setItem('game_clans', JSON.stringify(clans));
     
     if (hero.clan && clans[hero.clan]) {
-        let bonus = clans[hero.clan].totemLevel * 2;
-        localStorage.setItem('clan_bonus_stats', JSON.stringify({ strength: bonus, defense: bonus }));
+        let b = clans[hero.clan].totemLevel * 2;
+        localStorage.setItem('clan_bonus_stats', JSON.stringify({ strength: b, defense: b }));
     } else {
         localStorage.setItem('clan_bonus_stats', JSON.stringify({ strength: 0, defense: 0 }));
     }
-
-    renderClanSystem();
+    showClanView();
     if (typeof updateHeader === 'function') updateHeader();
 }
-
-initMarket = function(){}; 
-renderClanSystem();

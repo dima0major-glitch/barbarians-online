@@ -5,30 +5,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Клановые Замки</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Фирменный стиль синих полос из Норманнов */
+        .clan-menu-item {
+            background: linear-gradient(to bottom, #112233, #0a1520);
+            border-top: 1px solid #1c354d;
+            border-bottom: 1px solid #050b10;
+            padding: 8px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #c4d6e2;
+            text-decoration: none;
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .clan-menu-item:active {
+            background: #162d44;
+        }
+        .clan-btn-arrow {
+            color: #00ffcc;
+            font-weight: bold;
+        }
+        .clan-section-title {
+            background-color: #0d1a26;
+            padding: 5px;
+            font-weight: bold;
+            color: #8da9c4;
+            border-bottom: 1px solid #1c354d;
+            font-size: 12px;
+        }
+    </style>
 </head>
-<body>
+<body style="background-color: #060b11; margin: 0; padding: 0;">
 
-    <!-- Шапка генерируется через глобальное сквозное ядро -->
+    <!-- Шапка из сквозного ядра global_core.js -->
     <div id="header-container"></div>
 
-    <div class="main-content" style="padding: 5px; background-color: #2b323a; color: #e0e0e0; font-family: monospace;">
+    <div class="main-content" style="max-width: 480px; margin: 0 auto; background-color: #080f16; min-height: 100vh;">
         
-        <!-- Заголовок локации -->
-        <div style="background-color: #3a4454; padding: 4px; border-bottom: 2px solid #57687f; font-weight: bold; margin-bottom: 8px;">
-            🛡️ КЛАНОВЫЙ ЗАМОК
+        <!-- Верхний логотип и приветствие -->
+        <div style="text-align: center; padding: 15px 5px; background: radial-gradient(circle, #0e1e2d 0%, #060b11 100%);">
+            <div style="font-size: 40px; margin-bottom: 5px;">🛡️</div>
+            <div style="color: #fff; font-family: sans-serif; font-size: 13px;" id="clan-welcome-tag">Добро пожаловать</div>
         </div>
 
-        <!-- Контейнер для динамического переключения интерфейсов -->
-        <div id="clan-view"></div>
+        <!-- Контейнер для динамических экранов меню и вкладок -->
+        <div id="clan-main-box"></div>
 
-        <!-- Навигационное меню (WAP-стиль) -->
-        <div style="background-color: #1e232a; padding: 5px; margin-top: 10px; border-top: 1px solid #3a4454; text-align: center;">
-            <a href="poselok.html" style="color: #8da9c4; text-decoration: none;">↩️ В Поселок</a>
+        <!-- Кнопка возврата -->
+        <div style="background-color: #050a0f; padding: 10px; margin-top: 15px; border-top: 1px solid #112233; text-align: center;">
+            <a href="poselok.html" style="color: #00ffcc; text-decoration: none; font-size: 13px; font-family: sans-serif;">↩️ В Поселок</a>
         </div>
     </div>
 
-    <!-- Подключение ядра игры и внешней логики -->
+    <!-- Связующий блок скриптов (Сквозное ядро + две части логики клана) -->
     <script src="global_core.js"></script>
     <script src="clan_logic.js"></script>
+    <script src="clan_actions.js"></script>
 </body>
 </html>
