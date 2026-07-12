@@ -24,8 +24,6 @@
         .highlight-title { font-weight: bold; color: #adc8d9; }
         .yellow-text { color: #ffff00; }
         .green-text { color: #00ffaa; }
-        .btn-plus { background: linear-gradient(to bottom, #113824, #081c12); border: 1px solid #00ffaa; color: #00ffaa; font-size: 11px; font-weight: bold; padding: 3px 8px; border-radius: 3px; cursor: pointer; }
-        .btn-plus:disabled { background: #111a15; border-color: #44554d; color: #55665e; cursor: not-allowed; }
         .menu-link { background: linear-gradient(to bottom, #091b29, #050e16); padding: 13px 15px; margin-top: 15px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #0f2231; border-bottom: 1px solid #0f2231; text-decoration: none; color: #adc8d9; font-size: 14px; font-weight: bold; }
         .menu-arrow { color: #1c8cd1; font-weight: bold; letter-spacing: -2px; }
     </style>
@@ -54,23 +52,18 @@
     <div class="stats-block">
         <div class="stat-row">
             <div>💪 <span class="highlight-title">Сила:</span> <span id="stat-str">5</span></div>
-            <button class="btn-plus" id="buy-str" onclick="buyStat('str')">Улучшить (<span id="cost-str">10</span>🪙)</button>
         </div>
         <div class="stat-row">
             <div>🛡️ <span class="highlight-title">Защита:</span> <span id="stat-def">5</span></div>
-            <button class="btn-plus" id="buy-def" onclick="buyStat('def')">Улучшить (<span id="cost-def">10</span>🪙)</button>
         </div>
         <div class="stat-row">
             <div>🏃 <span class="highlight-title">Ловкость:</span> <span id="stat-agi">5</span></div>
-            <button class="btn-plus" id="buy-agi" onclick="buyStat('agi')">Улучшить (<span id="cost-agi">10</span>🪙)</button>
         </div>
         <div class="stat-row">
             <div>⚡ <span class="highlight-title">Мастерство:</span> <span id="stat-mst">5</span></div>
-            <button class="btn-plus" id="buy-mst" onclick="buyStat('mst')">Улучшить (<span id="cost-mst">10</span>🪙)</button>
         </div>
         <div class="stat-row">
             <div>➕ <span class="highlight-title">Живучесть:</span> <span id="stat-vit">5</span></div>
-            <button class="btn-plus" id="buy-vit" onclick="buyStat('vit')">Улучшить (<span id="cost-vit">10</span>🪙)</button>
         </div>
         <hr style="border-color: #0f2231; margin: 8px 0;">
         <div>❤️ <span class="highlight-title">Здоровье:</span> <span id="char-hp">250</span></div>
@@ -106,10 +99,6 @@
         <span class="menu-arrow">»»</span>
     </a>
     <script>
-        function calculateStatCost(currentStatValue) {
-            return 10 + (currentStatValue - 5) * 5;
-        }
-
         function loadHeroData() {
             const savedName = localStorage.getItem('barbarians_username');
             if (!savedName) { window.location.href = "start.html"; return; }
@@ -128,12 +117,6 @@
 
             let maxHp = 250 + (vit * 20);
 
-            let costStr = calculateStatCost(str);
-            let costDef = calculateStatCost(def);
-            let costAgi = calculateStatCost(agi);
-            let costMst = calculateStatCost(mst);
-            let costVit = calculateStatCost(vit);
-
             document.getElementById('header-player-name').innerText = savedName;
             document.getElementById('header-lvl').innerHTML = `👑 ${lvl}`;
             document.getElementById('header-hp').innerText = maxHp;
@@ -147,12 +130,6 @@
             document.getElementById('stat-mst').innerText = mst;
             document.getElementById('stat-vit').innerText = vit;
 
-            document.getElementById('cost-str').innerText = costStr;
-            document.getElementById('cost-def').innerText = costDef;
-            document.getElementById('cost-agi').innerText = costAgi;
-            document.getElementById('cost-mst').innerText = costMst;
-            document.getElementById('cost-vit').innerText = costVit;
-
             document.getElementById('char-hp').innerText = maxHp;
             document.getElementById('char-hp-max').innerText = maxHp;
 
@@ -161,31 +138,6 @@
             document.getElementById('char-fame').innerText = fame;
             document.getElementById('char-silver').innerText = userSilver;
             document.getElementById('char-gold').innerText = gold;
-
-            document.getElementById('buy-str').disabled = (userSilver < costStr);
-            document.getElementById('buy-def').disabled = (userSilver < costDef);
-            document.getElementById('buy-agi').disabled = (userSilver < costAgi);
-            document.getElementById('buy-mst').disabled = (userSilver < costMst);
-            document.getElementById('buy-vit').disabled = (userSilver < costVit);
-        }
-
-        function buyStat(statType) {
-            let userSilver = parseInt(localStorage.getItem('barb_silver') || '10000');
-            let currentStatValue = parseInt(localStorage.getItem('barb_' + statType) || '5');
-            let cost = calculateStatCost(currentStatValue);
-
-            if (userSilver >= cost) {
-                localStorage.setItem('barb_silver', userSilver - cost);
-                localStorage.setItem('barb_' + statType, currentStatValue + 1);
-                
-                if (statType === 'def') {
-                    localStorage.setItem('barb_def', currentStatValue + 1);
-                }
-
-                loadHeroData();
-            } else {
-                alert("🛑 Недостаточно серебра!");
-            }
         }
 
         document.addEventListener("DOMContentLoaded", loadHeroData);
