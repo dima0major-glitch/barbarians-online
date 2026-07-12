@@ -13,8 +13,6 @@
             padding: 0;
             user-select: none;
         }
-
-        /* Синий баннер игры */
         .game-banner {
             background: linear-gradient(to bottom, #112d3e, #091a26);
             border-bottom: 2px solid #1c8cd1;
@@ -25,8 +23,6 @@
             color: #ffffff;
             text-shadow: 1px 1px 3px #000;
         }
-
-        /* Панель ресурсов из оригинала */
         .game-header {
             background: linear-gradient(to bottom, #091a26, #051017);
             border-bottom: 2px solid #142a3a;
@@ -59,7 +55,6 @@
         .gold { color: #ffcc00; font-weight: bold; }
         .gems { color: #00ccff; }
 
-        /* Блок приветствия и онлайна */
         .welcome-block {
             text-align: center;
             padding: 12px 5px 6px 5px;
@@ -75,7 +70,6 @@
             color: #799bb3;
         }
 
-        /* Вертикальное меню */
         .menu-container {
             margin-top: 5px;
         }
@@ -106,8 +100,6 @@
             letter-spacing: -2px;
             font-size: 15px;
         }
-
-        /* Атмосферный деревянный разделитель */
         .menu-divider {
             height: 4px;
             background: repeating-linear-gradient(90deg, #3d240e, #1f1207 20px);
@@ -115,8 +107,6 @@
             border-bottom: 1px solid #5c3716;
             margin: 6px 0;
         }
-
-        /* Подвал управления */
         .footer-links {
             display: flex;
             justify-content: center;
@@ -129,8 +119,6 @@
             text-decoration: none;
             cursor: pointer;
         }
-
-        /* Юридический блок */
         .legal-info {
             text-align: center;
             font-size: 10px;
@@ -142,10 +130,8 @@
 </head>
 <body>
 
-    <!-- Название игры -->
     <div class="game-banner">🛡️ Варвары ⚔️</div>
 
-    <!-- Панель ресурсов из оригинала (Ник подгружается автоматически!) -->
     <div class="game-header">
         <div class="header-row">
             <div class="header-item">✉️</div>
@@ -164,13 +150,11 @@
         </div>
     </div>
 
-    <!-- Блок онлайна -->
     <div class="welcome-block">
         <div class="welcome-title">Добро пожаловать!</div>
         <div class="welcome-sub">Рядом с тобой 1080 варваров (онлайн)</div>
     </div>
 
-    <!-- Меню с точными иконками -->
     <div class="menu-container">
         <a href="events.html" class="menu-link">
             <span class="menu-text">⭐ События</span><span class="menu-arrow">»»</span>
@@ -212,10 +196,8 @@
             <span class="menu-text">🏆 Рейтинг</span><span class="menu-arrow">»»</span>
         </a>
 
-        <!-- Деревянный разделитель -->
         <div class="menu-divider"></div>
 
-        <!-- Нижнее системное меню -->
         <a href="index.html" class="menu-link">
             <span class="menu-text">🏠 Главная</span><span class="menu-arrow">»»</span>
         </a>
@@ -236,7 +218,6 @@
         </a>
     </div>
 
-    <!-- Ссылки в футере -->
     <div class="footer-links">
         <a href="about.html">Об игре</a>
         <a href="support.html">Поддержка</a>
@@ -250,24 +231,17 @@
 
     <script>
         function checkAndLoad() {
-            // Забираем сохраненное при регистрации имя
             const savedName = localStorage.getItem('barbarians_username');
-            
-            // Если имени нет — возвращаем на начало цепочки
             if (!savedName) {
                 window.location.href = "start.html";
                 return;
             }
-            
-            // Вставляем ник игрока в шапку сайта
             document.getElementById('player-name').innerText = savedName;
         }
-        
         function logout() {
             localStorage.removeItem('barbarians_username');
             window.location.href = "start.html";
         }
-        
         checkAndLoad();
     </script>
 </body>
