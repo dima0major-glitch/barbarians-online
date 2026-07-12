@@ -3,76 +3,263 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Варвары — Игра</title>
+    <title>Варвары — Главная</title>
     <style>
-        body { background-color: #061118; color: #ffffff; font-family: Arial, sans-serif; margin: 0; padding: 0; user-select: none; }
-        .game-banner { background: linear-gradient(to bottom, #112d3e, #091a26); border-bottom: 2px solid #1c8cd1; padding: 8px; text-align: center; font-size: 16px; font-weight: bold; text-shadow: 1px 1px 3px #000; }
-        .game-header { background: linear-gradient(to bottom, #091a26, #051017); border-bottom: 2px solid #142a3a; padding: 10px 8px; text-align: center; font-size: 13px; }
-        .player-row { display: flex; justify-content: center; align-items: center; gap: 5px; font-weight: bold; color: #e2f2ff; margin-bottom: 6px; }
-        .stats-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; font-size: 12px; color: #b0cbdc; }
-        .stat-item { display: flex; align-items: center; gap: 3px; }
-        .stat-item.gold { color: #ffcc00; }
-        .stat-item.hp { color: #ff4d4d; }
-        .welcome-block { text-align: center; padding: 12px 5px 6px 5px; }
-        .welcome-title { font-size: 18px; font-weight: bold; color: #ffffff; margin-bottom: 4px; }
-        .welcome-sub { font-size: 12px; color: #799bb3; }
-        .menu-link { background: linear-gradient(to bottom, #091b29, #050e16); padding: 13px 15px; margin-bottom: 2px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #0f2231; text-decoration: none; color: #adc8d9; font-size: 14px; font-weight: bold; }
-        .menu-link:active { background: #0d273d; }
-        .menu-arrow { color: #1c8cd1; font-weight: bold; letter-spacing: -2px; font-size: 15px; }
-        .menu-divider { height: 4px; background: repeating-linear-gradient(90deg, #3d240e, #1f1207 20px); border-top: 1px solid #5c3716; border-bottom: 1px solid #5c3716; margin: 6px 0; }
-        .footer-links { display: flex; justify-content: center; gap: 15px; padding: 15px 0 10px 0; font-size: 12px; }
-        .footer-links a { color: #7ba2bd; text-decoration: none; cursor: pointer; }
-        .legal-info { text-align: center; font-size: 10px; color: #4a6273; padding: 0 15px 25px 15px; text-transform: uppercase; }
+        body {
+            background-color: #061118;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        /* Синий баннер игры */
+        .game-banner {
+            background: linear-gradient(to bottom, #112d3e, #091a26);
+            border-bottom: 2px solid #1c8cd1;
+            padding: 8px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffffff;
+            text-shadow: 1px 1px 3px #000;
+        }
+
+        /* Панель ресурсов из оригинала */
+        .game-header {
+            background: linear-gradient(to bottom, #091a26, #051017);
+            border-bottom: 2px solid #142a3a;
+            padding: 8px 5px;
+            font-size: 12px;
+            color: #b0cbdc;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+        .header-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            line-height: 1.4;
+        }
+        .header-item {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+        .nickname {
+            font-weight: bold;
+            color: #e2f2ff;
+        }
+        .lvl { color: #ff9900; font-weight: bold; }
+        .hp { color: #ff4d4d; }
+        .armor { color: #a0b0b8; }
+        .silver { color: #e5e5e5; }
+        .gold { color: #ffcc00; font-weight: bold; }
+        .gems { color: #00ccff; }
+
+        /* Блок приветствия и онлайна */
+        .welcome-block {
+            text-align: center;
+            padding: 12px 5px 6px 5px;
+        }
+        .welcome-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+        .welcome-sub {
+            font-size: 12px;
+            color: #799bb3;
+        }
+
+        /* Вертикальное меню */
+        .menu-container {
+            margin-top: 5px;
+        }
+        .menu-link {
+            background: linear-gradient(to bottom, #091b29, #050e16);
+            padding: 13px 15px;
+            margin-bottom: 2px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #0f2231;
+            text-decoration: none;
+            color: #adc8d9;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .menu-link:active {
+            background: #0d273d;
+        }
+        .menu-text {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .menu-arrow {
+            color: #1c8cd1;
+            font-weight: bold;
+            letter-spacing: -2px;
+            font-size: 15px;
+        }
+
+        /* Атмосферный деревянный разделитель */
+        .menu-divider {
+            height: 4px;
+            background: repeating-linear-gradient(90deg, #3d240e, #1f1207 20px);
+            border-top: 1px solid #5c3716;
+            border-bottom: 1px solid #5c3716;
+            margin: 6px 0;
+        }
+
+        /* Подвал управления */
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding: 15px 0 10px 0;
+            font-size: 12px;
+        }
+        .footer-links a {
+            color: #7ba2bd;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Юридический блок */
+        .legal-info {
+            text-align: center;
+            font-size: 10px;
+            color: #4a6273;
+            padding: 0 15px 25px 15px;
+            text-transform: uppercase;
+        }
     </style>
 </head>
 <body>
+
+    <!-- Название игры -->
     <div class="game-banner">🛡️ Варвары ⚔️</div>
+
+    <!-- Панель ресурсов из оригинала (Ник подгружается автоматически!) -->
     <div class="game-header">
-        <div class="player-row">
-            <span>🪓 <span id="player-name">Загрузка...</span></span> 
-            <span style="color: #ff9900;">👑 1</span>
-        </div>
-        <div class="stats-grid">
-            <div class="stat-item hp">❤️ 250</div>
-            <div class="stat-item">🛡️ 15</div>
-            <div class="stat-item">🪙 1000</div>
-            <div class="stat-item gold">💰 5</div>
-            <div class="stat-item" style="color: #00ccff;">💎 0</div>
-            <div class="stat-item">⚔️ 3/3</div>
+        <div class="header-row">
+            <div class="header-item">✉️</div>
+            <div class="header-item nickname">🪓 <span id="player-name">Загрузка...</span></div>
+            <div class="header-item lvl">👑 15</div>
+            <div class="header-item hp">❤️ 145526</div>
+            <div class="header-item armor">🛡️ 1590</div>
+            <div class="header-item silver">🪙 139679</div>
+            <div class="header-item gems">💎 0</div>
+            <div class="header-item gold">💰 98</div>
+            <div class="header-item">⚔️ 3/3</div>
+            <div class="header-item">⏳ 00:00:00</div>
+            <div class="header-item">🕒 15:27:52</div>
+            <div class="header-item">🔍</div>
+            <div class="header-item">📜</div>
         </div>
     </div>
 
+    <!-- Блок онлайна -->
     <div class="welcome-block">
         <div class="welcome-title">Добро пожаловать!</div>
         <div class="welcome-sub">Рядом с тобой 1080 варваров (онлайн)</div>
     </div>
 
-    <div style="margin-top: 5px;">
-        <a href="#" class="menu-link"><span>⭐ События</span><span class="menu-arrow">»»</span></a>
-        <a href="#" class="menu-link"><span>⚔️ Дуэль</span><span class="menu-arrow">»»</span></a>
-        <a href="#" class="menu-link"><span>🏡 Поселок</span><span class="menu-arrow">»»</span></a>
+    <!-- Меню с точными иконками -->
+    <div class="menu-container">
+        <a href="events.html" class="menu-link">
+            <span class="menu-text">⭐ События</span><span class="menu-arrow">»»</span>
+        </a>
+        <a href="quests.html" class="menu-link">
+            <span class="menu-text">📜 Задания</span><span class="menu-arrow">»»</span>
+        </a>
+        <a href="duel.html" class="menu-link">
+            <span class="menu-text">⚔️ Дуэль</span><span class="menu-arrow">»»</span>
+        </a>
+        <a href="village.html" class="menu-link">
+            <span class="menu-text">🏡 Поселок</span><span class="menu-arrow">»»</span>
+        </a>
+        <a href="raid.html" class="menu-link">
+            <span class="menu-text">🛡️ Поход</span><span class="menu-arrow">»»</span>
+        </a>
+        <a href="fafnir.html" class="menu-link">
+            <span class="menu-text">🐉 Фафнир</span><span class="menu-arrow">»»</span>
+        </a>
+        <a href="dungeon.html" class="menu-link">
+            <span class="menu-text">🌋 Подземелье</span><span class="menu-arrow">»»</span>
+        </a>
+        <a href="undead.html" class="menu-link">
+            <span class="menu-text">💀 Нежить</span><span class="menu-arrow">»»</span>
+        </a>
+        <a href="port.html" class="menu-link">
+            <span class="menu-text">⚓ Порт</span><span class="menu-arrow">»»</span>
+        </a>
+        <a href="clan.html" class="menu-link">
+            <span class="menu-text">👑 Клан</span><span class="menu-arrow">»»</span>
+        </a>
+        <a href="brotherhood.html" class="menu-link">
+            <span class="menu-text">🛡️ Братство</span><span class="menu-arrow">»»</span>
+        </a>
+        <a href="beast.html" class="menu-link">
+            <span class="menu-text">🐾 Зверь</span><span class="menu-arrow">»»</span>
+        </a>
+        <a href="rating.html" class="menu-link">
+            <span class="menu-text">🏆 Рейтинг</span><span class="menu-arrow">»»</span>
+        </a>
+
+        <!-- Деревянный разделитель -->
         <div class="menu-divider"></div>
-        <a href="index.html" class="menu-link"><span>🏠 Главная</span><span class="menu-arrow">»»</span></a>
-        <a href="#" class="menu-link"><span>💬 Чат</span><span class="menu-arrow">»»</span></a>
+
+        <!-- Нижнее системное меню -->
+        <a href="index.html" class="menu-link">
+            <span class="menu-text">🏠 Главная</span><span class="menu-arrow">»»</span>
+        </a>
+        <a href="hero.html" class="menu-link">
+            <span class="menu-text">🤠 Герой</span><span class="menu-arrow">»»</span>
+        </a>
+        <a href="mail.html" class="menu-link">
+            <span class="menu-text">✉️ Почта</span><span class="menu-arrow">»»</span>
+        </a>
+        <a href="chat.html" class="menu-link">
+            <span class="menu-text">💬 Чат</span><span class="menu-arrow">»»</span>
+        </a>
+        <a href="forum.html" class="menu-link">
+            <span class="menu-text">🗣️ Форум</span><span class="menu-arrow">»»</span>
+        </a>
+        <a href="donate.html" class="menu-link">
+            <span class="menu-text">💰 Золото</span><span class="menu-arrow">»»</span>
+        </a>
     </div>
 
+    <!-- Ссылки в футере -->
     <div class="footer-links">
+        <a href="about.html">Об игре</a>
+        <a href="support.html">Поддержка</a>
+        <a href="settings.html">Настройки</a>
         <a onclick="logout()">Выйти</a>
     </div>
-    <div class="legal-info">MISUTECH LIMITED SUITE C, LEVEL 7, WORLD TRUST TOWER, 50 STANLEY STREET, CENTRAL, HONG KONG</div>
+
+    <div class="legal-info">
+        MISUTECH LIMITED SUITE C, LEVEL 7, WORLD TRUST TOWER, 50 STANLEY STREET, CENTRAL, HONG KONG
+    </div>
 
     <script>
         function checkAndLoad() {
-            // Проверяем, есть ли имя игрока в браузере
+            // Забираем сохраненное при регистрации имя
             const savedName = localStorage.getItem('barbarians_username');
             
-            // Если имени нет — цепочка нарушена, выкидываем на старт!
+            // Если имени нет — возвращаем на начало цепочки
             if (!savedName) {
                 window.location.href = "start.html";
                 return;
             }
             
-            // Если имя есть — вставляем его в шапку
+            // Вставляем ник игрока в шапку сайта
             document.getElementById('player-name').innerText = savedName;
         }
         
