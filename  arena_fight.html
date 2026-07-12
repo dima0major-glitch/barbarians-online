@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Варвары — Сражения</title>
+    <style>
+        body { background-color: #061118; color: #ffffff; font-family: Arial, sans-serif; margin: 0; padding: 0; user-select: none; }
+        .game-banner { background: linear-gradient(to bottom, #112d3e, #091a26); border-bottom: 2px solid #1c8cd1; padding: 8px; text-align: center; font-size: 16px; font-weight: bold; color: #ffffff; text-shadow: 1px 1px 3px #000; }
+        .game-header { background: linear-gradient(to bottom, #091a26, #051017); border-bottom: 2px solid #142a3a; padding: 8px 5px; font-size: 12px; color: #b0cbdc; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
+        .header-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px; line-height: 1.4; }
+        .header-item { display: flex; align-items: center; gap: 2px; }
+        .nickname { font-weight: bold; color: #e2f2ff; cursor: pointer; }
+        .lvl { color: #ff9900; font-weight: bold; cursor: pointer; }
+        .hp { color: #ff4d4d; }
+        .armor { color: #a0b0b8; }
+        .silver { color: #e5e5e5; }
+        .gold { color: #ffcc00; font-weight: bold; }
+        .gems { color: #00ccff; }
+
+        .category-bar { background: linear-gradient(to bottom, #123524, #05140d); color: #00ffaa; font-size: 14px; font-weight: bold; text-align: center; padding: 6px 15px; border-top: 1px solid #1d5339; border-bottom: 1px solid #040f0a; box-shadow: inset 0 1px 2px rgba(255,255,255,0.1); text-transform: uppercase; }
+        
+        .vs-container { background-color: #050d12; padding: 15px 10px; text-align: center; border-bottom: 1px solid #0f2231; }
+        .vs-title { font-size: 14px; font-weight: bold; color: #ffffff; margin-bottom: 15px; }
+        .vs-title span { color: #adc8d9; }
+        
+        .avatars-row { display: flex; justify-content: center; align-items: center; gap: 25px; margin-bottom: 15px; }
+        .avatar-box { width: 90px; height: 90px; border: 1px solid #1c8cd1; border-radius: 4px; display: flex; flex-direction: column; justify-content: center; align-items: center; background-color: #091822; }
+        .avatar-box.enemy { border-color: #ff4d4d; background: linear-gradient(to bottom, #220909, #0f0404); }
+        .avatar-big-icon { font-size: 40px; }
+
+        .comparison-table { width: 220px; margin: 0 auto 20px auto; font-size: 14px; font-weight: bold; }
+        .comp-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .comp-player { width: 60px; text-align: right; color: #ffffff; }
+        .comp-icon { width: 40px; text-align: center; font-size: 16px; }
+        .comp-enemy { width: 60px; text-align: left; color: #ffbfcc; }
+
+        .btn-fight-container { margin-bottom: 15px; }
+        .btn-fight { background: linear-gradient(to bottom, #7a2208, #421002); border: 1px solid #ff4d15; color: #ffccaa; font-size: 15px; font-weight: bold; padding: 8px 50px; border-radius: 4px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.6); text-shadow: 1px 1px 2px #000; width: 65%; }
+        .btn-fight:active { background: #5a1805; border-color: #00ffaa; color: #00ffaa; }
+
+        .bot-taunt { font-size: 12px; color: #799bb3; line-height: 1.4; padding: 0 20px; margin-bottom: 5px; }
+        .bot-taunt b { color: #adc8d9; display: block; margin-bottom: 4px; }
+
+        .menu-container { margin-top: 2px; }
+        .menu-link { background: linear-gradient(to bottom, #091b29, #050e16); padding: 13px 15px; margin-bottom: 2px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #0f2231; text-decoration: none; color: #adc8d9; font-size: 14px; font-weight: bold; }
+        .menu-arrow { color: #1c8cd1; font-weight: bold; letter-spacing: -2px; font-size: 15px; }
+    </style>
+</head>
+<body>
+
+    <div class="game-banner">🛡️ Варвары ⚔️</div>
+
+    <div class="game-header">
+        <div class="header-row">
+            <div class="header-item">✉️</div>
+            <div class="header-item nickname" onclick="window.location.href='profile.html'">🪓 <span id="header-player-name">Загрузка...</span></div>
+            <div class="header-item lvl" onclick="window.location.href='hero.html'"><span id="header-lvl">👑 1</span></div>
+            <div class="header-item hp">❤️ <span id="header-hp">250</span></div>
+            <div class="header-item armor">🛡️ <span id="header-def">5</span></div>
+            <div class="header-item silver"><span id="header-silver">🪙 10000</span></div>
+            <div class="header-item gems">💎 <span id="header-gems">0</span></div>
+            <div class="header-item gold"><span id="header-gold">💰 15</span></div>
+            <div class="header-item" onclick="window.location.href='duel.html'" style="cursor: pointer; text-decoration: underline;">⚔️ <span id="header-battles">3/3</span></div>
+            <div class="header-item">⏳ 00:00:00</div>
+            <div class="header-item">🕒 15:27:52</div>
+        </div>
+    </div>
+
+    <div class="category-bar">Сражения</div>
+
+    <div class="vs-container">
+        <div class="vs-title"><span id="p-name-vs">Ты</span> против <span id="e-name-vs">Соперника</span></div>
+        
+        <div class="avatars-row">
+            <div class="avatar-box">
+                <span class="avatar-big-icon">👤</span>
+            </div>
+            <div class="avatar-box enemy">
+                <span class="avatar-big-icon">💀</span>
+            </div>
+        </div>
+
+        <div class="comparison-table">
+            <div class="comp-row">
+                <div class="comp-player" id="p-str">5</div>
+                <div class="comp-icon">💪</div>
+                <div class="comp-enemy" id="e-str">5</div>
+            </div>
+            <div class="comp-row">
+                <div class="comp-player" id="p-def">5</div>
+                <div class="comp-icon">🛡️</div>
+                <div class="comp-enemy" id="e-def">5</div>
+            </div>
+            <div class="comp-row">
+                <div class="comp-player" id="p-agi">5</div>
+                <div class="comp-icon">🏃</div>
+                <div class="comp-enemy" id="e-agi">5</div>
+            </div>
+            <div class="comp-row">
+                <div class="comp-player" id="p-mst">5</div>
+                <div class="comp-icon">⚡</div>
+                <div class="comp-enemy" id="e-mst">5</div>
+            </div>
+            <div class="comp-row">
+                <div class="comp-player" id="p-vit">5</div>
+                <div class="comp-icon">➕</div>
+                <div class="comp-enemy" id="e-vit">5</div>
+            </div>
+        </div>
+
+        <div class="btn-fight-container">
+            <button class="btn-fight" onclick="startBattle()">Сражаться</button>
+        </div>
+
+        <div class="bot-taunt">
+            <b>Хочет тебе сказать:</b>
+            <span id="bot-phrase">Загрузка реплики...</span>
+        </div>
+    </div>
+
+    <div class="menu-container">
+        <a href="#" onclick="generateEnemy(); return false;" class="menu-link"><span>🪓 Следующий</span><span class="menu-arrow">»»</span></a>
+        <a href="arena_fight.html?type=mercenaries" class="menu-link"><span>🔵 Кристальный наемник</span><span class="menu-arrow">»»</span></a>
+        <a href="arena_fight.html?type=boss" class="menu-link"><span>🟡 Золотой наемник</span><span class="menu-arrow">»»</span></a>
+        <a href="duel.html" class="menu-link"><span>⚔️ Дуэль (Назад)</span><span class="menu-arrow">»»</span></a>
+        <a href="index.html" class="menu-link"><span>🏠 Главная</span><span class="menu-arrow">»»</span></a>
+    </div>
+    <script>
+        let currentEnemy = {};
+        const urlParams = new URLSearchParams(window.location.search);
+        const fightType = urlParams.get('type') || 'equal';
+
+        function generateEnemy() {
+            const pStr = parseInt(localStorage.getItem('barb_str') || '5');
+            const pDef = parseInt(localStorage.getItem('barb_def') || '5');
+            const pAgi = parseInt(localStorage.getItem('barb_agi') || '5');
+            const pMst = parseInt(localStorage.getItem('barb_mst') || '5');
+            const pVit = parseInt(localStorage.getItem('barb_vit') || '5');
+
+            let modifier = 1.0;
+            let name = "Серебряный наемник";
+            let phrase = "Я обычный наемник, которого легко победить. В награду можешь получить только серебро.";
+
+            if (fightType === 'junior') {
+                modifier = 0.8;
+                name = "Молодой гладиатор";
+                phrase = "Пощади, великий воин! Я только учусь держать топор.";
+            } else if (fightType === 'senior') {
+                modifier = 1.3;
+                name = "Ветеран Арены";
+                phrase = "Твои кости останутся сохнуть на этом песке, щенок!";
+            } else if (fightType === 'boss') {
+                modifier = 1.8;
+                name = "Владыка Наемников";
+                phrase = "Ха-ха! Ты бросил вызов самому королю подземных бойцов?!";
+            } else if (fightType === 'mercenaries') {
+                modifier = 1.1;
+                name = "Кристальный наемник";
+                phrase = "Моя броня крепка, но в карманах звенят редкие синие камни!";
+            }
+
+            currentEnemy = {
+                name: name,
+                phrase: phrase,
+                type: fightType,
+                str: Math.max(5, Math.floor(pStr * modifier + (Math.random() * 4 - 2))),
+                def: Math.max(5, Math.floor(pDef * modifier + (Math.random() * 4 - 2))),
+                agi: Math.max(5, Math.floor(pAgi * modifier + (Math.random() * 4 - 2))),
+                mst: Math.max(5, Math.floor(pMst * modifier + (Math.random() * 4 - 2))),
+                vit: Math.max(5, Math.floor(pVit * modifier + (Math.random() * 4 - 2)))
+            };
+
+            document.getElementById('e-name-vs').innerText = currentEnemy.name;
+            document.getElementById('e-str').innerText = currentEnemy.str;
+            document.getElementById('e-def').innerText = currentEnemy.def;
+            document.getElementById('e-agi').innerText = currentEnemy.agi;
+            document.getElementById('e-mst').innerText = currentEnemy.mst;
+            document.getElementById('e-vit').innerText = currentEnemy.vit;
+            document.getElementById('bot-phrase').innerText = currentEnemy.phrase;
+        }
+
+        function loadFightScreen() {
+            const savedName = localStorage.getItem('barbarians_username') || "Воин";
+            if (!localStorage.getItem('barbarians_username')) { window.location.href = "start.html"; return; }
+
+            let userSilver = parseInt(localStorage.getItem('barb_silver') || '10000');
+            let lvl = localStorage.getItem('barb_lvl') || '1';
+            let gold = localStorage.getItem('barb_gold') || '15';
+            let gems = localStorage.getItem('barb_gems') || '0';
+            let def = parseInt(localStorage.getItem('barb_def') || '5');
+            let vit = parseInt(localStorage.getItem('barb_vit') || '5');
+            let battles = localStorage.getItem('barb_battle_count') ?? '3';
+            let maxHp = 250 + (vit * 20);
+
+            document.getElementById('header-player-name').innerText = savedName;
+            document.getElementById('header-lvl').innerHTML = `👑 ${lvl}`;
+            document.getElementById('header-hp').innerText = maxHp;
+            document.getElementById('header-def').innerText = def;
+            document.getElementById('header-silver').innerText = `🪙 ${userSilver}`;
+            document.getElementById('header-gold').innerText = `💰 ${gold}`;
+            document.getElementById('header-gems').innerText = gems;
+            document.getElementById('header-battles').innerText = `${battles}/3`;
+
+            document.getElementById('p-name-vs').innerText = savedName;
+            document.getElementById('p-str').innerText = localStorage.getItem('barb_str') || '5';
+            document.getElementById('p-def').innerText = def;
+            document.getElementById('p-agi').innerText = localStorage.getItem('barb_agi') || '5';
+            document.getElementById('p-mst').innerText = localStorage.getItem('barb_mst') || '5';
+            document.getElementById('p-vit').innerText = vit;
+
+            generateEnemy();
+        }
+
+        function startBattle() {
+            let battles = parseInt(localStorage.getItem('barb_battle_count') ?? '3');
+            if (battles <= 0) {
+                alert("🛑 Не осталось попыток боя! Дождись восстановления.");
+                return;
+            }
+            localStorage.setItem('current_arena_enemy', JSON.stringify(currentEnemy));
+            window.location.href = 'battle_result.html';
+        }
+
+        document.addEventListener("DOMContentLoaded", loadFightScreen);
+    </script>
+</body>
+</html>

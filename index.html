@@ -10,7 +10,7 @@
         .game-header { background: linear-gradient(to bottom, #091a26, #051017); border-bottom: 2px solid #142a3a; padding: 8px 5px; font-size: 12px; color: #b0cbdc; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
         .header-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px; line-height: 1.4; }
         .header-item { display: flex; align-items: center; gap: 2px; }
-        .nickname { font-weight: bold; color: #e2f2ff; }
+        .nickname { font-weight: bold; color: #e2f2ff; cursor: pointer; }
         .lvl { color: #ff9900; font-weight: bold; cursor: pointer; }
         .hp { color: #ff4d4d; }
         .armor { color: #a0b0b8; }
@@ -42,9 +42,10 @@
             <div class="header-item hp">❤️ <span id="header-hp">250</span></div>
             <div class="header-item armor">🛡️ <span id="header-def">5</span></div>
             <div class="header-item silver"><span id="header-silver">🪙 10000</span></div>
-            <div class="header-item gems">💎 0</div>
+            <div class="header-item gems">💎 <span id="header-gems">0</span></div>
             <div class="header-item gold"><span id="header-gold">💰 15</span></div>
-            <div class="header-item">⚔️ 3/3</div>
+            <!-- Счетчик боев теперь кликабелен и ведет на Арену -->
+            <div class="header-item" onclick="window.location.href='duel.html'" style="cursor: pointer; text-decoration: underline;">⚔️ <span id="header-battles">3/3</span></div>
             <div class="header-item">⏳ 00:00:00</div>
             <div class="header-item">🕒 15:27:52</div>
             <div class="header-item">🔍</div>
@@ -59,6 +60,7 @@
     <div class="menu-container">
         <a href="events.html" class="menu-link"><span>⭐ События</span><span class="menu-arrow">»»</span></a>
         <a href="quests.html" class="menu-link"><span>📜 Задания</span><span class="menu-arrow">»»</span></a>
+        <!-- Ссылка Дуэль ведет на duel.html -->
         <a href="duel.html" class="menu-link"><span>⚔️ Дуэль</span><span class="menu-arrow">»»</span></a>
         <a href="village.html" class="menu-link"><span>🏡 Поселок</span><span class="menu-arrow">»»</span></a>
         <a href="raid.html" class="menu-link"><span>🛡️ Поход</span><span class="menu-arrow">»»</span></a>
@@ -91,26 +93,23 @@
     <div class="legal-info">
         MISUTECH LIMITED SUITE C, LEVEL 7, WORLD TRUST TOWER, 50 STANLEY STREET, CENTRAL, HONG KONG
     </div>
+
     <script>
         function checkAndLoad() {
-            const savedName = localStorage.getItem('barbarians_username');
-            if (!savedName) {
-                window.location.href = "start.html";
-                return;
-            }
+            const savedName = localStorage.getItem('barbarians_username') || "Воин";
             
             const lvl = localStorage.getItem('barb_lvl') || '1';
             const silver = localStorage.getItem('barb_silver') || '10000';
             const gold = localStorage.getItem('barb_gold') || '15';
             const def = localStorage.getItem('barb_def') || '5';
+            const gems = localStorage.getItem('barb_gems') || '0';
+            const battles = localStorage.getItem('barb_battle_count') ?? '3';
+            
             const vit = parseInt(localStorage.getItem('barb_vit') || '5');
             const maxHp = 250 + (vit * 20);
 
-            if (document.getElementById('player-name')) {
-                document.getElementById('player-name').innerText = savedName;
-            }
+            if (document.getElementById('player-name')) document.getElementById('player-name').innerText = savedName;
             
-            // Настраиваем клик по уровню строго на hero.html без ошибок
             const lvlElement = document.getElementById('header-lvl');
             if (lvlElement) {
                 lvlElement.setAttribute('onclick', "window.location.href='hero.html'");
@@ -119,13 +118,15 @@
             
             if (document.getElementById('header-silver')) document.getElementById('header-silver').innerText = `🪙 ${silver}`;
             if (document.getElementById('header-gold')) document.getElementById('header-gold').innerText = `💰 ${gold}`;
+            if (document.getElementById('header-gems')) document.getElementById('header-gems').innerText = gems;
             if (document.getElementById('header-def')) document.getElementById('header-def').innerText = def;
             if (document.getElementById('header-hp')) document.getElementById('header-hp').innerText = maxHp;
+            if (document.getElementById('header-battles')) document.getElementById('header-battles').innerText = `${battles}/3`;
         }
         
         function logout() {
             localStorage.clear();
-            window.location.href = "start.html";
+            location.reload();
         }
         
         document.addEventListener("DOMContentLoaded", checkAndLoad);

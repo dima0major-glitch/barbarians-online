@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Варвары — Арена</title>
+    <style>
+        body { background-color: #061118; color: #ffffff; font-family: Arial, sans-serif; margin: 0; padding: 0; user-select: none; }
+        .game-banner { background: linear-gradient(to bottom, #112d3e, #091a26); border-bottom: 2px solid #1c8cd1; padding: 8px; text-align: center; font-size: 16px; font-weight: bold; color: #ffffff; text-shadow: 1px 1px 3px #000; }
+        .game-header { background: linear-gradient(to bottom, #091a26, #051017); border-bottom: 2px solid #142a3a; padding: 8px 5px; font-size: 12px; color: #b0cbdc; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
+        .header-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px; line-height: 1.4; }
+        .header-item { display: flex; align-items: center; gap: 2px; }
+        .nickname { font-weight: bold; color: #e2f2ff; cursor: pointer; }
+        .lvl { color: #ff9900; font-weight: bold; cursor: pointer; }
+        .hp { color: #ff4d4d; }
+        .armor { color: #a0b0b8; }
+        .silver { color: #e5e5e5; }
+        .gold { color: #ffcc00; font-weight: bold; }
+        .gems { color: #00ccff; }
+
+        .category-bar { background: linear-gradient(to bottom, #123524, #05140d); color: #00ffaa; font-size: 14px; font-weight: bold; text-align: center; padding: 6px 15px; border-top: 1px solid #1d5339; border-bottom: 1px solid #040f0a; box-shadow: inset 0 1px 2px rgba(255,255,255,0.1); text-transform: uppercase; letter-spacing: 1px; }
+        .arena-banner-container { background-color: #040b0f; padding: 10px; text-align: center; border-bottom: 1px solid #0f2231; }
+        .arena-image-placeholder { width: 90%; max-width: 320px; height: 130px; margin: 0 auto; border: 1px solid #1c8cd1; background: linear-gradient(45deg, #112535, #07111a); border-radius: 4px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #4b6a82; box-shadow: 0 4px 8px rgba(0,0,0,0.5); }
+        .arena-img-icon { font-size: 40px; margin-bottom: 5px; }
+        .arena-subtitle { font-size: 13px; color: #adc8d9; margin-top: 10px; font-style: italic; }
+
+        .menu-container { margin-top: 2px; }
+        .menu-link { background: linear-gradient(to bottom, #091b29, #050e16); padding: 13px 15px; margin-bottom: 2px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #0f2231; text-decoration: none; color: #adc8d9; font-size: 14px; font-weight: bold; }
+        .menu-link:active { background: #0d273d; }
+        .menu-arrow { color: #1c8cd1; font-weight: bold; letter-spacing: -2px; font-size: 15px; }
+        .menu-divider { height: 4px; background: repeating-linear-gradient(90deg, #3d240e, #1f1207 20px); border-top: 1px solid #5c3716; border-bottom: 1px solid #5c3716; margin: 6px 0; }
+    </style>
+</head>
+<body>
+
+    <div class="game-banner">🛡️ Варвары ⚔️</div>
+
+    <div class="game-header">
+        <div class="header-row">
+            <div class="header-item">✉️</div>
+            <div class="header-item nickname" onclick="window.location.href='profile.html'">🪓 <span id="header-player-name">Загрузка...</span></div>
+            <div class="header-item lvl" onclick="window.location.href='hero.html'"><span id="header-lvl">👑 1</span></div>
+            <div class="header-item hp">❤️ <span id="header-hp">250</span></div>
+            <div class="header-item armor">🛡️ <span id="header-def">5</span></div>
+            <div class="header-item silver"><span id="header-silver">🪙 10000</span></div>
+            <div class="header-item gems">💎 <span id="header-gems">0</span></div>
+            <div class="header-item gold"><span id="header-gold">💰 15</span></div>
+            <div class="header-item" onclick="window.location.href='duel.html'" style="cursor: pointer; text-decoration: underline;">⚔️ <span id="header-battles">3/3</span></div>
+            <div class="header-item">⏳ 00:00:00</div>
+            <div class="header-item">🕒 15:27:52</div>
+        </div>
+    </div>
+
+    <div class="category-bar">Арена</div>
+
+    <div class="arena-banner-container">
+        <div class="arena-image-placeholder">
+            <span class="arena-img-icon">🏟️</span>
+            <span style="font-size: 11px; text-transform: uppercase; font-weight: bold; letter-spacing: 1px;">Изображение Арены</span>
+        </div>
+        <div class="arena-subtitle">Покажи, на что ты способен!</div>
+    </div>
+
+    <div class="menu-container">
+        <a href="arena_fight.html?type=equal" class="menu-link"><span>⚔️ Ровня</span><span class="menu-arrow">»»</span></a>
+        <a href="arena_fight.html?type=junior" class="menu-link"><span>⚔️🔻 Младшие</span><span class="menu-arrow">»»</span></a>
+        <a href="arena_fight.html?type=senior" class="menu-link"><span>⚔️🔺 Старшие</span><span class="menu-arrow">»»</span></a>
+        <a href="arena_fight.html?type=mercenaries" class="menu-link"><span>🪖 Наемники</span><span class="menu-arrow">»»</span></a>
+        <a href="arena_fight.html?type=boss" class="menu-link"><span>🐲 Владыка Наемников</span><span class="menu-arrow">»»</span></a>
+        <a href="arena_fight.html?type=by_level" class="menu-link"><span>🏵️ По уровню</span><span class="menu-arrow">»»</span></a>
+
+        <div class="menu-divider"></div>
+
+        <a href="index.html" class="menu-link"><span>🏠 Главная</span><span class="menu-arrow">»»</span></a>
+        <a href="hero.html" class="menu-link"><span>🤠 Герой</span><span class="menu-arrow">»»</span></a>
+    </div>
+
+    <script>
+        function loadArenaHeader() {
+            const savedName = localStorage.getItem('barbarians_username') || "Воин";
+            if (!localStorage.getItem('barbarians_username')) { window.location.href = "start.html"; return; }
+
+            let userSilver = parseInt(localStorage.getItem('barb_silver') || '10000');
+            let lvl = localStorage.getItem('barb_lvl') || '1';
+            let gold = localStorage.getItem('barb_gold') || '15';
+            let gems = localStorage.getItem('barb_gems') || '0';
+            let def = parseInt(localStorage.getItem('barb_def') || '5');
+            let vit = parseInt(localStorage.getItem('barb_vit') || '5');
+            let battles = localStorage.getItem('barb_battle_count') ?? '3';
+
+            let maxHp = 250 + (vit * 20);
+
+            document.getElementById('header-player-name').innerText = savedName;
+            document.getElementById('header-lvl').innerHTML = `👑 ${lvl}`;
+            document.getElementById('header-hp').innerText = maxHp;
+            document.getElementById('header-def').innerText = def;
+            document.getElementById('header-silver').innerText = `🪙 ${userSilver}`;
+            document.getElementById('header-gold').innerText = `💰 ${gold}`;
+            document.getElementById('header-gems').innerText = gems;
+            document.getElementById('header-battles').innerText = `${battles}/3`;
+        }
+
+        document.addEventListener("DOMContentLoaded", loadArenaHeader);
+    </script>
+</body>
+</html>
