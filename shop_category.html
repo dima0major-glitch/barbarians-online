@@ -1,69 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Варвары — Товары</title>
+    <style>
+        body { background-color: #061118; color: #ffffff; font-family: Arial, sans-serif; margin: 0; padding: 0; user-select: none; }
+        .category-bar { background: linear-gradient(to bottom, #092429, #040f12); color: #00ffcc; font-size: 14px; font-weight: bold; text-align: center; padding: 6px 15px; border-top: 1px solid #144b54; border-bottom: 1px solid #040e10; text-transform: uppercase; }
+        .cat-desc { font-size: 12px; color: #799bb3; line-height: 1.4; padding: 12px 15px; text-align: center; border-bottom: 1px solid #0f2231; background-color: #040b0f; }
+        
+        .item-card { padding: 15px 12px; border-bottom: 1px solid #0e1e29; display: flex; align-items: flex-start; gap: 12px; background: #050d12; position: relative; }
+        .item-icon-frame { width: 64px; height: 64px; border: 2px solid #ffcc00; background: linear-gradient(135deg, #2b2111, #140f07); border-radius: 6px; display: flex; justify-content: center; align-items: center; font-size: 32px; box-shadow: 0 3px 6px rgba(0,0,0,0.5); flex-shrink: 0; }
+        .item-details { flex-grow: 1; font-size: 13px; color: #adc8d9; line-height: 1.4; }
+        .item-title { font-size: 14px; font-weight: bold; color: #1c8cd1; margin: 0 0 3px 0; }
+        .item-details b { color: #ffffff; }
+        
+        .buy-action-row { text-align: center; padding: 8px 0 12px 0; background: #050d12; border-bottom: 1px solid #122533; display: flex; justify-content: center; gap: 10px; }
+        .wap-buy-btn { background: linear-gradient(to bottom, #7a2208, #421002); border: 1px solid #ff4d15; color: #ffccaa; font-size: 13px; font-weight: bold; padding: 6px 30px; border-radius: 4px; cursor: pointer; text-shadow: 1px 1px 1px #000; box-shadow: 0 2px 4px rgba(0,0,0,0.4); }
+        .wap-buy-btn:active { background: #5a1805; border-color: #00ffaa; color: #00ffaa; }
+        
+        .wap-sell-btn { background: linear-gradient(to bottom, #1a2a3a, #0d151d); border: 1px solid #28425b; color: #b0cbdc; font-size: 13px; font-weight: bold; padding: 6px 30px; border-radius: 4px; cursor: pointer; text-shadow: 1px 1px 1px #000; box-shadow: 0 2px 4px rgba(0,0,0,0.4); }
+        .wap-sell-btn:active { background: #111d29; border-color: #ff4d4d; color: #ff4d4d; }
+        
+        .menu-container { margin-top: 5px; }
+        .menu-link { background: linear-gradient(to bottom, #091b29, #050e16); padding: 13px 15px; margin-bottom: 2px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #0f2231; text-decoration: none; color: #adc8d9; font-size: 14px; font-weight: bold; }
+        .menu-arrow { color: #1c8cd1; font-weight: bold; letter-spacing: -2px; font-size: 15px; }
+        .empty-cat-text { text-align: center; color: #4b6a82; font-size: 13px; padding: 25px; font-style: italic; background: #050d12; }
+    </style>
+</head>
+<body>
+    <div class="category-bar" id="cat-title">Товары</div>
+    <div class="cat-desc" id="cat-info">Загрузка...</div>
+    <div id="products-list-container"></div>
+
     <div class="menu-container">
         <a href="shop.html" class="menu-link"><span>↩️ Назад в Лавку</span><span class="menu-arrow">»»</span></a>
-        <a href="village.html" class="menu-link"><span>🏡 Поселок</span><span class="menu-arrow">»»</span></a>
+        <a href="poselok.html" class="menu-link"><span>🏡 Поселок</span><span class="menu-arrow">»»</span></a>
     </div>
 
     <script>
-        // Обновленная база данных лавки: расчет СТРОГО в серебре по прогрессии уровня
         const shopDatabase = {
             potions: {
                 title: "Зелья",
                 desc: "Редкие отвары шаманов. Зелья боёв мгновенно восстанавливают энергию для поединков на Арене, не заставляя ждать таймер.",
                 items: [
-                    { id: "p1", icon: "🧪", name: "Настойка Гьяллархорна", level: 1, text: "Восстановление боев: +1 бой", bonus: { battles: 1 }, price: 150, currency: "silver" },
-                    { id: "p2", icon: "🧪", name: "Кровь Одина", level: 3, text: "Восстановление боев: Полное восстановление (3/3 боев)", bonus: { battles: 3 }, price: 650, currency: "silver" }
+                    { id: "p1", icon: "🧪", name: "Настойка Гьяллархорна", level: 1, text: "Восстановление боев: +1 бой", bonus: { battles: 1 }, price: 150 },
+                    { id: "p2", icon: "🧪", name: "Кровь Одина", level: 3, text: "Восстановление боев: Полное восстановление (3/3 боев)", bonus: { battles: 3 }, price: 650 }
                 ]
             },
             scrolls: {
                 title: "Свитки",
                 desc: "Древние пергаменты с руническими заклинаниями, дарующие временное превосходство в боевом мастерстве.",
                 items: [
-                    { id: "sc1", icon: "📜", name: "Руна Ярости", level: 1, text: "Мастерство: +2 в бою (заглушка)", bonus: {}, price: 200, currency: "silver" },
-                    { id: "sc2", icon: "📜", name: "Знамение Одина", level: 4, text: "Мастерство: +6 в бою (заглушка)", bonus: {}, price: 1800, currency: "silver" }
+                    { id: "sc1", icon: "📜", name: "Руна Ярости", level: 1, text: "Мастерство: +2 в бою (заглушка)", bonus: {}, price: 200 },
+                    { id: "sc2", icon: "📜", name: "Знамение Одина", level: 3, text: "Мастерство: +6 в бою (заглушка)", bonus: {}, price: 1800 }
                 ]
             },
             helmets: {
                 title: "Шлемы",
                 desc: "Защита твоей головы от сокрушительных ударов вражеских топоров. Увеличивает параметры защиты и живучести.",
                 items: [
-                    { id: "h1", icon: "🪖", name: "Кожаный капюшон", level: 1, text: "Защита: +1<br/>Живучесть: +1", bonus: { def: 1, vit: 1 }, price: 250, currency: "silver" },
-                    { id: "h2", icon: "🪖", name: "Норманнский шлем", level: 3, text: "Защита: +3<br/>Живучесть: +2", bonus: { def: 3, vit: 2 }, price: 1150, currency: "silver" },
-                    { id: "h3", icon: "🪖", name: "Тяжелый шлем Одина", level: 5, text: "Защита: +7<br/>Живучесть: +5", bonus: { def: 7, vit: 5 }, price: 7800, currency: "silver" }
+                    { id: "h1", icon: "🪖", name: "Кожаный капюшон", level: 1, text: "Защита: +1<br/>Живучесть: +1", bonus: { def: 1, vit: 1 }, price: 250 },
+                    { id: "h2", icon: "🪖", name: "Норманнский шлем", level: 3, text: "Защита: +3<br/>Живучесть: +2", bonus: { def: 3, vit: 2 }, price: 1150 },
+                    { id: "h3", icon: "🪖", name: "Тяжелый шлем Одина", level: 5, text: "Защита: +7<br/>Живучесть: +5", bonus: { def: 7, vit: 5 }, price: 7800 }
                 ]
             },
             weapons: {
                 title: "Оружие",
                 desc: "Сталь решает любые споры. Хорошее оружие значительно поднимает твою атакующую Силу и Ловкость на Арене.",
                 items: [
-                    { id: "w1", icon: "🪓", name: "Охотничий нож", level: 1, text: "Сила: +1", bonus: { str: 1 }, price: 300, currency: "silver" },
-                    { id: "w2", icon: "🪓", name: "Топор Налётчика", level: 3, text: "Сила: +4<br/>Ловкость: +1", bonus: { str: 4, agi: 1 }, price: 2200, currency: "silver" },
-                    { id: "w3", icon: "⚔️", name: "Меч Конунга", level: 5, text: "Сила: +12<br/>Мастерство: +5", bonus: { str: 12, mst: 5 }, price: 12400, currency: "silver" }
+                    { id: "w1", icon: "🪓", name: "Охотничий нож", level: 1, text: "Сила: +1", bonus: { str: 1 }, price: 300 },
+                    { id: "w2", icon: "🪓", name: "Топор Налётчика", level: 3, text: "Сила: +4<br/>Ловкость: +1", bonus: { str: 4, agi: 1 }, price: 2200 },
+                    { id: "w3", icon: "⚔️", name: "Меч Конунга", level: 5, text: "Сила: +12<br/>Мастерство: +5", bonus: { str: 12, mst: 5 }, price: 12400 }
                 ]
             },
             armor: {
                 title: "Доспехи",
                 desc: "Не жалей серебра для покупки доспехов высшего уровня, так как бонусы к характеристикам героя от доспехов самые большие среди всей экипировки.",
                 items: [
-                    { id: "a1", icon: "👕", name: "Туника", level: 1, text: "Сила: +2<br/>Защита: +5", bonus: { str: 2, def: 5 }, price: 180, currency: "silver" },
-                    { id: "a2", icon: "🛡️", name: "Деревник", level: 3, text: "Сила: +4<br/>Защита: +8", bonus: { str: 4, def: 8 }, price: 1620, currency: "silver" },
-                    { id: "a3", icon: "🦺", name: "Панцирь", level: 5, text: "Сила: +8<br/>Защита: +10", bonus: { str: 8, def: 10 }, price: 15500, currency: "silver" }
+                    { id: "a1", icon: "👕", name: "Туника", level: 1, text: "Сила: +2<br/>Защита: +5", bonus: { str: 2, def: 5 }, price: 180 },
+                    { id: "a2", icon: "🛡️", name: "Деревник", level: 3, text: "Сила: +4<br/>Защита: +8", bonus: { str: 4, def: 8 }, price: 1620 },
+                    { id: "a3", icon: "🦺", name: "Панцирь", level: 5, text: "Сила: +8<br/>Защита: +10", bonus: { str: 8, def: 10 }, price: 15500 }
                 ]
             },
             shields: {
                 title: "Щиты",
                 desc: "Крепкий щит — залог выживания варвара под стрелами и тяжелыми секирами наемников.",
                 items: [
-                    { id: "sh1", icon: "🛡️", name: "Плетеный баклер", level: 1, text: "Защита: +1", bonus: { def: 1 }, price: 150, currency: "silver" },
-                    { id: "sh2", icon: "🛡️", name: "Дубовый круглый щит", level: 3, text: "Защита: +4", bonus: { def: 4 }, price: 1400, currency: "silver" },
-                    { id: "sh3", icon: "🛡️", name: "Окованный ростовой щит", level: 5, text: "Защита: +9", bonus: { def: 9 }, price: 9200, currency: "silver" }
+                    { id: "sh1", icon: "🛡️", name: "Плетеный баклер", level: 1, text: "Защита: +1", bonus: { def: 1 }, price: 150 },
+                    { id: "sh2", icon: "🛡️", name: "Дубовый круглый щит", level: 3, text: "Защита: +4", bonus: { def: 4 }, price: 1400 },
+                    { id: "sh3", icon: "🛡️", name: "Окованный ростовой щит", level: 5, text: "Защита: +9", bonus: { def: 9 }, price: 9200 }
                 ]
             },
             gifts: {
                 title: "Подарки",
                 desc: "Прекрасные сувениры и трофеи для демонстрации своей щедрости и высокого статуса в племени.",
                 items: [
-                    { id: "g1", icon: "🎁", name: "Деревянная фигурка", level: 1, text: "Описание: Простой оберег", bonus: {}, price: 100, currency: "silver" },
-                    { id: "g2", icon: "🎁", name: "Рог Медовухи", level: 3, text: "Описание: Старинный кубок славы племени", bonus: {}, price: 900, currency: "silver" }
+                    { id: "g1", icon: "🎁", name: "Деревянная фигурка", level: 1, text: "Описание: Простой оберег", bonus: {}, price: 100 },
+                    { id: "g2", icon: "🎁", name: "Рог Медовухи", level: 3, text: "Описание: Старинный кубок славы племени", bonus: {}, price: 900 }
                 ]
             }
         };
@@ -78,23 +112,46 @@
             document.getElementById('cat-title').innerText = currentCategory.title;
             document.getElementById('cat-info').innerHTML = currentCategory.desc;
 
+            let playerLvl = parseInt(localStorage.getItem('barb_lvl') || '1');
+            let inventory = JSON.parse(localStorage.getItem('barb_inventory') || '[]');
+            let equipped = JSON.parse(localStorage.getItem('barb_equipped') || '{}');
+
             let html = "";
+            let shownItemsCount = 0;
+
             currentCategory.items.forEach(item => {
-                html += `
-                    <div class="item-card">
-                        <div class="item-icon-frame">${item.icon}</div>
-                        <div class="item-details">
-                            <div class="item-title">${item.name}</div>
-                            <b>Уровень: ${item.level}</b><br/>
-                            ${item.text}<br/>
-                            Цена: ${item.price} серебра
+                if (playerLvl >= item.level) {
+                    shownItemsCount++;
+                    let hasInInventory = inventory.some(i => i.id === item.id);
+                    let isEquipped = false;
+                    for (let slot in equipped) {
+                        if (equipped[slot].id === item.id) isEquipped = true;
+                    }
+                    let sellPrice = Math.floor(item.price * 0.5);
+
+                    html += `
+                        <div class="item-card">
+                            <div class="item-icon-frame">${item.icon}</div>
+                            <div class="item-details">
+                                <div class="item-title">${item.name}</div>
+                                <b>Уровень: ${item.level}</b><br/>
+                                ${item.text}<br/>
+                                Цена покупки: ${item.price} серебра
+                            </div>
                         </div>
-                    </div>
-                    <div class="buy-action-row">
-                        <button class="wap-buy-btn" onclick="executeWapPurchase('${currentCatKey}', '${item.id}')">Купить</button>
-                    </div>
-                `;
+                        <div class="buy-action-row">
+                            <button class="wap-buy-btn" onclick="executeWapPurchase('${currentCatKey}', '${item.id}')">Купить</button>
+                    `;
+                    if (hasInInventory || isEquipped) {
+                        html += `<button class="wap-sell-btn" onclick="executeWapSell('${item.id}', ${sellPrice})">Продать (+${sellPrice} 🪙)</button>`;
+                    }
+                    html += `</div>`;
+                }
             });
+
+            if (shownItemsCount === 0) {
+                html = `<div class="empty-cat-text">В этой категории нет доступных товаров для вашего уровня (Ур. ${playerLvl}).</div>`;
+            }
             document.getElementById('products-list-container').innerHTML = html;
         }
 
@@ -104,11 +161,7 @@
             if (!item) return;
 
             let userSilver = parseInt(localStorage.getItem('barb_silver') || '10000');
-
-            if (userSilver < item.price) { 
-                alert("Недостаточно серебра воину!"); 
-                return; 
-            }
+            if (userSilver < item.price) { alert("Недостаточно серебра воину!"); return; }
             
             localStorage.setItem('barb_silver', userSilver - item.price);
 
@@ -116,17 +169,57 @@
                 let currentBattles = parseInt(localStorage.getItem('barb_battle_count') ?? '3');
                 let newBattles = Math.min(3, currentBattles + item.bonus.battles);
                 localStorage.setItem('barb_battle_count', newBattles);
-                alert(`Вы выпили ${item.name}! Количество боев восстановлено до: ${newBattles}/3.`);
+                alert(`Вы выпили ${item.name}! Бои восстановлены до: ${newBattles}/3.`);
             } else {
                 let inventory = JSON.parse(localStorage.getItem('barb_inventory') || '[]');
                 inventory.push({ id: item.id, name: item.name, icon: item.icon, type: catKey, bonus: item.bonus });
                 localStorage.setItem('barb_inventory', JSON.stringify(inventory));
                 alert(`Вы приобрели: ${item.name}! Предмет отправлен в Экипировку.`);
             }
-
             location.reload();
         }
 
+        function executeWapSell(itemId, refund) {
+            if (!confirm(`Вы действительно хотите продать эту вещь за ${refund} серебра?`)) return;
+
+            let inventory = JSON.parse(localStorage.getItem('barb_inventory') || '[]');
+            let equipped = JSON.parse(localStorage.getItem('barb_equipped') || '{}');
+            let userSilver = parseInt(localStorage.getItem('barb_silver') || '10000');
+            let removed = false;
+
+            let invIndex = inventory.findIndex(i => i.id === itemId);
+            if (invIndex !== -1) {
+                inventory.splice(invIndex, 1);
+                removed = true;
+            }
+            if (!removed) {
+                for (let slot in equipped) {
+                    if (equipped[slot].id === itemId) {
+                        delete equipped[slot];
+                        removed = true;
+                        break;
+                    }
+                }
+            }
+            if (removed) {
+                localStorage.setItem('barb_silver', userSilver + refund);
+                localStorage.setItem('barb_inventory', JSON.stringify(inventory));
+                localStorage.setItem('barb_equipped', JSON.stringify(equipped));
+                
+                let totalDef = 5, totalStr = 5;
+                for (let slot in equipped) {
+                    if (equipped[slot].bonus) {
+                        if (equipped[slot].bonus.def) totalDef += equipped[slot].bonus.def;
+                        if (equipped[slot].bonus.str) totalStr += equipped[slot].bonus.str;
+                    }
+                }
+                localStorage.setItem('barb_def', totalDef);
+                localStorage.setItem('barb_str', totalStr);
+
+                alert("Предмет успешно продан торговцу!");
+                location.reload();
+            }
+        }
         document.addEventListener("DOMContentLoaded", renderCategoryPage);
     </script>
     <script src="global_core.js"></script>

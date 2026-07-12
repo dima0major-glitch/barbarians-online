@@ -10,17 +10,14 @@
         
         .section-title { font-size: 14px; font-weight: bold; color: #adc8d9; padding: 8px 15px; background: #040b10; border-bottom: 1px solid #0f2231; text-transform: uppercase; }
         
-        /* Стили надетых слотов (в стиле Norman) */
         .slot-row { padding: 12px; border-bottom: 1px solid #0f2231; display: flex; align-items: center; gap: 12px; background: #050d12; }
         .slot-frame { width: 48px; height: 48px; border: 1px dashed #1c8cd1; background: #07151f; border-radius: 4px; display: flex; justify-content: center; align-items: center; font-size: 24px; flex-shrink: 0; }
-        .slot-frame.equipped { border: 1px solid #ffcc00; background: linear-gradient(135deg, #2b2111, #140f07); }
+        .slot-frame.equipped { border: 1px solid #ffcc00; background: linear-gradient(135deg, #2b2111, #140f07); border-radius: 4px; }
         .slot-info { flex-grow: 1; font-size: 13px; color: #799bb3; }
         .slot-name { font-weight: bold; color: #ffffff; font-size: 14px; margin-bottom: 2px; }
         
-        /* Кнопка "Снять" */
         .takeoff-btn { background: linear-gradient(to bottom, #3a1111, #1f0707); border: 1px solid #ff4d4d; color: #ff9999; padding: 4px 10px; font-size: 11px; font-weight: bold; border-radius: 3px; cursor: pointer; }
         
-        /* Рюкзак с вещами */
         .backpack-item { padding: 12px; border-bottom: 1px solid #0e1e29; display: flex; justify-content: space-between; align-items: center; background: #050d12; }
         .item-meta { display: flex; align-items: center; gap: 12px; font-size: 13px; color: #adc8d9; }
         .item-icon { width: 44px; height: 44px; border: 1px solid #ffcc00; background: #140f07; border-radius: 4px; display: flex; justify-content: center; align-items: center; font-size: 22px; }
@@ -42,13 +39,13 @@
     <div class="section-title">🎒 Сумка (Рюкзак)</div>
     <div id="backpack-container"></div>
     <div class="menu-container">
-        <a href="profile.html" class="menu-link"><span>⚙️ Настройки (Назад)</span><span class="menu-arrow">»»</span></a>
+        <a href="profile.html" class="menu-link"><span>⚙️ Управление (Назад)</span><span class="menu-arrow">»»</span></a>
         <a href="hero.html" class="menu-link"><span>🤠 Характеристики</span><span class="menu-arrow">»»</span></a>
         <a href="index.html" class="menu-link"><span>🏠 Главная</span><span class="menu-arrow">»»</span></a>
     </div>
 
     <script>
-        // Конфигурация слотов и типов предметов, которые в них подходят
+        // Задаем строгую конфигурацию слотов
         const slotConfig = {
             weapons: { label: "Оружие", icon: "⚔️" },
             armor: { label: "Доспех", icon: "👕" },
@@ -56,21 +53,32 @@
             shields: { label: "Щит", icon: "🛡️" }
         };
 
+        // ВАЖНОЕ ИСПРАВЛЕНИЕ: Функция нормализации типов, чтобы 'weapons' и 'weapons' склеивались без багов
+        function getNormalSlotKey(type) {
+            if (!type) return "weapons";
+            let t = type.toLowerCase();
+            if (t === "weapons" || t === "weapon") return "weapons";
+            if (t === "armor" || t === "armors") return "armor";
+            if (t === "helmets" || t === "helmet") return "helmets";
+            if (t === "shields" || t === "shield") return "shields";
+            return "weapons";
+        }
+
         function renderEquipment() {
             let inventory = JSON.parse(localStorage.getItem('barb_inventory') || '[]');
             let equipped = JSON.parse(localStorage.getItem('barb_equipped') || '{}');
 
-            // 1. Рендеринг надетых слотов
+            // 1. Отрисовка четырех слотов на теле героя
             let slotsHtml = "";
             for (let slotKey in slotConfig) {
                 let activeItem = equipped[slotKey];
                 if (activeItem) {
                     slotsHtml += `
                         <div class="slot-row">
-                            <div class="slot-frame equipped">${activeItem.icon}</div>
+                            <div class="slot-frame equipped">${activeItem.icon || slotConfig[slotKey].icon}</div>
                             <div class="slot-info">
                                 <div class="slot-name">${activeItem.name}</div>
-                                <span>Активен в бою</span>
+                                <span style="color:#00ffaa; font-size:11px;">Предмет надет</span>
                             </div>
                             <button class="takeoff-btn" onclick="unequipItem('${slotKey}')">Снять</button>
                         </div>
@@ -89,25 +97,29 @@
             }
             document.getElementById('equipped-slots-container').innerHTML = slotsHtml;
 
-            // 2. Рендеринг вещей в рюкзаке
+            // 2. Отрисовка предметов в рюкзаке варвара
             let backpackHtml = "";
             if (inventory.length === 0) {
                 backpackHtml = `<div class="empty-text">Ваша сумка пуста. Купите вещи в Лавке Поселка!</div>`;
             } else {
                 inventory.forEach((item, index) => {
                     let bonusText = "";
-                    for (let stat in item.bonus) {
+                    if (item.bonus) {
                         let statLabels = { str: "Сила", def: "Защита", agi: "Ловкость", mst: "Мастерство", vit: "Живучесть" };
-                        bonusText += `${statLabels[stat]} +${item.bonus[stat]} `;
+                        for (let stat in item.bonus) {
+                            if (item.bonus[stat]) {
+                                bonusText += `${statLabels[stat]} +${item.bonus[stat]} `;
+                            }
+                        }
                     }
 
                     backpackHtml += `
                         <div class="backpack-item">
                             <div class="item-meta">
-                                <div class="item-icon">${item.icon}</div>
+                                <div class="item-icon">${item.icon || "📦"}</div>
                                 <div>
                                     <div style="font-weight:bold; color:#ffffff;">${item.name}</div>
-                                    <span style="font-size:11px; color:#799bb3;">${bonusText}</span>
+                                    <span style="font-size:11px; color:#799bb3;">${bonusText || "Нет бонусов"}</span>
                                 </div>
                             </div>
                             <button class="equip-btn" onclick="equipItem(${index})">Надеть</button>
@@ -123,14 +135,14 @@
             let equipped = JSON.parse(localStorage.getItem('barb_equipped') || '{}');
 
             let itemToEquip = inventory[index];
-            let slotKey = itemToEquip.type; // Поле 'type' совпадает с ключом слота (weapons, armor и т.д.)
+            let slotKey = getNormalSlotKey(itemToEquip.type);
 
-            // Если в этом слоте уже есть вещь — возвращаем её обратно в инвентарь
+            // Если слот занят — отправляем старую вещь обратно в сумку
             if (equipped[slotKey]) {
                 inventory.push(equipped[slotKey]);
             }
 
-            // Переносим вещь на героя
+            // Кладем новую вещь в активный слот и вырезаем из инвентаря
             equipped[slotKey] = itemToEquip;
             inventory.splice(index, 1);
 
@@ -157,22 +169,25 @@
             }
         }
 
-        // Важнейшая функция: пересчитывает общую защиту и силу для шапки
+        // Перерасчет статов защиты и атаки для шапки и боев
         function recalculateStatsAndBonuses() {
             let equipped = JSON.parse(localStorage.getItem('barb_equipped') || '{}');
             
-            // Базовые статы игрока без шмоток (по умолчанию 5, если не качались)
-            let baseDef = 5; 
-            
-            // Складываем все бонусы от надетых вещей
+            // Базовые характеристики без шмоток (база = 5)
+            let totalDef = 5; 
+            let totalStr = 5;
+
             for (let slot in equipped) {
-                if (equipped[slot].bonus && equipped[slot].bonus.def) {
-                    baseDef += equipped[slot].bonus.def;
+                let item = equipped[slot];
+                if (item && item.bonus) {
+                    if (item.bonus.def) totalDef += item.bonus.def;
+                    if (item.bonus.str) totalStr += item.bonus.str;
                 }
             }
 
-            // Записываем итоговую Защиту в LocalStorage, чтобы ядро игры и Арена увидели изменения
-            localStorage.setItem('barb_def', baseDef);
+            // Синхронизируем новые показатели с LocalStorage, чтобы Арена и Шапка сразу их увидели
+            localStorage.setItem('barb_def', totalDef);
+            localStorage.setItem('barb_str', totalStr);
         }
 
         document.addEventListener("DOMContentLoaded", renderEquipment);
