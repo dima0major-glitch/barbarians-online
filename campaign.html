@@ -57,33 +57,51 @@
             font-size: 13px;
         }
         .arrow-cyan { color: #00ffcc; font-weight: bold; }
-        .divider-brown {
+        
+        /* Стили для нижнего WAP-меню */
+        .norman-footer-divider {
             background-color: #261a0d; height: 4px;
             border-top: 1px solid #4d351c; border-bottom: 1px solid #100b05;
-            margin: 10px 0;
+            margin-top: 15px;
+        }
+        .norman-nav-bar {
+            background: linear-gradient(to bottom, #112233, #0a1520);
+            border-top: 1px solid #1c354d; border-bottom: 1px solid #050b10;
+            padding: 9px 12px; display: flex; justify-content: space-between;
+            align-items: center; color: #c4d6e2; text-decoration: none;
+            font-family: Arial, sans-serif; font-size: 13px; font-weight: bold;
+        }
+        .norman-nav-bar:active { background: #162d44; }
+        .norman-arrow-cyan { color: #00ffcc; font-weight: bold; font-size: 14px; }
+        .norman-footer-text-block {
+            text-align: center; padding: 12px; font-size: 11px; color: #6a8296;
+            font-family: Arial, sans-serif; background-color: #060b11;
+        }
+        .norman-footer-text-block span, .norman-footer-text-block a {
+            color: #6a8296; text-decoration: none; margin: 0 5px; cursor: pointer;
         }
     </style>
 </head>
 <body style="background-color: #060b11; margin: 0; padding: 0; color: #fff; font-family: Arial, sans-serif;">
 
-    <!-- Сквозная шапка ядра -->
+    <!-- Сквозная шапка, генерируемая твоим ядром -->
     <div id="header-container"></div>
 
-    <div class="main-content" style="max-width: 480px; margin: 0 auto; background-color: #080f16; text-align: center; padding-bottom: 10px;">
+    <div class="main-content" style="max-width: 480px; margin: 0 auto; background-color: #080f16; text-align: center; padding-bottom: 10px; min-height: 40vh;">
         
         <div class="campaign-title">Поход</div>
 
-        <!-- Картинка викинга на коне как на скрине -->
+        <!-- Тематическая картинка похода -->
         <div style="margin: 10px 0;">
             <div style="width: 240px; height: 130px; margin: 0 auto; background: #1c354d; border: 1px solid #00ffff; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #00ffff; border-radius: 4px;">
                 🐴 [ ВСАДНИК В ПОХОДЕ ]
             </div>
         </div>
 
-        <!-- Динамическая зона похода (Таймер или Выбор времени) -->
+        <!-- Динамическая зона похода (Выбор минут или Таймер обратного отсчета) -->
         <div id="campaign-logic-box" style="padding: 10px; font-size: 13px; min-height: 120px;"></div>
 
-        <!-- Промежуточные кнопки действий из Норманнов -->
+        <!-- Промежуточные кнопки локаций -->
         <div style="text-align: left; margin-top: 15px;">
             <div class="sub-menu-item" onclick="location.reload()" style="cursor: pointer;">
                 <span>🔄 Обновить</span><span class="arrow-cyan">»</span>
@@ -91,178 +109,44 @@
             <a href="mine.html" class="sub-menu-item">
                 <span>⛏️ Шахта</span><span class="arrow-cyan">»</span>
             </a>
-            <a href="poselok.html" class="sub-menu-item">
+            <a href="village.html" class="sub-menu-item">
                 <span>🌿 Участок</span><span class="arrow-cyan">»</span>
             </a>
-            <a href="arena.html" class="sub-menu-item">
+            <a href="duel.html" class="sub-menu-item">
                 <span>👹 Подземелье</span><span class="arrow-cyan">»</span>
             </a>
         </div>
-
-        <!-- Коричневый разделитель перед глобальным футером -->
-        <div class="divider-brown"></div>
-
-        <!-- Нижнее WAP меню -->
-        <div style="text-align: left;">
-            <a href="index.html" class="sub-menu-item"><span>🏡 Главная</span><span class="arrow-cyan">»</span></a>
-            <a href="hero.html" class="sub-menu-item"><span>🤠 Герой</span><span class="arrow-cyan">»</span></a>
-            <a href="chat.html" class="sub-menu-item"><span>💬 Чат</span><span class="arrow-cyan">»</span></a>
-        </div>
     </div>
 
-    <!-- Скрипты связи -->
+    <!-- ФИРМЕННОЕ НИЖНЕЕ МЕНЮ НАВИГАЦИИ -->
+    <div class="norman-footer-divider"></div>
+    <div id="norman-global-navigation-links">
+        <a href="index.html" class="norman-nav-bar">
+            <span>🏠 Главная</span><span class="norman-arrow-cyan">»</span>
+        </a>
+        <a href="hero.html" class="norman-nav-bar">
+            <span>🤠 Герой</span><span class="norman-arrow-cyan">»</span>
+        </a>
+        <a href="mail.html" class="norman-nav-bar">
+            <span>✉️ Почта</span><span class="norman-arrow-cyan">»</span>
+        </a>
+        <a href="chat.html" class="norman-nav-bar">
+            <span>💬 Чат</span><span class="norman-arrow-cyan">»</span>
+        </a>
+        <a href="forum.html" class="norman-nav-bar">
+            <span>👥 Форум</span><span class="norman-arrow-cyan">»</span>
+        </a>
+        <a href="shop.html" class="norman-nav-bar">
+            <span>💰 Золото</span><span class="norman-arrow-cyan">»</span>
+        </a>
+    </div>
+
+    <div class="norman-footer-text-block">
+        <span>Об игре</span> | <span>Поддержка</span> | <span>Настройки</span> | <a href="index.html">Выйти</a>
+    </div>
+
+    <!-- Подключение сквозного ядра и вынесенного скрипта логики -->
     <script src="global_core.js"></script>
     <script src="campaign_logic.js"></script>
 </body>
 </html>
-/* ==========================================================================
-   ЛОГИКА АВТО-ПОХОДОВ ДЛЯ МАКСИМУМ 360 МИНУТ В СУТКИ
-   ========================================================================== */
-
-/* Загружаем статы персонажа и состояние походов */
-let heroStats = JSON.parse(localStorage.getItem('hero_stats')) || { name: "Воин", silver: 1000, gold: 0, level: 1 };
-let campState = JSON.parse(localStorage.getItem('campaign_state')) || {
-    isEnRoute: false,
-    returnTime: 0,
-    lastDuration: 0,
-    lastSilverReward: 0,
-    lastGoldReward: 0,
-    timeUsedToday: 0,
-    lastResetDate: ""
-};
-
-/* Функция проверки и сброса суточного таймера на 360 минут */
-function checkDailyReset() {
-    const todayStr = new Date().toDateString();
-    if (campState.lastResetDate !== todayStr) {
-        campState.timeUsedToday = 0; /* Сбрасываем потраченные минуты */
-        campState.lastResetDate = todayStr;
-        localStorage.setItem('campaign_state', JSON.stringify(campState));
-    }
-}
-
-/* Основной цикл обновления интерфейса */
-function updateCampaignUI() {
-    checkDailyReset();
-    const box = document.getElementById('campaign-logic-box');
-    if (!box) return;
-
-    const now = Date.now();
-    const timeLeftToday = 360 - campState.timeUsedToday;
-
-    /* Сценарий 1: Персонаж прямо сейчас идет по лесам */
-    if (campState.isEnRoute) {
-        if (now >= campState.returnTime) {
-            /* Время вышло — поход завершен */
-            processCampaignEnd();
-            return;
-        }
-
-        /* Высчитываем сколько секунд осталось до возвращения коня */
-        let secondsLeft = Math.ceil((campState.returnTime - now) / 1000);
-        let displayMins = Math.floor(secondsLeft / 60);
-        let displaySecs = secondsLeft % 60;
-        if (displaySecs < 10) displaySecs = "0" + displaySecs;
-
-        box.innerHTML = `
-            <div style="font-weight: bold; color: #ffaa00; margin-bottom: 10px;">🛡️ Ваша дружина в походе!</div>
-            <div>Ваш герой вернется через: <b style="color: #00ffcc;">${displayMins}:${displaySecs}</b></div>
-            <div style="font-size: 11px; color: #6a8296; margin-top: 10px;">Вы собираете трофеи на землях врагов...</div>
-        `;
-        
-        /* Запускаем ежесекундный тик */
-        setTimeout(updateCampaignUI, 1000);
-        return;
-    }
-
-    /* Сценарий 2: Персонаж дома, выводим результаты прошлого рейда и меню отправки */
-    let lastResultHTML = "";
-    if (campState.lastDuration > 0) {
-        let goldText = campState.lastGoldReward > 0 ? `, <span style="color:#ffcc00;">👑 ${campState.lastGoldReward} зол.</span>` : "";
-        lastResultHTML = `
-            <div style="background: #0d1a26; padding: 6px; border: 1px dashed #1c354d; margin-bottom: 10px; text-align: left;">
-                <b>Последний поход:</b><br>
-                Ты был в походе ${campState.lastDuration} минут, награда: <span style="color:#ccc;">⚪ ${campState.lastSilverReward} сер.</span>${goldText}
-            </div>
-        `;
-    }
-
-    box.innerHTML = `
-        ${lastResultHTML}
-        <div style="margin-bottom: 12px; font-weight: bold;">
-            Осталось времени на поход: <span style="color: #00ffcc;">${timeLeftToday} минут</span>
-        </div>
-
-        ${timeLeftToday <= 0 ? 
-            `<div style="color: #ff4444; font-weight: bold;">Вы исчерпали суточный лимит в 360 минут! Возвращайтесь завтра.</div>` : 
-            `<!-- Выпадающий список выбора минут -->
-             <select id="camp-duration-select" class="norman-select">
-                 ${timeLeftToday >= 10 ? '<option value="10">10 минут</option>' : ''}
-                 ${timeLeftToday >= 30 ? '<option value="30">30 минут</option>' : ''}
-                 ${timeLeftToday >= 60 ? '<option value="60">60 минут</option>' : ''}
-             </select><br>
-             <button onclick="startCampaignRequest()" class="btn-send">Отправить</button>`
-        }
-    `;
-}
-
-/* Действие: Отправка коня в поход */
-window.startCampaignRequest = function() {
-    const select = document.getElementById('camp-duration-select');
-    if (!select) return;
-
-    const mins = parseInt(select.value);
-    const timeLeftToday = 360 - campState.timeUsedToday;
-
-    if (mins > timeLeftToday) {
-        alert("У вас нет столько доступного времени на сегодня!");
-        return;
-    }
-
-    /* Для теста и удобства разработки переводим 1 минуту похода в 1 секунду ожидания */
-    /* (Если нужно строго реальное время минут, замените "* 1000" на "* 60 * 1000") */
-    const durationInMs = mins * 1000; 
-
-    campState.isEnRoute = true;
-    campState.returnTime = Date.now() + durationInMs;
-    campState.lastDuration = mins;
-    campState.timeUsedToday += mins;
-
-    localStorage.setItem('campaign_state', JSON.stringify(campState));
-    updateCampaignUI();
-};
-
-/* Логика: Начисление наград при возвращении */
-function processCampaignEnd() {
-    const mins = campState.lastDuration;
-
-    /* Базовый расчет серебра на основе минут */
-    let silverEarned = Math.floor(mins * 70 + Math.random() * 50);
-    let goldEarned = 0;
-
-    /* Логика золота: за 60-минутный поход даём шанс выбить до 1 золотого */
-    if (mins === 60) {
-        if (Math.random() < 0.8) goldEarned = 1; /* Высокий 80% шанс принести 1 золото */
-    } else if (mins === 30) {
-        if (Math.random() < 0.3) goldEarned = 1; /* 30% шанс для тридцатиминутки */
-    }
-
-    /* Обновляем кошелек героя */
-    heroStats.silver += silverEarned;
-    heroStats.gold += goldEarned;
-
-    /* Обновляем состояние модуля */
-    campState.isEnRoute = false;
-    campState.returnTime = 0;
-    campState.lastSilverReward = silverEarned;
-    campState.lastGoldReward = goldEarned;
-
-    localStorage.setItem('hero_stats', JSON.stringify(heroStats));
-    localStorage.setItem('campaign_state', JSON.stringify(campState));
-
-    updateCampaignUI();
-    if (typeof updateHeader === 'function') updateHeader(); /* Синхронизируем шапку */
-}
-
-/* Инициализация модуля при загрузке */
-updateCampaignUI();
