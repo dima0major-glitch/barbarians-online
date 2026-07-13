@@ -66,3 +66,84 @@
     <script src="clan_actions.js"></script>
 </body>
 </html>
+    <!-- НАЧАЛО НИЖНЕГО МЕНЮ НАВИГАЦИИ -->
+    <style>
+        /* Фирменные стили оригинального меню */
+        .norman-footer-divider {
+            background-color: #261a0d;
+            height: 4px;
+            border-top: 1px solid #4d351c;
+            border-bottom: 1px solid #100b05;
+            margin-top: 10px;
+        }
+        .norman-nav-bar {
+            background: linear-gradient(to bottom, #112233, #0a1520);
+            border-top: 1px solid #1c354d;
+            border-bottom: 1px solid #050b10;
+            padding: 9px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #c4d6e2;
+            text-decoration: none;
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            font-weight: bold;
+        }
+        .norman-nav-bar:active {
+            background: #162d44;
+        }
+        .norman-arrow-cyan {
+            color: #00ffcc;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .norman-footer-text-block {
+            text-align: center; 
+            padding: 12px; 
+            font-size: 11px; 
+            color: #6a8296; 
+            font-family: Arial, sans-serif;
+            background-color: #060b11;
+        }
+        .norman-footer-text-block span, .norman-footer-text-block a {
+            color: #6a8296;
+            text-decoration: none;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+    </style>
+
+    <!-- Коричнево-золотая разделительная полоса -->
+    <div class="norman-footer-divider"></div>
+
+    <!-- Навигационные ссылки » -->
+    <div id="norman-global-navigation-links">
+        <a href="index.html" class="norman-nav-bar">
+            <span>🏠 Главная</span><span class="norman-arrow-cyan">»</span>
+        </a>
+        <a href="hero.html" class="norman-nav-bar">
+            <span>🤠 Герой</span><span class="norman-arrow-cyan">»</span>
+        </a>
+        <a href="mail.html" class="norman-nav-bar">
+            <span>✉️ Почта</span><span class="norman-arrow-cyan">»</span>
+        </a>
+        <a href="chat.html" class="norman-nav-bar">
+            <span>💬 Чат</span><span class="norman-arrow-cyan">»</span>
+        </a>
+        <a href="forum.html" class="norman-nav-bar">
+            <span>👥 Форум</span><span class="norman-arrow-cyan">»</span>
+        </a>
+        <a href="shop.html" class="norman-nav-bar">
+            <span>💰 Золото</span><span class="norman-arrow-cyan">»</span>
+        </a>
+    </div>
+
+    <!-- Текстовый футер -->
+    <div class="norman-footer-text-block">
+        <span>Об игре</span> | 
+        <span>Поддержка</span> | 
+        <span>Настройки</span> | 
+        <a href="index.html">Выйти</a>
+    </div>
+    <!-- КОНЕЦ НИЖНЕГО МЕНЮ НАВИГАЦИИ -->

@@ -158,3 +158,99 @@ document.addEventListener("DOMContentLoaded", () => {
     updateGlobalGameCore();
     setInterval(updateGlobalGameCore, 1000);
 });
+/* ==========================================================================
+   СКВОЗНАЯ АВТОГЕНЕРАЦИЯ ГЛОБАЛЬНОГО МЕНЮ НАВИГАЦИИ (НОРМАННЫ-СТИЛЬ)
+   ========================================================================== */
+document.addEventListener("DOMContentLoaded", () => {
+    // 1. Внедряем каноничные стили для нижнего меню
+    if (!document.getElementById("wap-global-footer-styles")) {
+        const styleElement = document.createElement("style");
+        styleElement.id = "wap-global-footer-styles";
+        styleElement.innerHTML = `
+            .norman-footer-divider {
+                background-color: #261a0d;
+                height: 4px;
+                border-top: 1px solid #4d351c;
+                border-bottom: 1px solid #100b05;
+                margin-top: 10px;
+            }
+            .norman-nav-bar {
+                background: linear-gradient(to bottom, #112233, #0a1520);
+                border-top: 1px solid #1c354d;
+                border-bottom: 1px solid #050b10;
+                padding: 9px 12px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                color: #c4d6e2;
+                text-decoration: none;
+                font-family: Arial, sans-serif;
+                font-size: 13px;
+                font-weight: bold;
+            }
+            .norman-nav-bar:active {
+                background: #162d44;
+            }
+            .norman-arrow-cyan {
+                color: #00ffcc;
+                font-weight: bold;
+                font-size: 14px;
+            }
+            .norman-footer-text-block {
+                text-align: center; 
+                padding: 12px; 
+                font-size: 11px; 
+                color: #6a8296; 
+                font-family: Arial, sans-serif;
+                background-color: #060b11;
+            }
+            .norman-footer-text-block span, .norman-footer-text-block a {
+                color: #6a8296;
+                text-decoration: none;
+                margin: 0 5px;
+                cursor: pointer;
+            }
+        `;
+        document.head.appendChild(styleElement);
+    }
+
+    // 2. Автоматически создаем контейнер в самом низу тега body, если его забыли добавить
+    let dynamicFooterBox = document.getElementById("global-footer-nav-container");
+    if (!dynamicFooterBox) {
+        dynamicFooterBox = document.createElement("div");
+        dynamicFooterBox.id = "global-footer-nav-container";
+        // Принудительно крепим в конец документа, чтобы меню всегда шло после контента
+        document.body.appendChild(dynamicFooterBox);
+    }
+
+    // 3. Собираем разметку меню строго по предоставленному образцу
+    dynamicFooterBox.innerHTML = `
+        <div class="norman-footer-divider"></div>
+        <div id="norman-global-navigation-links">
+            <a href="index.html" class="norman-nav-bar">
+                <span>🏠 Главная</span><span class="norman-arrow-cyan">»</span>
+            </a>
+            <a href="hero.html" class="norman-nav-bar">
+                <span>🤠 Герой</span><span class="norman-arrow-cyan">»</span>
+            </a>
+            <a href="mail.html" class="norman-nav-bar">
+                <span>✉️ Почта</span><span class="norman-arrow-cyan">»</span>
+            </a>
+            <a href="chat.html" class="norman-nav-bar">
+                <span>💬 Чат</span><span class="norman-arrow-cyan">»</span>
+            </a>
+            <a href="forum.html" class="norman-nav-bar">
+                <span>👥 Форум</span><span class="norman-arrow-cyan">»</span>
+            </a>
+            <a href="shop.html" class="norman-nav-bar">
+                <span>💰 Золото</span><span class="norman-arrow-cyan">»</span>
+            </a>
+        </div>
+        <div class="norman-footer-text-block">
+            <span>Об игре</span>
+            <span>Поддержка</span>
+            <span>Настройки</span>
+            <a href="index.html">Выйти</a>
+        </div>
+    `;
+});
