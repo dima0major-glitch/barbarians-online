@@ -2,109 +2,166 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Варвары — Шахта</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Варвары - Шахта</title>
     <style>
-        body { background-color: #061118; color: #ffffff; font-family: Arial, sans-serif; margin: 0; padding: 0; user-select: none; }
-        .category-bar { background: linear-gradient(to bottom, #241f12, #0f0d07); color: #ffcc00; font-size: 14px; font-weight: bold; text-align: center; padding: 6px 15px; border-top: 1px solid #54492a; border-bottom: 1px solid #14110a; text-transform: uppercase; }
-        .mine-container { background-color: #050d12; padding: 15px; text-align: center; border-bottom: 1px solid #0f2231; }
-        .resource-block { background: #07151f; margin: 8px 10px; padding: 12px; border: 1px solid #1c8cd1; border-radius: 4px; text-align: left; }
-        .res-title { font-size: 14px; font-weight: bold; color: #ffffff; margin-bottom: 5px; display: flex; justify-content: space-between; }
-        .mine-btn { background: linear-gradient(to bottom, #7a5c08, #423202); border: 1px solid #ffcc00; color: #ffebaa; font-size: 13px; font-weight: bold; padding: 6px 20px; border-radius: 4px; cursor: pointer; text-shadow: 1px 1px 1px #000; float: right; }
-        .mine-btn:disabled { background: #1a1e21; border-color: #3a4146; color: #555; cursor: not-allowed; }
-        .menu-container { margin-top: 5px; }
-        .menu-link { background: linear-gradient(to bottom, #091b29, #050e16); padding: 13px 15px; margin-bottom: 2px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #0f2231; text-decoration: none; color: #adc8d9; font-size: 14px; font-weight: bold; }
-        .menu-arrow { color: #1c8cd1; font-weight: bold; letter-spacing: -2px; font-size: 15px; }
+        body { background-color: #1a242f; color: #e0e6ed; font-family: monospace; margin: 0; padding: 8px; }
+        .header { background-color: #2c3e50; border: 1px solid #34495e; padding: 6px; text-align: center; margin-bottom: 8px; font-weight: bold; }
+        .w-block { background-color: #243342; border: 1px solid #2c3e50; padding: 6px; margin-bottom: 6px; text-align: center; }
+        .w-title { background-color: #2c3e50; padding: 3px; font-size: 0.9em; font-weight: bold; margin: -6px -6px 6px -6px; border-bottom: 1px solid #34495e; color: #00d2ff; text-align: left; }
+        .btn-mine { background-color: #27ae60; color: #fff; border: 1px solid #2ecc71; padding: 8px 16px; cursor: pointer; font-weight: bold; font-family: monospace; font-size: 1em; width: 80%; margin: 8px 0; }
+        .btn-mine:disabled { background-color: #7f8c8d; border-color: #95a5a6; cursor: not-allowed; }
+        .cooldown { color: #e74c3c; font-weight: bold; font-size: 1.1em; margin: 5px 0; }
+        .notify { color: #f1c40f; font-size: 0.95em; min-height: 20px; margin-bottom: 6px; }
+        .nav-back { text-align: center; margin-top: 12px; font-size: 0.9em; }
+        .nav-back a { color: #00d2ff; text-decoration: none; }
     </style>
 </head>
 <body>
-    <div class="category-bar">Золотая и Кристальная Шахта</div>
-    <div class="mine-container">
-        <div class="resource-block">
-            <div class="res-title">💎 Кристальная жила <span id="gems-energy">150/150 Ен.</span></div>
-            <span style="font-size:11px; color:#799bb3;">Расход: 30 ен. за удар | Кулдаун: 2 мин.</span>
-            <button class="mine-btn" id="btn-gems" onclick="dig('gems')">Копать</button>
-            <div style="clear:both;"></div>
-            <div id="cooldown-gems" style="font-size:12px; color:#ff4d4d; margin-top:5px; display:none;">⏳ Перезагрузка: <span id="timer-gems">00:00</span></div>
-        </div>
-        <div class="resource-block">
-            <div class="res-title">💰 Золотая жила <span id="gold-energy">80/80 Ен.</span></div>
-            <span style="font-size:11px; color:#799bb3;">Расход: 30 ен. за удар | Кулдаун: 2 мин.</span>
-            <button class="mine-btn" id="btn-gold" onclick="dig('gold')">Копать</button>
-            <div style="clear:both;"></div>
-            <div id="cooldown-gold" style="font-size:12px; color:#ff4d4d; margin-top:5px; display:none;">⏳ Перезагрузка: <span id="timer-gold">00:00</span></div>
-        </div>
-        <div id="mine-report" style="margin-top:10px; font-size:13px; font-weight:bold; color:#00ffaa;"></div>
+
+    <!-- Шапка генерируется через глобальное ядро -->
+    <div id="core-header"></div>
+
+    <div class="header">⛏️ ТЕМНЫЕ ШАХТЫ</div>
+
+    <!-- Здесь пишется результат удара киркой -->
+    <div id="mine-notify" class="notify"></div>
+
+    <!-- Ресурсы персонажа -->
+    <div class="w-block">
+        Энергия: <span id="player-energy" style="color: #e67e22; font-weight: bold;">0</span>/100<br>
+        Серебро: <span id="player-silver" style="color: #bdc3c7;">0</span> сер. | 
+        Кристаллы: <span id="player-crystals" style="color: #9b59b6; font-weight: bold;">0</span>💎
     </div>
-    <div class="menu-container">
-        <a href="poselok.html" class="menu-link"><span>🏡 Назад в Поселок</span><span class="menu-arrow">»»</span></a>
-        <a href="index.html" class="menu-link"><span>🏠 Главная</span><span class="menu-arrow">»»</span></a>
+
+    <!-- Кнопка и таймер -->
+    <div class="w-block">
+        <div class="w-title">Добыча руды</div>
+        <p style="font-size: 0.85em; color: #95a5a6; margin: 4px 0;">Расход: 30 энергии. Кулдаун: 2 мин.<br>Шанс найти редкий кристалл для кузницы!</p>
+        
+        <button id="mine-btn" class="btn-mine" onclick="digMine()">УДАРить КИРКОЙ</button>
+        <div id="cooldown-box" class="cooldown" style="display: none;">Отдых: <span id="timer">02:00</span></div>
     </div>
+
+    <div class="nav-back">
+        <a href="poselok.html">↺ Вернуться в Поселок</a>
+    </div>
+
+    <!-- Нижнее меню генерируется через глобальное ядро -->
+    <div id="core-footer"></div>
+    <script src="global_core.js"></script>
     <script>
-        const COOLDOWN_MS = 2 * 60 * 1000; 
         const ENERGY_COST = 30;
+        const COOLDOWN_TIME = 120; // 2 минуты отдыха
 
-        function updateMineUI() {
-            let now = Date.now();
-            ['gems', 'gold'].forEach(type => {
-                let max = type === 'gems' ? 150 : 80;
-                let eng = localStorage.getItem(`mine_eng_${type}`) !== null ? parseInt(localStorage.getItem(`mine_eng_${type}`)) : max;
-                let cd = parseInt(localStorage.getItem(`mine_cd_${type}`) || '0');
+        function initMine() {
+            if(!localStorage.getItem('player_energy')) localStorage.setItem('player_energy', '100');
+            if(!localStorage.getItem('player_silver')) localStorage.setItem('player_silver', '0');
+            if(!localStorage.getItem('player_crystals')) localStorage.setItem('player_crystals', '0');
 
-                document.getElementById(`${type}-energy`).innerText = `${eng}/${max} Ен.`;
-
-                let btn = document.getElementById(`btn-${type}`);
-                let cdBlock = document.getElementById(`cooldown-${type}`);
-
-                if (now < cd) {
-                    btn.disabled = true;
-                    cdBlock.style.display = "block";
-                    let left = Math.ceil((cd - now) / 1000);
-                    let m = Math.floor(left / 60).toString().padStart(2,'0');
-                    let s = (left % 60).toString().padStart(2,'0');
-                    document.getElementById(`timer-${type}`).innerText = `${m}:${s}`;
-                } else {
-                    btn.disabled = (eng < ENERGY_COST);
-                    cdBlock.style.display = "none";
-                }
-            });
+            updateStatsDisplay();
+            checkCooldown();
         }
 
-        function dig(type) {
-            let max = type === 'gems' ? 150 : 80;
-            let eng = localStorage.getItem(`mine_eng_${type}`) !== null ? parseInt(localStorage.getItem(`mine_eng_${type}`)) : max;
-            
-            if (eng < ENERGY_COST) { alert("Не хватает энергии!"); return; }
+        function updateStatsDisplay() {
+            document.getElementById('player-energy').innerText = localStorage.getItem('player_energy');
+            document.getElementById('player-silver').innerText = localStorage.getItem('player_silver');
+            document.getElementById('player-crystals').innerText = localStorage.getItem('player_crystals');
+        }
 
-            eng -= ENERGY_COST;
-            localStorage.setItem(`mine_eng_${type}`, eng);
-            localStorage.setItem(`mine_cd_${type}`, Date.now() + COOLDOWN_MS);
+        function checkCooldown() {
+            const lastMine = localStorage.getItem('last_mine_time');
+            if (!lastMine) return;
 
-            let loot = 0;
-            let report = "";
-            if (type === 'gems') {
-                loot = Math.random() < 0.4 ? Math.floor(Math.random() * 2) + 1 : 0; 
-                if (loot > 0) {
-                    let cur = parseInt(localStorage.getItem('barb_gems') || '0');
-                    localStorage.setItem('barb_gems', cur + loot);
-                    report = `⛏️ Бум! Вы выкопали Кристаллы: +💎 ${loot}`;
-                } else { report = "⛏️ Ничего не нашлось в этой породе..."; }
-            } else {
-                loot = Math.floor(Math.random() * 3) + 1; 
-                let cur = parseInt(localStorage.getItem('barb_gold') || '15');
-                localStorage.setItem('barb_gold', cur + loot);
-                report = `⛏️ Удачно! Вы откололи Золото: +💰 ${loot}`;
+            const now = Math.floor(Date.now() / 1000);
+            const elapsed = now - parseInt(lastMine);
+
+            if (elapsed < COOLDOWN_TIME) {
+                startTimer(COOLDOWN_TIME - elapsed);
+            }
+        }
+
+        function startTimer(secondsLeft) {
+            const btn = document.getElementById('mine-btn');
+            const coodownBox = document.getElementById('cooldown-box');
+            const timerDisplay = document.getElementById('timer');
+
+            btn.disabled = true;
+            coodownBox.style.display = 'block';
+
+            const interval = setInterval(() => {
+                secondsLeft--;
+                
+                let mins = Math.floor(secondsLeft / 60);
+                let secs = secondsLeft % 60;
+                timerDisplay.innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+
+                if (secondsLeft <= 0) {
+                    clearInterval(interval);
+                    btn.disabled = false;
+                    coodownBox.style.display = 'none';
+                    document.getElementById('mine-notify').innerText = "💪 Руки отдохнули, можно снова копать!";
+                    
+                    let energy = parseInt(localStorage.getItem('player_energy')) || 0;
+                    if(energy < 100) {
+                        energy = Math.min(100, energy + 30);
+                        localStorage.setItem('player_energy', energy.toString());
+                        updateStatsDisplay();
+                    }
+                }
+            }, 1000);
+        }
+
+        // Функция взмаха кирки с отправкой данных в общие события
+        window.digMine = function() {
+            let energy = parseInt(localStorage.getItem('player_energy')) || 0;
+            let silver = parseInt(localStorage.getItem('player_silver')) || 0;
+            let crystals = parseInt(localStorage.getItem('player_crystals')) || 0;
+            const notify = document.getElementById('mine-notify');
+
+            if (energy < ENERGY_COST) {
+                notify.innerHTML = "❌ <span style='color:#ff6b6b;'>Недостаточно энергии! Отдохните или выпейте эликсир.</span>";
+                return;
             }
 
-            document.getElementById('mine-report').innerText = report;
-            updateMineUI();
-        }
+            // Тратим энергию и пишем время удара
+            energy -= ENERGY_COST;
+            localStorage.setItem('player_energy', energy.toString());
+            localStorage.setItem('last_mine_time', Math.floor(Date.now() / 1000).toString());
 
-        document.addEventListener("DOMContentLoaded", () => {
-            updateMineUI();
-            setInterval(updateMineUI, 1000);
-        });
+            // Рандомим серебро (от 50 до 150)
+            let silverGained = Math.floor(Math.random() * (150 - 50 + 1)) + 50; 
+            silver += silverGained;
+            localStorage.setItem('player_silver', silver.toString());
+
+            // 15% шанс добыть драгоценный кристалл
+            let crystalGained = 0;
+            if (Math.random() < 0.15) {
+                crystalGained = 1;
+                crystals += 1;
+                localStorage.setItem('player_crystals', crystals.toString());
+            }
+
+            // Пишем лог на экран и передаем его в журнал событий
+            if (crystalGained > 0) {
+                notify.innerHTML = `⛏️ Вы ударили по жиле! Найдено: <span style="color:#bdc3c7;">+${silverGained} сер.</span> и редкий <span style="color:#9b59b6; font-weight:bold;">💎 Кристалл [+1]</span>!`;
+                
+                if(typeof window.addGameEvent === 'function') {
+                    window.addGameEvent('mine', '⛏️ Шахта Одина', `Ты успешно вскопал породу. Добыча: <span class="highlight">+${silverGained} серебра</span> и редкий <span class="highlight" style="color:#9b59b6;">💎 Кристалл (1 шт.)</span>.`);
+                }
+            } else {
+                notify.innerHTML = `⛏️ Вы вскопали породу и нашли <span style="color:#bdc3c7;">+${silverGained} сер.</span>`;
+                
+                if(typeof window.addGameEvent === 'function') {
+                    window.addGameEvent('mine', '⛏️ Шахта Одина', `Ты вскопал породу и нашел <span class="highlight">+${silverGained} серебра</span>.`);
+                }
+            }
+
+            updateStatsDisplay();
+            startTimer(COOLDOWN_TIME);
+        };
+
+        document.addEventListener("DOMContentLoaded", initMine);
     </script>
-    <script src="global_core.js"></script>
 </body>
 </html>

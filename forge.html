@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Варвары - Кузница</title>
+    <style>
+        body { background-color: #1a242f; color: #e0e6ed; font-family: monospace; margin: 0; padding: 8px; }
+        .header { background-color: #2c3e50; border: 1px solid #34495e; padding: 6px; text-align: center; margin-bottom: 8px; font-weight: bold; }
+        .w-block { background-color: #243342; border: 1px solid #2c3e50; padding: 6px; margin-bottom: 6px; }
+        .w-title { background-color: #2c3e50; padding: 3px; font-size: 0.9em; font-weight: bold; margin: -6px -6px 6px -6px; border-bottom: 1px solid #34495e; color: #00d2ff; }
+        .item-row { border-bottom: 1px dashed #34495e; padding: 6px 0; display: flex; justify-content: space-between; align-items: center; }
+        .item-row:last-child { border-bottom: none; }
+        .btn-upgrade { background-color: #2980b9; color: #fff; border: 1px solid #3498db; padding: 2px 8px; cursor: pointer; text-decoration: none; font-size: 0.85em; }
+        .btn-upgrade:hover { background-color: #3498db; }
+        .cost-bad { color: #ff6b6b; }
+        .cost-good { color: #2ecc71; }
+        .notify { color: #f1c40f; font-size: 0.9em; margin-bottom: 6px; text-align: center; }
+        .nav-back { text-align: center; margin-top: 8px; font-size: 0.9em; }
+        .nav-back a { color: #00d2ff; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+    <!-- Шапка генерируется через global_core.js (включая клик по 🕒 -> poselok.html) -->
+    <div id="core-header"></div>
+
+    <div class="header">⚒️ КУЗНИЦА ОДИНА</div>
+
+    <div id="forge-notify" class="notify"></div>
+
+    <!-- Ресурсы игрока для наглядности -->
+    <div class="w-block">
+        Ваши ресурсы: <span id="player-silver" style="color: #bdc3c7;">0</span> сер. | <span id="player-crystals" style="color: #9b59b6;">0</span> крист.
+    </div>
+
+    <!-- Описание правил -->
+    <div class="w-block" style="font-size: 0.85em; color: #95a5a6;">
+        Заточка увеличивает базовые характеристики вещи (Силу или Защиту) на +20% за каждый уровень. Максимальный уровень улучшения: +2.
+    </div>
+
+    <!-- Список вещей для заточки -->
+    <div class="w-block">
+        <div class="w-title">Снаряжение в рюкзаке</div>
+        <div id="forge-items-list">
+            <!-- Сюда рендерятся вещи из localStorage -->
+        </div>
+    </div>
+
+    <div class="nav-back">
+        <a href="poselok.html">↺ Вернуться в Поселок</a>
+    </div>
+
+    <!-- Нижнее меню генерируется через global_core.js -->
+    <div id="core-footer"></div>
+
+    <!-- Подключение ядра -->
+    <script src="global_core.js"></script>
+    <script>
+        // Эмуляция первичных данных игрока, если их нет (для тестов)
+        if(!localStorage.getItem('player_silver')) localStorage.setItem('player_silver', '5000');
+        if(!localStorage.getItem('player_crystals')) localStorage.setItem('player_crystals', '5');
+        
+        // Тестовый рюкзак, если пуст (Слот экипировки: 0 - в рюкзаке)
+        if(!localStorage.getItem('player_inventory')) {
+            const defaultItems = [
+                { id: 1, name: "Норманнский меч", type: "weapon", statType: "power", statVal: 15, upgrade: 0, equipped: 0 },
+                { id: 2, name: "Кольчуга конунга", type: "armor", statType: "def", statVal: 20, upgrade: 0, equipped: 0 },
+                { id: 3, name: "Щит Одина", type: "shield", statType: "def", statVal: 10, upgrade: 1, equipped: 0 }
+            ];
+            localStorage.setItem('player_inventory', JSON.stringify(defaultItems));
+        }
+
+        // Настройки стоимости улучшений
+        const upgradeCosts = {
+            1: { silver: 500, crystals: 1 },  // Стоимость заточки на +1
+            2: { silver: 1500, crystals: 3 }  // Стоимость заточки на +2
+        };
+
+        function updateResourcesDisplay() {
+            document.getElementById('player-silver').innerText = localStorage.getItem('player_silver') || 0;
+            document.getElementById('player-crystals').innerText = localStorage.getItem('player_crystals') || 0;
+        }
+
+        function renderForge() {
+            updateResourcesDisplay();
+            const listContainer = document.getElementById('forge-items-list');
+            const notify = document.getElementById('forge-notify');
+            
+            let inventory = JSON.parse(localStorage.getItem('player_inventory')) || [];
+            let silver = parseInt(localStorage.getItem('player_silver')) || 0;
+            let crystals = parseInt(localStorage.getItem('player_crystals')) || 0;
+
+            // Фильтруем только оружие, щиты и броню (то, что точится)
+            let upgradeableItems = inventory.filter(item => ['weapon', 'armor', 'shield'].includes(item.type));
+
+            if(upgradeableItems.length === 0) {
+                listContainer.innerHTML = '<div style="text-align:center; padding:10px; color:#7f8c8d;">У вас нет подходящих вещей для заточки.</div>';
+                return;
+            }
+
+            let html = '';
+            upgradeableItems.forEach(item => {
+                let currentUpgrade = item.upgrade || 0;
+                let nextUpgrade = currentUpgrade + 1;
+                let statName = item.statType === 'power' ? 'Сил' : 'Защ';
+                
+                let itemLabel = `${item.name} ${currentUpgrade > 0 ? '[+' + currentUpgrade + ']' : ''}`;
+                let equippedBadge = item.equipped ? ' <span style="color:#e67e22; font-size:0.8em;">(надето)</span>' : '';
+
+                if(currentUpgrade >= 2) {
+                    // Максимальный уровень заточки достигнет
+                    html += `
+                    <div class="item-row">
+                        <div>
+                            <strong>${itemLabel}</strong>${equippedBadge}<br>
+                            <small style="color:#2ecc71;">Макс. заточка достигнута (${statName}: +${item.statVal})</small>
+                        </div>
+                        <div><span style="color:#2ecc71;">⚡ Макс</span></div>
+                    </div>`;
+                } else {
+                    // Стоимость следующего шага
+                    let cost = upgradeCosts[nextUpgrade];
+                    let silClass = silver >= cost.silver ? 'cost-good' : 'cost-bad';
+                    let cryClass = crystals >= cost.crystals ? 'cost-good' : 'cost-bad';
+                    
+                    // Расчет будущего стата (+20% от базового)
+                    let bonus = Math.round(item.statVal * 0.2);
+                    let nextStat = item.statVal + bonus;
+
+                    html += `
+                    <div class="item-row">
+                        <div>
+                            <strong>${itemLabel}</strong>${equippedBadge}<br>
+                            <small>${statName}: ${item.statVal} ➔ <span style="color:#00d2ff;">${nextStat}</span></small><br>
+                            <small>Цена: <span class="${silClass}">${cost.silver} сер.</span> | <span class="${cryClass}">${cost.crystals} крист.</span></small>
+                        </div>
+                        <div>
+                            <button class="btn-upgrade" onclick="tryUpgrade(${item.id}, ${nextUpgrade})">Точить на +${nextUpgrade}</button>
+                        </div>
+                    </div>`;
+                }
+            });
+
+            listContainer.innerHTML = html;
+        }
+
+        window.tryUpgrade = function(itemId, targetUpgrade) {
+            const notify = document.getElementById('forge-notify');
+            let inventory = JSON.parse(localStorage.getItem('player_inventory')) || [];
+            let silver = parseInt(localStorage.getItem('player_silver')) || 0;
+            let crystals = parseInt(localStorage.getItem('player_crystals')) || 0;
+
+            let itemIndex = inventory.findIndex(i => i.id === itemId);
+            if(itemIndex === -1) return;
+
+            let item = inventory[itemIndex];
+            let cost = upgradeCosts[targetUpgrade];
+
+            if(silver < cost.silver || crystals < cost.crystals) {
+                notify.innerText = "❌ Недостаточно ресурсов для заточки!";
+                return;
+            }
+
+            // Списание ресурсов
+            silver -= cost.silver;
+            crystals -= cost.crystals;
+            localStorage.setItem('player_silver', silver.toString());
+            localStorage.setItem('player_crystals', crystals.toString());
+
+            // Применение заточки и модификация характеристик (+20% к текущему)
+            let bonus = Math.round(item.statVal * 0.2);
+            item.statVal += bonus;
+            item.upgrade = targetUpgrade;
+
+            // Сохраняем изменения в рюкзаке
+            localStorage.setItem('player_inventory', JSON.stringify(inventory));
+
+            // Триггерим пересчет общих статов персонажа (если вещь была надета)
+            if(item.equipped && typeof updatePlayerStatsFromEquipment === 'function') {
+                updatePlayerStatsFromEquipment();
+            } else if (item.equipped) {
+                // Если функции из другого файла нет под рукой, просто помечаем флаг для перерасчета статов
+                localStorage.setItem('recalc_stats_needed', '1');
+            }
+
+            notify.innerHTML = `✅ <span style="color:#2ecc71;">${item.name} успешно заточен на +${targetUpgrade}!</span>`;
+            renderForge();
+        };
+
+        // Логика инициализации при наличии ядра
+        document.addEventListener("DOMContentLoaded", () => {
+            // Если в global_core.js есть инициализация интерфейса, она отработает там
+            renderForge();
+        });
+    </script>
+</body>
+</html>

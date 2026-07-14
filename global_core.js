@@ -254,3 +254,30 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
     `;
 });
+// Добавь этот код в конец твоего файла global_core.js
+window.addGameEvent = function(type, category, text, hasDetails = false) {
+    let events = JSON.parse(localStorage.getItem('game_events')) || [];
+    
+    // Форматируем время (например: "14 июля 18:16")
+    const now = new Date();
+    const months = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
+    const timeStr = `${now.getDate()} ${months[now.getMonth()]} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+
+    // Создаем объект события
+    const newEvent = {
+        type: type,          // 'arena', 'mine', 'gift', 'boss'
+        category: category,  // "Сражение на арене", "Шахта", "Подарок"
+        text: text,          // Текст сообщения с HTML тегами подсветки
+        time: timeStr,       // Время
+        hasDetails: hasDetails // Нужна ли кнопка "Детали боя"
+    };
+
+    events.push(newEvent);
+    
+    // Храним только последние 30 событий, чтобы не забивать память
+    if (events.length > 30) {
+        events.shift(); 
+    }
+
+    localStorage.setItem('game_events', JSON.stringify(events));
+};
