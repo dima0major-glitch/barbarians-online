@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Поход Норманнов</title>
-    <link rel="stylesheet" href="style.css">
     <style>
         .campaign-title {
             background: linear-gradient(to right, transparent, #004c4c, transparent);
@@ -24,10 +23,11 @@
             color: #ffffff;
             padding: 6px;
             font-size: 13px;
-            width: 150px;
+            width: 160px;
             text-align: center;
             margin-bottom: 15px;
             border-radius: 4px;
+            font-family: monospace;
         }
         .btn-send {
             background: linear-gradient(to bottom, #a03000, #501000);
@@ -80,12 +80,18 @@
         .norman-footer-text-block span, .norman-footer-text-block a {
             color: #6a8296; text-decoration: none; margin: 0 5px; cursor: pointer;
         }
+        .camp-timer-text {
+            font-size: 16px; color: #f1c40f; font-weight: bold; margin: 10px 0; font-family: monospace;
+        }
+        .camp-notify {
+            color: #2ecc71; margin-bottom: 10px; font-size: 13px; font-weight: bold;
+        }
     </style>
 </head>
 <body style="background-color: #060b11; margin: 0; padding: 0; color: #fff; font-family: Arial, sans-serif;">
 
-    <!-- Сквозная шапка, генерируемая твоим ядром -->
-    <div id="header-container"></div>
+    <!-- Сквозная шапка из ядра (контейнер изменен под id в Вашем ядре) -->
+    <div id="global-game-header-container"></div>
 
     <div class="main-content" style="max-width: 480px; margin: 0 auto; background-color: #080f16; text-align: center; padding-bottom: 10px; min-height: 40vh;">
         
@@ -98,26 +104,30 @@
             </div>
         </div>
 
-        <!-- Динамическая зона похода (Выбор минут или Таймер обратного отсчета) -->
-        <div id="campaign-logic-box" style="padding: 10px; font-size: 13px; min-height: 120px;"></div>
+        <!-- Лог наград и уведомлений -->
+        <div id="camp-notify-box" class="camp-notify"></div>
 
-        <!-- Промежуточные кнопки локаций -->
+        <!-- Динамическая зона похода (Рендерится скриптом) -->
+        <div id="campaign-logic-box" style="padding: 10px; font-size: 13px; min-height: 120px;">
+            <!-- Сюда вставится либо выбор времени, либо таймер обратного отсчета -->
+        </div>
+
+        <!-- Навигационные кнопки локаций (исправлен village.html -> poselok.html) -->
         <div style="text-align: left; margin-top: 15px;">
             <div class="sub-menu-item" onclick="location.reload()" style="cursor: pointer;">
-                <span>🔄 Обновить</span><span class="arrow-cyan">»</span>
+                <span>🔄 Обновить страницу</span><span class="arrow-cyan">»</span>
             </div>
             <a href="mine.html" class="sub-menu-item">
-                <span>⛏️ Шахта</span><span class="arrow-cyan">»</span>
+                <span>⛏️ Шахта Одина</span><span class="arrow-cyan">»</span>
             </a>
-            <a href="village.html" class="sub-menu-item">
-                <span>🌿 Участок</span><span class="arrow-cyan">»</span>
+            <a href="poselok.html" class="sub-menu-item">
+                <span>🏡 Вернуться в Поселок</span><span class="arrow-cyan">»</span>
             </a>
             <a href="duel.html" class="sub-menu-item">
-                <span>👹 Подземелье</span><span class="arrow-cyan">»</span>
+                <span>👹 Арена / Подземелье</span><span class="arrow-cyan">»</span>
             </a>
         </div>
     </div>
-
     <!-- ФИРМЕННОЕ НИЖНЕЕ МЕНЮ НАВИГАЦИИ -->
     <div class="norman-footer-divider"></div>
     <div id="norman-global-navigation-links">
@@ -145,8 +155,154 @@
         <span>Об игре</span> | <span>Поддержка</span> | <span>Настройки</span> | <a href="index.html">Выйти</a>
     </div>
 
-    <!-- Подключение сквозного ядра и вынесенного скрипта логики -->
+    <!-- Подключение сквозного ядра -->
     <script src="global_core.js"></script>
-    <script src="campaign_logic.js"></script>
+    <script>
+        // Инициализация базовых параметров под ключи Вашего ядра
+        if(localStorage.getItem('camp_daily_limit') === null) localStorage.setItem('camp_daily_limit', '360');
+        if(localStorage.getItem('barb_gold') === null) localStorage.setItem('barb_gold', '15');
+        if(localStorage.getItem('barb_silver') === null) localStorage.setItem('barb_silver', '10000');
+
+        function initCampaignModule() {
+            const endTime = localStorage.getItem('camp_end_timestamp');
+            if (endTime) {
+                const now = Math.floor(Date.now() / 1000);
+                const remaining = parseInt(endTime) - now;
+                if (remaining > 0) {
+                    renderActiveTimer(remaining);
+                } else {
+                    processCampaignReward();
+                }
+            } else {
+                renderSetupInterface();
+            }
+        }
+
+        // Экран настроек перед отправкой в поход
+        function renderSetupInterface() {
+            const box = document.getElementById('campaign-logic-box');
+            const dailyLimit = localStorage.getItem('camp_daily_limit') || '360';
+
+            box.innerHTML = `
+                <div style="margin-bottom: 8px;">Осталось времени на сегодня: <span style="color:#e67e22; font-weight:bold;">${dailyLimit} мин.</span></div>
+                <div style="margin-bottom: 12px; color:#8a9fae; font-size:12px;">Ускорение времени включено: 1 минута похода = 1 секунда реального времени!</div>
+                
+                <select id="camp-duration-select" class="norman-select">
+                    <option value="10">Набег (10 мин)</option>
+                    <option value="30">Осада заставы (30 мин)</option>
+                    <option value="60">Поход на Англию (60 мин)</option>
+                </select>
+                <br>
+                <button class="btn-send" onclick="sendToCampaign()">ОТПРАВИТЬ</button>
+            `;
+        }
+
+        // Запуск похода
+        window.sendToCampaign = function() {
+            const select = document.getElementById('camp-duration-select');
+            const minutes = parseInt(select.value);
+            let limit = parseInt(localStorage.getItem('camp_daily_limit')) || 0;
+            const notifyBox = document.getElementById('camp-notify-box');
+
+            if (limit < minutes) {
+                notifyBox.innerHTML = "<span style='color:#ff4d4d;'>❌ На сегодня лимит походов исчерпан!</span>";
+                return;
+            }
+
+            // Списываем доступный дневной лимит минут
+            limit -= minutes;
+            localStorage.setItem('camp_daily_limit', limit.toString());
+
+            // 1 минута = 1 секунда в тесте
+            const durationSeconds = minutes;
+            const endTimestamp = Math.floor(Date.now() / 1000) + durationSeconds;
+
+            localStorage.setItem('camp_end_timestamp', endTimestamp.toString());
+            localStorage.setItem('camp_active_duration', minutes.toString());
+
+            notifyBox.innerText = "";
+            renderActiveTimer(durationSeconds);
+        };
+
+        // Отображение тикающего таймера
+        function renderActiveTimer(secondsLeft) {
+            const box = document.getElementById('campaign-logic-box');
+            box.innerHTML = `
+                <div style="color: #c4d6e2; margin-bottom: 5px;">Ваша дружина грабит прибрежные земли...</div>
+                <div class="camp-timer-text">До возвращения: <span id="camp-countdown-clock">00:00</span></div>
+                <div style="font-size:11px; color:#6a8296;">Страница автоматически обновится по завершении.</div>
+            `;
+
+            const clockDisplay = document.getElementById('camp-countdown-clock');
+            
+            const timerInterval = setInterval(() => {
+                secondsLeft--;
+                
+                let mins = Math.floor(secondsLeft / 60);
+                let secs = secondsLeft % 60;
+                clockDisplay.innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+
+                if (secondsLeft <= 0) {
+                    clearInterval(timerInterval);
+                    processCampaignReward();
+                }
+            }, 1000);
+        }
+
+        // Выдача награды и логирование в События
+        function processCampaignReward() {
+            const duration = parseInt(localStorage.getItem('camp_active_duration')) || 10;
+            
+            // Удаляем маркеры текущего похода из памяти
+            localStorage.removeItem('camp_end_timestamp');
+            localStorage.removeItem('camp_active_duration');
+
+            let silver = parseInt(localStorage.getItem('barb_silver')) || 0;
+            let gold = parseInt(localStorage.getItem('barb_gold')) || 0;
+
+            // Расчет наград (серебро зависит от времени, золото идет бонусом)
+            let silverGained = Math.floor(Math.random() * (duration * 12)) + (duration * 5);
+            let goldGained = 0;
+
+            // На 60 минутах шанс получить 1 золото — 75%
+            if (duration === 60 && Math.random() < 0.75) {
+                goldGained = 1;
+            } else if (Math.random() < (duration / 100)) { 
+                goldGained = 1;
+            }
+
+            // Начисляем
+            silver += silverGained;
+            gold += goldGained;
+            localStorage.setItem('barb_silver', silver.toString());
+            localStorage.setItem('barb_gold', gold.toString());
+
+            // Выводим уведомление на экран
+            const notifyBox = document.getElementById('camp-notify-box');
+            let rewardMessage = `Дружина вернулась! Добыто серебра: <span style="color:#e5e5e5;">+${silverGained}🪙</span>`;
+            if (goldGained > 0) {
+                rewardMessage += ` и золото: <span style="color:#ffcc00;">+${goldGained}💰</span>!`;
+            }
+            notifyBox.innerHTML = `✅ ${rewardMessage}`;
+
+            // ОТПРАВЛЯЕМ ЗАПИСЬ В ГЛОБАЛЬНЫЙ ЖУРНАЛ СОБЫТИЙ СТРАНИЦЫ events.html
+            if (typeof window.addGameEvent === 'function') {
+                window.addGameEvent(
+                    'boss', 
+                    '🦅 Военный поход', 
+                    `Твои воины завершили поход на Англию (${duration} мин). Награда: <span class="highlight">+${silverGained} сер.</span> ${goldGained > 0 ? 'и королевский <span class="highlight" style="color:#ffcc00;">+1 Золотой!</span>' : ''}`
+                );
+            }
+
+            // Перерисовываем интерфейс в режим готовности
+            renderSetupInterface();
+            
+            // Форсируем обновление верхней плашки Вашего ядра, если функция доступна
+            if(typeof updateGlobalGameCore === 'function') updateGlobalGameCore();
+        }
+
+        // Запуск проверки при загрузке страницы
+        document.addEventListener("DOMContentLoaded", initCampaignModule);
+    </script>
 </body>
 </html>
