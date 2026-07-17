@@ -29,7 +29,7 @@ function renderGlobalHeader() {
     const headerContainer = document.createElement('div');
     headerContainer.id = 'global-game-header-container';
     
-    // Переписанная разметка: теперь ⏳ и 🕒 ведут по клику прямо на village.html
+    // Переписанная разметка: теперь ⏳ и 🕒 ведут строго на ПОСЕЛОК (poselok.html)
     headerContainer.innerHTML = `
         <div class="game-banner">🛡️ Варвары ⚔️</div>
         <div class="game-header">
@@ -45,8 +45,8 @@ function renderGlobalHeader() {
                 <div class="header-item" id="header-battles-zone" onclick="window.location.href='duel.html'">
                     ⚔️ <span id="header-battles">3/3</span>
                 </div>
-                <div class="header-item" onclick="window.location.href='village.html'" style="cursor: pointer; text-decoration: underline;">⏳ <span id="header-timer">00:00</span></div>
-                <div class="header-item" onclick="window.location.href='village.html'" style="cursor: pointer; text-decoration: underline;">🕒 <span id="header-clock">00:00:00</span></div>
+                <div class="header-item" onclick="window.location.href='poselok.html'" style="cursor: pointer; text-decoration: underline;">⏳ <span id="header-timer">00:00</span></div>
+                <div class="header-item" onclick="window.location.href='poselok.html'" style="cursor: pointer; text-decoration: underline;">🕒 <span id="header-clock">00:00:00</span></div>
             </div>
         </div>
     `;
@@ -133,7 +133,7 @@ function updateGlobalGameCore() {
 
     if (elClock) {
         let d = new Date();
-        elClock.innerText = d.toTimeString().split(' ');
+        elClock.innerText = d.toTimeString().split(' ')[0];
     }
 
     const fightButtons = document.querySelectorAll('.fight-btn');
@@ -167,114 +167,54 @@ document.addEventListener("DOMContentLoaded", () => {
         const styleElement = document.createElement("style");
         styleElement.id = "wap-global-footer-styles";
         styleElement.innerHTML = `
-            .norman-footer-divider {
-                background-color: #261a0d;
-                height: 4px;
-                border-top: 1px solid #4d351c;
-                border-bottom: 1px solid #100b05;
-                margin-top: 10px;
-            }
-            .norman-nav-bar {
-                background: linear-gradient(to bottom, #112233, #0a1520);
-                border-top: 1px solid #1c354d;
-                border-bottom: 1px solid #050b10;
-                padding: 9px 12px;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                color: #c4d6e2;
-                text-decoration: none;
-                font-family: Arial, sans-serif;
-                font-size: 13px;
-                font-weight: bold;
-            }
-            .norman-nav-bar:active {
-                background: #162d44;
-            }
-            .norman-arrow-cyan {
-                color: #00ffcc;
-                font-weight: bold;
-                font-size: 14px;
-            }
-            .norman-footer-text-block {
-                text-align: center; 
-                padding: 12px; 
-                font-size: 11px; 
-                color: #6a8296; 
-                font-family: Arial, sans-serif;
-                background-color: #060b11;
-            }
-            .norman-footer-text-block span, .norman-footer-text-block a {
-                color: #6a8296;
-                text-decoration: none;
-                margin: 0 5px;
-                cursor: pointer;
-            }
+            .wap-footer-nav { background: #243342; border: 1px solid #2c3e50; padding: 5px; margin-top: 10px; font-size: 11px; font-family: monospace; text-align: center; box-shadow: inset 0 1px 3px rgba(0,0,0,0.4); }
+            .wap-footer-nav a { color: #00d2ff; text-decoration: none; padding: 2px 5px; display: inline-block; }
+            .wap-footer-nav a:hover { color: #ffffff; background-color: #2c3e50; }
+            .wap-footer-divider { color: #34495e; padding: 0 2px; }
+            .wap-copyright { font-size: 9px; color: #7f8c8d; text-align: center; margin-top: 5px; padding-bottom: 10px; }
         `;
         document.head.appendChild(styleElement);
     }
 
-    // 2. Автоматически создаем контейнер в самом низу тега body, если его забыли добавить
-    let dynamicFooterBox = document.getElementById("global-footer-nav-container");
-    if (!dynamicFooterBox) {
-        dynamicFooterBox = document.createElement("div");
-        dynamicFooterBox.id = "global-footer-nav-container";
-        // Принудительно крепим в конец документа, чтобы меню всегда шло после контента
-        document.body.appendChild(dynamicFooterBox);
+    // 2. Автоматически рендерим меню навигации во все блоки <div id="core-footer"></div>
+    const footerContainer = document.getElementById("core-footer");
+    if (footerContainer) {
+        footerContainer.innerHTML = `
+            <div class="wap-footer-nav">
+                <a href="index.html">Главная</a><span class="wap-footer-divider">|</span>
+                <a href="hero.html">Герой</a><span class="wap-footer-divider">|</span>
+                <a href="poselok.html" style="font-weight: bold; color: #f1c40f;">Поселок</a><span class="wap-footer-divider">|</span>
+                <a href="campaign.html">Походы</a><span class="wap-footer-divider">|</span>
+                <a href="events.html" style="color: #2ecc71;">События</a><span class="wap-footer-divider">|</span>
+                <a href="clan.html">Клан</a>
+            </div>
+            <div class="wap-copyright">Barbarians WAP-RPG © 2026</div>
+        `;
     }
-
-    // 3. Собираем разметку меню строго по предоставленному образцу
-    dynamicFooterBox.innerHTML = `
-        <div class="norman-footer-divider"></div>
-        <div id="norman-global-navigation-links">
-            <a href="index.html" class="norman-nav-bar">
-                <span>🏠 Главная</span><span class="norman-arrow-cyan">»</span>
-            </a>
-            <a href="hero.html" class="norman-nav-bar">
-                <span>🤠 Герой</span><span class="norman-arrow-cyan">»</span>
-            </a>
-            <a href="mail.html" class="norman-nav-bar">
-                <span>✉️ Почта</span><span class="norman-arrow-cyan">»</span>
-            </a>
-            <a href="chat.html" class="norman-nav-bar">
-                <span>💬 Чат</span><span class="norman-arrow-cyan">»</span>
-            </a>
-            <a href="forum.html" class="norman-nav-bar">
-                <span>👥 Форум</span><span class="norman-arrow-cyan">»</span>
-            </a>
-            <a href="shop.html" class="norman-nav-bar">
-                <span>💰 Золото</span><span class="norman-arrow-cyan">»</span>
-            </a>
-        </div>
-        <div class="norman-footer-text-block">
-            <span>Об игре</span>
-            <span>Поддержка</span>
-            <span>Настройки</span>
-            <a href="index.html">Выйти</a>
-        </div>
-    `;
 });
-// Добавь этот код в конец твоего файла global_core.js
+
+/* ==========================================================================
+   ГЛОБАЛЬНАЯ СИСТЕМА ЛОГИРОВАНИЯ СОБЫТИЙ (addGameEvent)
+   ========================================================================== */
 window.addGameEvent = function(type, category, text, hasDetails = false) {
     let events = JSON.parse(localStorage.getItem('game_events')) || [];
     
-    // Форматируем время (например: "14 июля 18:16")
+    // Форматируем славянскую / скандинавскую дату логов
     const now = new Date();
     const months = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
     const timeStr = `${now.getDate()} ${months[now.getMonth()]} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
 
-    // Создаем объект события
     const newEvent = {
-        type: type,          // 'arena', 'mine', 'gift', 'boss'
-        category: category,  // "Сражение на арене", "Шахта", "Подарок"
-        text: text,          // Текст сообщения с HTML тегами подсветки
-        time: timeStr,       // Время
-        hasDetails: hasDetails // Нужна ли кнопка "Детали боя"
+        type: type,            // Типы: 'arena', 'mine', 'gift', 'boss'
+        category: category,    // Название вкладки-источника
+        text: text,            // HTML-текст лога с подсветкой
+        time: timeStr,         // Время
+        hasDetails: hasDetails // Показ кнопки подробностей
     };
 
     events.push(newEvent);
     
-    // Храним только последние 30 событий, чтобы не забивать память
+    // Жесткий WAP-лимит на 30 записей, чтобы не засорять память LocalStorage
     if (events.length > 30) {
         events.shift(); 
     }
