@@ -201,44 +201,54 @@
 
 </div> <!-- /main-content -->
 <script>
-    // Безопасная функция чтения данных, перебирающая все возможные названия ключей в вашей игре
-    function getGameData(keysArray, defaultValue) {
-        for (let i = 0; i < keysArray.length; i++) {
-            let val = localStorage.getItem(keysArray[i]);
-            if (val !== null && val !== undefined && val.trim() !== "") {
-                return val;
+    // Умная функция-ищейка: ищет совпадения по фрагментам ключей в localStorage
+    function scanStorageFor(fragments, defaultValue) {
+        // Сначала ищем точное совпадение
+        for (let i = 0; i < localStorage.length; i++) {
+            let key = localStorage.key(i);
+            for (let f of fragments) {
+                if (key === f) return localStorage.getItem(key);
+            }
+        }
+        // Если точного нет, ищем любое частичное упоминание слова в ключе
+        for (let i = 0; i < localStorage.length; i++) {
+            let key = localStorage.key(i);
+            for (let f of fragments) {
+                if (key.toLowerCase().includes(f.toLowerCase())) {
+                    return localStorage.getItem(key);
+                }
             }
         }
         return defaultValue;
     }
 
     document.addEventListener("DOMContentLoaded", function() {
-        // Отрисовка шапки из глобального ядра
+        // Отрисовка верхней панели ядра
         if (typeof window.initCore === "function") {
             window.initCore();
         }
 
-        // 1. УРОВЕНЬ (Проверяем barb_lvl или barb_level)
-        const lvl = getGameData(['barb_lvl', 'barb_level'], '1');
+        // 1. УРОВЕНЬ
+        const lvl = scanStorageFor(['barb_lvl', 'lvl', 'level'], '1');
         document.getElementById('prof-lvl').innerText = lvl;
         document.getElementById('stat-lvl-copy').innerText = lvl;
 
-        // 2. СЛАВА (Проверяем barb_glory, player_glory или слава)
-        const glory = getGameData(['barb_glory', 'player_glory', 'barb_silver_glory'], '0');
+        // 2. СЛАВА
+        const glory = scanStorageFor(['glory', 'slava', 'слава'], '0');
         document.getElementById('prof-glory').innerText = glory;
         document.getElementById('stat-glory-copy').innerText = glory;
 
-        // 3. ОПЫТ (Проверяем barb_exp, player_exp, barb_experience)
-        const exp = getGameData(['barb_exp', 'player_exp', 'barb_experience'], '0');
+        // 3. ОПЫТ
+        const exp = scanStorageFor(['exp', 'experience', 'опыт'], '0');
         document.getElementById('stat-exp').innerText = exp + " / " + (parseInt(lvl) * 100);
 
-        // 4. БОЕВЫЕ ХАРАКТЕРИСТИКИ (Проверяем ядра и кастомные ключи)
-        document.getElementById('stat-str').innerText = getGameData(['barb_str', 'player_str', 'barbarians_str'], '5');
-        document.getElementById('stat-def').innerText = getGameData(['barb_def', 'player_def', 'barbarians_def'], '5');
-        document.getElementById('stat-dex').innerText = getGameData(['barb_dex', 'player_dex', 'barbarians_dex'], '5');
-        document.getElementById('stat-mst').innerText = getGameData(['barb_mst', 'player_mst', 'barbarians_mst'], '5');
+        // 4. ХАРАКТЕРИСТИКИ
+        document.getElementById('stat-str').innerText = scanStorageFor(['str', 'сила', 'power'], '5');
+        document.getElementById('stat-def').innerText = scanStorageFor(['def', 'defence', 'защита'], '5');
+        document.getElementById('stat-dex').innerText = scanStorageFor(['dex', 'ловкость', 'agility'], '5');
+        document.getElementById('stat-mst').innerText = scanStorageFor(['mst', 'mastery', 'мастерство'], '5');
         
-        const vit = parseInt(getGameData(['barb_vit', 'player_vit', 'barbarians_vit'], '5'));
+        const vit = parseInt(scanStorageFor(['vit', 'vitality', 'живучесть'], '5'));
         document.getElementById('stat-vit').innerText = vit;
 
         // Автоматический перерасчет здоровья по Живучести
@@ -247,16 +257,13 @@
         document.getElementById('stat-hp-max').innerText = maxHp;
         document.getElementById('stat-hp-reg').innerText = Math.floor(maxHp * 0.1);
 
-        // 5. ПОБЕДЫ И ПОРАЖЕНИЯ (Перебираем абсолютно все варианты названий ключей Арены)
-        document.getElementById('stat-wins').innerText = getGameData(['stat_wins', 'barb_wins', 'arena_wins', 'player_wins', 'barb_battle_wins'], '0');
-        document.getElementById('stat-losses').innerText = getGameData(['stat_losses', 'barb_losses', 'arena_losses', 'player_losses', 'barb_battle_losses'], '0');
-        document.getElementById('stat-goblins').innerText = getGameData(['stat_goblins', 'goblin_kills', 'goblins_killed'], '0');
+        // 5. ПОБЕДЫ И ПОРАЖЕНИЯ (Полный скан памяти на боевые термины)
+        document.getElementById('stat-wins').innerText = scanStorageFor(['stat_wins', 'wins', 'pobedi', 'побед'], '0');
+        document.getElementById('stat-losses').innerText = scanStorageFor(['stat_losses', 'losses', 'proigrish', 'поражен'], '0');
+        document.getElementById('stat-goblins').innerText = scanStorageFor(['goblin', 'гоблин'], '0');
 
-        // Имя персонажа
-        const username = getGameData(['barbarians_username', 'player_name', 'username'], 'Воин');
-
-        // Название клана из вашей системы
-        const clan = getGameData(['barb_clan_id', 'player_clan', 'clan_name'], '');
+        // Проверка клана
+        const clan = scanStorageFor(['clan', 'клан'], '');
         if(clan && clan.trim() !== "") {
             document.getElementById('prof-clan').className = "text-green";
             document.getElementById('prof-clan').innerText = clan;
