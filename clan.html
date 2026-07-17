@@ -2,51 +2,67 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Клановые Замки</title>
     <style>
-        body { background-color: #060b11; margin: 0; padding: 0; color: #fff; font-family: Arial, sans-serif; }
+        body { background-color: #060b11; margin: 0; padding: 0; color: #fff; font-family: Arial, sans-serif; user-select: none; }
+        
+        /* Стили сине-голубых спойлеров со скриншота */
         .clan-menu-item {
-            background: linear-gradient(to bottom, #112233, #0a1520);
-            border-top: 1px solid #1c354d; border-bottom: 1px solid #050b10;
-            padding: 8px 10px; display: flex; justify-content: space-between;
-            align-items: center; color: #c4d6e2; text-decoration: none;
-            font-size: 13px; cursor: pointer; font-family: monospace;
+            background: linear-gradient(to bottom, #091b29, #050e16);
+            border-bottom: 1px solid #0f2231;
+            padding: 13px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #adc8d9;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
         }
-        .clan-menu-item:active { background: #162d44; }
-        .clan-btn-arrow { color: #00ffcc; font-weight: bold; }
-        .clan-section-title { background-color: #0d1a26; padding: 5px 10px; font-weight: bold; color: #8da9c4; border-bottom: 1px solid #1c354d; font-size: 12px; text-transform: uppercase; font-family: monospace; }
-        .clan-input { background-color: #112233; border: 1px solid #1c354d; color: #fff; padding: 6px; font-size: 13px; font-family: monospace; border-radius: 4px; width: 80%; max-width: 250px; margin-bottom: 8px; }
-        .clan-btn { background: linear-gradient(to bottom, #a03000, #501000); border: 1px solid #ff6600; color: #fff; padding: 6px 20px; font-size: 13px; font-weight: bold; font-family: monospace; cursor: pointer; border-radius: 4px; margin-top: 5px; }
-        .clan-btn-blue { background: linear-gradient(to bottom, #164366, #0d283d); border: 1px solid #00d2ff; color: #fff; padding: 4px 12px; font-size: 12px; font-family: monospace; cursor: pointer; border-radius: 4px; }
-        .clan-tab-content { padding: 10px; font-size: 13px; font-family: monospace; line-height: 1.4; color: #adc8d9; }
-        .clan-notify { text-align: center; color: #f1c40f; font-size: 13px; font-weight: bold; margin-bottom: 8px; font-family: monospace; }
-        .norman-footer-divider { background-color: #261a0d; height: 4px; border-top: 1px solid #4d351c; border-bottom: 1px solid #100b05; margin-top: 15px; }
-        .norman-nav-bar { background: linear-gradient(to bottom, #112233, #0a1520); border-top: 1px solid #1c354d; border-bottom: 1px solid #050b10; padding: 9px 12px; display: flex; justify-content: space-between; align-items: center; color: #c4d6e2; text-decoration: none; font-family: Arial, sans-serif; font-size: 13px; font-weight: bold; }
-        .norman-arrow-cyan { color: #00ffcc; font-weight: bold; font-size: 14px; }
-        .norman-footer-text-block { text-align: center; padding: 12px; font-size: 11px; color: #6a8296; font-family: Arial, sans-serif; background-color: #060b11; }
-        .norman-footer-text-block span, .norman-footer-text-block a { color: #6a8296; text-decoration: none; margin: 0 5px; cursor: pointer; }
+        .clan-menu-item:active { background: #0d273d; }
+        .clan-btn-arrow { color: #1c8cd1; font-weight: bold; font-size: 15px; letter-spacing: -2px; }
+        .clan-section-title { background: #04090d; padding: 6px 12px; font-weight: bold; color: #4a6273; border-bottom: 1px solid #0f2231; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+        
+        /* Формы и кнопки */
+        .clan-input { background-color: #050e16; border: 1px solid #1c8cd1; color: #fff; padding: 8px; font-size: 13px; font-family: Arial, sans-serif; border-radius: 4px; width: 80%; max-width: 250px; margin-bottom: 8px; box-shadow: inset 0 0 4px rgba(0,0,0,0.6); }
+        .norman-select { background-color: #050e16; border: 1px solid #1c8cd1; color: #ffffff; padding: 6px; font-size: 13px; border-radius: 4px; margin-bottom: 10px; }
+        .clan-btn { background: linear-gradient(to bottom, #a03000, #501000); border: 1px solid #ff6600; color: #fff; padding: 8px 25px; font-size: 13px; font-weight: bold; cursor: pointer; border-radius: 4px; box-shadow: inset 0 0 5px rgba(255,100,0,0.4); }
+        .clan-btn-blue { background: linear-gradient(to bottom, #112d3e, #091a26); border: 1px solid #1c8cd1; color: #fff; padding: 5px 12px; font-size: 12px; font-weight: bold; cursor: pointer; border-radius: 4px; }
+        
+        .clan-tab-content { padding: 12px; font-size: 13px; line-height: 1.5; color: #b0cbdc; background-color: #040a0f; border-bottom: 1px solid #0f2231; }
+        .clan-notify { text-align: center; color: #ffcc00; font-size: 13px; font-weight: bold; padding: 8px 0; }
+        
+        /* Стили нижнего меню навигации */
+        .norman-footer-divider { background-color: #261a0d; height: 4px; border-top: 1px solid #5c3716; border-bottom: 1px solid #1f1207; margin-top: 15px; }
+        .norman-nav-bar { background: linear-gradient(to bottom, #091b29, #050e16); border-bottom: 1px solid #0f2231; padding: 13px 15px; display: flex; justify-content: space-between; align-items: center; color: #adc8d9; text-decoration: none; font-size: 14px; font-weight: bold; }
+        .norman-nav-bar:active { background: #0d273d; }
+        .norman-arrow-cyan { color: #1c8cd1; font-weight: bold; font-size: 15px; letter-spacing: -2px; }
+        .norman-footer-text-block { text-align: center; padding: 15px 12px; font-size: 11px; color: #4a6273; background-color: #060b11; text-transform: uppercase; }
+        .norman-footer-text-block span, .norman-footer-text-block a { color: #4a6273; text-decoration: none; margin: 0 5px; cursor: pointer; }
     </style>
 </head>
 <body>
     <div id="header-container"></div>
     <div id="core-header"></div>
+
     <div class="main-content" style="max-width: 480px; margin: 0 auto; background-color: #080f16; min-height: 40vh;">
-        <div style="text-align: center; padding: 15px 5px; background: radial-gradient(circle, #0e1e2d 0%, #060b11 100%); border-bottom: 1px solid #142a3a;">
-            <div style="font-size: 40px; margin-bottom: 5px;">🛡️</div>
-            <div style="color: #fff; font-family: sans-serif; font-size: 14px; font-weight: bold;" id="clan-welcome-tag">ЗАМКИ ВОЕННЫХ СОЮЗОВ</div>
+        <div style="text-align: center; padding: 15px 5px; background: radial-gradient(circle, #091b29 0%, #060b11 100%); border-bottom: 1px solid #0f2231;">
+            <div style="font-size: 44px; margin-bottom: 5px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));">🛡️</div>
+            <div style="color: #00ffff; font-size: 15px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;" id="clan-welcome-tag">Клановые Замки</div>
+            <div style="color: #7ba2bd; font-size: 12px; margin-top: 4px;">Добро пожаловать</div>
         </div>
         <div id="clan-msg-box" class="clan-notify"></div>
         <div id="clan-main-box"></div>
     </div>
-    <div id="core-footer"></div>
     <div class="norman-footer-divider"></div>
     <div id="norman-global-navigation-links">
-        <a href="index.html" class="norman-nav-bar"><span>🏠 Главная</span><span class="norman-arrow-cyan">»</span></a>
-        <a href="hero.html" class="norman-nav-bar"><span>🤠 Герой</span><span class="norman-arrow-cyan">»</span></a>
-        <a href="poselok.html" class="norman-nav-bar"><span>🏡 Поселок</span><span class="norman-arrow-cyan">»</span></a>
-        <a href="campaign.html" class="norman-nav-bar"><span>🦅 Походы</span><span class="norman-arrow-cyan">»</span></a>
-        <a href="events.html" class="norman-nav-bar"><span>📜 События</span><span class="norman-arrow-cyan">»</span></a>
+        <a href="index.html" class="norman-nav-bar"><span>🏠 Главная</span><span class="norman-arrow-cyan">»»</span></a>
+        <a href="hero.html" class="norman-nav-bar"><span>🤠 Герой</span><span class="norman-arrow-cyan">»»</span></a>
+        <a href="poselok.html" class="norman-nav-bar"><span>🏡 Поселок</span><span class="norman-arrow-cyan">»»</span></a>
+        <a href="campaign.html" class="norman-nav-bar"><span>🦅 Походы</span><span class="norman-arrow-cyan">»»</span></a>
+        <a href="events.html" class="norman-nav-bar"><span>📜 События</span><span class="norman-arrow-cyan">»»</span></a>
     </div>
     <div class="norman-footer-text-block">
         <span>Об игре</span> | <span>Поддержка</span> | <span>Настройки</span> | <a href="index.html">Выйти</a>
@@ -54,7 +70,7 @@
 
     <script src="global_core.js"></script>
     <script>
-        const CREATION_COST = 1500;
+        const CREATION_COST = 10000; 
         const MAX_WARRIORS = 15;
 
         function initClanModule() {
@@ -67,63 +83,65 @@
             const box = document.getElementById('clan-main-box');
             document.getElementById('clan-welcome-tag').innerText = "Создание Военного Союза";
             box.innerHTML = `
-                <div class="clan-tab-content" style="text-align: center;">
-                    <p>Создайте свой союз воинов и ведите дружину к победам!</p>
-                    <p style="color: #e5e5e5;">Стоимость основания: <span style="color: #00d2ff; font-weight:bold;">10 000 серебра</span></p>
-                    <input type="text" id="clan-name-input" class="clan-input" placeholder="Введите название клана..." maxlength="20"><br>
-                    <button class="clan-btn" onclick="createClanAction()">ОСНОВАТЬ КЛАН</button>
+                <div class="clan-tab-content" style="text-align: center; background: none; border: none;">
+                    <p style="color: #adc8d9;">Оснуйте свой собственный клан, собирайте дань и качайте тотем силы!</p>
+                    <p style="color: #ffffff; font-size: 14px;">Цена основания: <span style="color: #ffcc00; font-weight:bold;">10 000 серебра</span></p>
+                    <input type="text" id="clan-name-input" class="clan-input" placeholder="Введите название ОПГ..." maxlength="20"><br>
+                    <button class="clan-btn" onclick="createClanAction()">ОСНОВАТЬ СОЮЗ</button>
                 </div>`;
+        }
+
+        function renderClanDashboard(clanName) {
+            document.getElementById('clan-welcome-tag').innerText = `Клан ${clanName}`;
+            const box = document.getElementById('clan-main-box');
+            box.innerHTML = `
+                <div class="clan-section-title">⚔️ Цитадель Клана</div>
+                <div class="clan-menu-item" onclick="toggleClanTab('info')"><span>📊 Информация</span><span class="clan-btn-arrow">»»</span></div>
+                <div id="tab-info" class="clan-tab-content" style="display:none;"></div>
+                <div class="clan-menu-item" onclick="toggleClanTab('kazna')"><span>🔷 Пожертвовать</span><span class="clan-btn-arrow">»»</span></div>
+                <div id="tab-kazna" class="clan-tab-content" style="display:none;"></div>
+                <div class="clan-menu-item" onclick="toggleClanTab('totem')"><span>⚜️ Улучшения</span><span class="clan-btn-arrow">»»</span></div>
+                <div id="tab-totem" class="clan-tab-content" style="display:none;"></div>
+                <div class="clan-menu-item" onclick="toggleClanTab('war')"><span>💀 Война</span><span class="clan-btn-arrow">»»</span></div>
+                <div id="tab-war" class="clan-tab-content" style="display:none;"></div>
+                <div class="clan-menu-item" onclick="toggleClanTab('warriors')"><span>🛡️ Воины</span><span class="clan-btn-arrow">»»</span></div>
+                <div id="tab-warriors" class="clan-tab-content" style="display:none;"></div>
+                <div class="clan-menu-item" onclick="toggleClanTab('chat')"><span>💬 Чат</span><span class="clan-btn-arrow">»»</span></div>
+                <div id="tab-chat" class="clan-tab-content" style="display:none;"></div>
+                <div class="clan-menu-item" onclick="toggleClanTab('appeals')"><span>🪶 Обращения</span><span class="clan-btn-arrow">»»</span></div>
+                <div id="tab-appeals" class="clan-tab-content" style="display:none;"></div>
+                <div class="clan-menu-item" onclick="toggleClanTab('clanevents')"><span>⭐ События клана</span><span class="clan-btn-arrow">»»</span></div>
+                <div id="tab-clanevents" class="clan-tab-content" style="display:none;"></div>
+                <div class="clan-menu-item" onclick="toggleClanTab('leaders')"><span>👑 Воеводы</span><span class="clan-btn-arrow">»»</span></div>
+                <div id="tab-leaders" class="clan-tab-content" style="display:none;"></div>
+                <div class="clan-menu-item" onclick="toggleClanTab('mailout')"><span>🦅 Рассылка</span><span class="clan-btn-arrow">»»</span></div>
+                <div id="tab-mailout" class="clan-tab-content" style="display:none;"></div>
+                <div class="clan-menu-item" onclick="toggleClanTab('requests')"><span>🤠 Заявки (0)</span><span class="clan-btn-arrow">»»</span></div>
+                <div id="tab-requests" class="clan-tab-content" style="display:none;"></div>
+                <div class="clan-menu-item" onclick="toggleClanTab('edit')"><span>⚙️ Редактирование</span><span class="clan-btn-arrow">»»</span></div>
+                <div id="tab-edit" class="clan-tab-content" style="display:none;"></div>
+                <div style="text-align:center; padding: 20px 10px;"><button class="clan-btn" style="background:#c0392b; border-color:#e74c3c; width:90%;" onclick="leaveClanAction()">РАСПУСТИТЬ КЛАН</button></div>`;
         }
 
         window.createClanAction = function() {
             const nameInput = document.getElementById('clan-name-input');
             const clanName = nameInput.value.trim();
             const msgBox = document.getElementById('clan-msg-box');
-            if (clanName.length < 3) { msgBox.innerText = "❌ Имя должно быть от 3 до 20 символов!"; return; }
-
+            if (clanName.length < 3) { msgBox.innerText = "❌ От 3 до 20 символов!"; return; }
             let silver = parseInt(localStorage.getItem('barb_silver')) || 0;
-            if (silver < CREATION_COST) {
-                msgBox.innerHTML = `❌ <span style="color:#ff6b6b;">Недостаточно серебра! Баланс: ${silver}🪙</span>`;
-                return;
-            }
+            if (silver < CREATION_COST) { msgBox.innerHTML = `❌ Мало серебра: <span style="color:#ff4d4d;">${silver}🪙</span>`; return; }
             silver -= CREATION_COST;
             localStorage.setItem('barb_silver', silver.toString());
             localStorage.setItem('barb_clan_name', clanName);
             localStorage.setItem('barb_clan_kazna', '0');
+            localStorage.setItem('barb_clan_crystals_kazna', '0');
             localStorage.setItem('barb_clan_totem_lvl', '0');
-            localStorage.setItem('barb_clan_desc', 'Союз северных варваров.');
-            
-            const initialWarriors = [{ name: "Admin (Вождь)", type: "player" }, { name: "Эрик_Топор", type: "bot" }];
-            localStorage.setItem('barb_clan_members', JSON.stringify(initialWarriors));
-
-            if (typeof window.addGameEvent === 'function') {
-                window.addGameEvent('boss', '🛡️ Клан Воинов', `Ты основал союз <span class="highlight" style="color:#00d2ff;">${clanName}</span>! Потрачено 10к сер.`);
-            }
-            if(typeof updateGlobalGameCore === 'function') updateGlobalGameCore();
+            localStorage.setItem('barb_clan_desc', 'Суровый союз северных варваров.');
+            localStorage.setItem('barb_clan_members', JSON.stringify([{ name: "Эрик_Топор", type: "bot" }]));
+            if (typeof window.addGameEvent === 'function') window.addGameEvent('boss', '🛡️ Военный Союз', `Ты основал клан ${clanName}!`);
+            if (typeof updateGlobalGameCore === 'function') updateGlobalGameCore();
             initClanModule();
-        };
-
-        function renderClanDashboard(clanName) {
-            document.getElementById('clan-welcome-tag').innerText = `Цитадель Клана [${clanName}]`;
-            const box = document.getElementById('clan-main-box');
-            box.innerHTML = `
-                <div class="clan-section-title">⚔️ Управление Союзом</div>
-                <div class="clan-menu-item" onclick="toggleClanTab('info')"><span>ℹ️ Информация союза</span><span class="clan-btn-arrow">»</span></div>
-                <div id="tab-info" class="clan-tab-content" style="display:none;"></div>
-                <div class="clan-menu-item" onclick="toggleClanTab('kazna')"><span>💰 Пожертвовать в казну</span><span class="clan-btn-arrow">»</span></div>
-                <div id="tab-kazna" class="clan-tab-content" style="display:none;"></div>
-                <div class="clan-menu-item" onclick="toggleClanTab('totem')"><span>🗿 Улучшения (Тотем)</span><span class="clan-btn-arrow">»</span></div>
-                <div id="tab-totem" class="clan-tab-content" style="display:none;"></div>
-                <div class="clan-menu-item" onclick="toggleClanTab('warriors')"><span>👥 Воины дружины</span><span class="clan-btn-arrow">»</span></div>
-                <div id="tab-warriors" class="clan-tab-content" style="display:none;"></div>
-                <div class="clan-menu-item" onclick="toggleClanTab('chat')"><span>💬 Клановый чат</span><span class="clan-btn-arrow">»</span></div>
-                <div id="tab-chat" class="clan-tab-content" style="display:none;"></div>
-                <div class="clan-section-title">🛡️ Военные Вкладки</div>
-                <div class="clan-menu-item" onclick="alert('Клановая война в разработке!')"><span>⚔️ Клановая Война</span><span class="clan-btn-arrow">»</span></div>
-                <div class="clan-menu-item" onclick="toggleClanTab('edit')"><span>✏️ Редактировать описание</span><span class="clan-btn-arrow">»</span></div>
-                <div id="tab-edit" class="clan-tab-content" style="display:none;"></div>
-                <div style="text-align:center; padding: 15px;"><button class="clan-btn" style="background:#c0392b; border-color:#e74c3c;" onclick="leaveClanAction()">РАСПУСТИТЬ КЛАН</button></div>`;
-        }
+        }; // Конец createClanAction
         window.toggleClanTab = function(tabId) {
             const el = document.getElementById(`tab-${tabId}`);
             const isHidden = el.style.display === 'none';
@@ -133,63 +151,111 @@
 
         function loadTabLogic(tabId) {
             const el = document.getElementById(`tab-${tabId}`);
+            const desc = localStorage.getItem('barb_clan_desc') || 'Суровый союз северных варваров.';
+            const kaznaSilver = localStorage.getItem('barb_clan_kazna') || '0';
+            const kaznaCrystals = localStorage.getItem('barb_clan_crystals_kazna') || '0';
+            const totemLvl = parseInt(localStorage.getItem('barb_clan_totem_lvl') || '0');
+            const members = JSON.parse(localStorage.getItem('barb_clan_members')) || [];
+
             if (tabId === 'info') {
-                const desc = localStorage.getItem('barb_clan_desc') || '';
-                const kazna = localStorage.getItem('barb_clan_kazna') || '0';
-                const totem = localStorage.getItem('barb_clan_totem_lvl') || '0';
-                const members = JSON.parse(localStorage.getItem('barb_clan_members')) || [];
-                el.innerHTML = `<strong>Описание:</strong> ${desc}<br><strong>Казна союза:</strong> ${kazna} сер.<br><strong>Тотем:</strong> Уровень +${totem}<br><strong>Состав:</strong> ${members.length}/${MAX_WARRIORS}`;
-            }
-            if (tabId === 'kazna') {
-                const kazna = localStorage.getItem('barb_clan_kazna') || '0';
-                el.innerHTML = `В казне: ${kazna} сер.<br><input type="number" id="gold-donate-input" class="clan-input" style="width:100px;" value="1000"> сер.<br><button class="clan-btn-blue" onclick="donateToKazna()">Внести</button>`;
-            }
-            if (tabId === 'totem') {
-                const totem = parseInt(localStorage.getItem('barb_clan_totem_lvl') || '0');
-                const cost = (totem + 1) * 5000;
-                el.innerHTML = `Тотем: Уровень +${totem} (+${totem*2} к статам)<br>Цена апа до +${totem+1}: ${cost} сер. (из казны)<br><button class="clan-btn-blue" onclick="upgradeTotemAction(${cost})">Апнуть тотем</button> `;
+                const creatorName = localStorage.getItem('barbarians_username') || 'Admin';
+                const soyuz1 = localStorage.getItem('barb_soyuz_1') || 'Нет';
+                const soyuz2 = localStorage.getItem('barb_soyuz_2') || 'Нет';
+                const soyuz3 = localStorage.getItem('barb_soyuz_3') || 'Нет';
+                const totalDef = 1317663 + (totemLvl * 15000) + (members.length * 450);
+                el.innerHTML = `
+                    <div style="line-height: 1.6; color: #b0cbdc;">
+                        Основатель: <span style="color: #ffcc00; font-weight: bold;">${creatorName}</span><br>
+                        Воинов: <span style="color: #fff;">${members.length + 1}</span><br>
+                        Воеводы: <span style="color: #fff;">Нет</span><br>
+                        Свободных мест: <span style="color: #2ecc71;">${MAX_WARRIORS - (members.length + 1)}</span><br>
+                        Казна: <span style="color: #e5e5e5;">🪙 ${kaznaSilver} сер.</span> и <span style="color: #00ccff;">💎 ${kaznaCrystals} крист.</span><br>
+                        Побед: <span style="color: #2ecc71;">0</span> | Поражений: <span style="color: #ff4d4d;">0</span> | Война: <span style="color: #7f8c8d;">Нет</span><br>
+                        Защита: <span style="color: #00ffcc; font-weight: bold;">${totalDef}</span>
+                    </div>
+                    <div style="background-color: #04090d; padding: 4px; font-weight: bold; color: #4a6273; font-size: 11px; margin: 8px -12px -12px -12px; padding-left:12px; border-top: 1px solid #0f2231; text-transform: uppercase;">🛡️ Дипломатия: Союз Кланов</div>
+                    <div style="padding-top: 8px; font-size: 12px; line-height: 1.5;">
+                        🤝 Союзник 1: <span style="color:#00ffff;">${soyuz1}</span> | Союзник 2: <span style="color:#00ffff;">${soyuz2}</span> | Союзник 3: <span style="color:#00ffff;">${soyuz3}</span><br>
+                        <div style="margin-top:6px; border-top:1px solid #0f2231; padding-top:6px;">
+                            <select id="soyuz-slot-sel" class="norman-select" style="padding:2px; font-size:11px;"><option value="1">Слот 1</option><option value="2">Слот 2</option><option value="3">Слот 3</option></select>
+                            <select id="soyuz-clan-sel" class="norman-select" style="padding:2px; font-size:11px;"><option value="Норманны_ОПГ">Норманны_ОПГ</option><option value="Северные_Волки">Северные_Волки</option></select>
+                            <button class="clan-btn-blue" style="padding:2px 6px; font-size:11px;" onclick="saveSoyuzAction()">Оформить</button>
+                        </div>
+                    </div>`;
             }
             if (tabId === 'warriors') {
-                const members = JSON.parse(localStorage.getItem('barb_clan_members')) || [];
-                let h = `<strong>Дружина (${members.length}/${MAX_WARRIORS}):</strong><br>`;
-                members.forEach((m, idx) => { h += `• ${m.name} ${m.type==='bot' ? `<a href="#" style="color:#c0392b;" onclick="kickMember(${idx})">[Кик]</a>`:''}<br>`; });
-                if (members.length < MAX_WARRIORS) h += `<br><button class="clan-btn-blue" onclick="hireBotAction()">Нанять воина-бота</button>`;
+                const cName = localStorage.getItem('barbarians_username') || 'Admin';
+                const cLvl = localStorage.getItem('barb_lvl') || '15';
+                const pSilv = localStorage.getItem('barb_my_silver_donated') || '0';
+                const pCrys = localStorage.getItem('barb_my_crystals_donated') || '0';
+                const pSlava = localStorage.getItem('barb_my_slava') || '83258';
+                let h = `<div style="background: #04090d; font-weight: bold; color: #4a6273; font-size: 11px; margin: -12px -12px 6px -12px; padding: 6px 12px; text-transform: uppercase;">📊 Статистика пожертвований</div>`;
+                h += `<div style="border-bottom: 1px solid #0f2231; padding: 6px 0; line-height: 1.4;">
+                        <span style="color:#ffcc00; font-weight:bold;">${cLvl} ${cName}</span><br>Слава: <span style="color:#2ecc71;">🍏 ${pSlava}</span><br>Пожертвовал: 🪙 ${pSilv} серебра и 💎 ${pCrys} кристаллов<br><span style="font-size:14px;">🇺🇦</span>
+                      </div>`;
+                members.forEach((m, idx) => {
+                    h += `<div style="border-bottom: 1px solid #0f2231; padding: 6px 0; font-size: 12px;">• ${m.name} <span style="color:#7f8c8d;">[Бот]</span> | Взнос: 🪙 500 сер. <a href="#" style="color:#c0392b; float:right;" onclick="kickMember(${idx})">[Кик]</a></div>`;
+                });
+                if (members.length < MAX_WARRIORS - 1) h += `<br><button class="clan-btn-blue" style="width:100%;" onclick="hireBotAction()">Нанять Наемника</button>`;
                 el.innerHTML = h;
             }
-            if (tabId === 'chat') { el.innerHTML = `[Система]: Дружина у костра.<br>[Эрик]: Вождь, когда поход на Англию?<br>`; }
+            if (tabId === 'chat') { el.innerHTML = `[Чат ОПГ]: Новобранцы прибыли в замок.`; }
+            if (tabId === 'appeals') { el.innerHTML = `Новых обращений от воинов нет.`; }
+            if (tabId === 'clanevents') { el.innerHTML = `• Цитадель ОПГ основана успешно.`; }
+            if (tabId === 'leaders') { el.innerHTML = `👑 Вождь: ${localStorage.getItem('barbarians_username') || 'Admin'}`; }
+            if (tabId === 'mailout') { el.innerHTML = `Текст рассылки:<br><input type="text" class="clan-input"><br><button class="clan-btn-blue" onclick="alert('Улетело!')">Отправить</button>`; }
+            if (tabId === 'requests') { el.innerHTML = `Заявок на вступление нет.`; }
             if (tabId === 'edit') {
-                const desc = localStorage.getItem('barb_clan_desc') || '';
-                el.innerHTML = `<textarea id="clan-desc-text" class="clan-input" style="width:90%; height:50px;">${desc}</textarea><br><button class="clan-btn-blue" onclick="saveClanDesc()">Сохранить</button>`;
+                el.innerHTML = `<textarea id="clan-desc-text" class="clan-input">${desc}</textarea><br><button class="clan-btn-blue" onclick="saveClanDesc()">Сохранить</button>`;
             }
-        }
+        } // Вот эта скобка закрывает loadTabLogic!
 
-        window.donateToKazna = function() {
-            const input = document.getElementById('gold-donate-input');
-            const amt = parseInt(input.value) || 0;
+        window.donSilv = function() {
+            const amt = parseInt(document.getElementById('silv-don').value) || 0;
             let silver = parseInt(localStorage.getItem('barb_silver')) || 0;
             let kazna = parseInt(localStorage.getItem('barb_clan_kazna')) || 0;
-            if (amt <= 0 || silver < amt) { alert("Недостаточно серебра!"); return; }
+            if (amt <= 0 || silver < amt) { alert("Мало денег!"); return; }
             silver -= amt; kazna += amt;
             localStorage.setItem('barb_silver', silver.toString());
             localStorage.setItem('barb_clan_kazna', kazna.toString());
-            if (typeof window.addGameEvent === 'function') window.addGameEvent('gift', '🛡️ Клан', `Взнос в казну союза +${amt} серебра.`);
-            alert("Внесено успешно!"); if(typeof updateGlobalGameCore === 'function') updateGlobalGameCore(); loadTabLogic('kazna');
+            let myDon = parseInt(localStorage.getItem('barb_my_silver_donated') || '0') + amt;
+            localStorage.setItem('barb_my_silver_donated', myDon.toString());
+            alert("Внесено!"); if(typeof updateGlobalGameCore === 'function') updateGlobalGameCore(); loadTabLogic('kazna');
         };
 
-        window.upgradeTotemAction = function(cost) {
+        window.donCrys = function() {
+            const amt = parseInt(document.getElementById('crys-don').value) || 0;
+            let crystals = parseInt(localStorage.getItem('player_crystals')) || 0;
+            let kaznaCrys = parseInt(localStorage.getItem('barb_clan_crystals_kazna') || '0');
+            if (amt <= 0 || crystals < amt) { alert("Мало кристаллов!"); return; }
+            crystals -= amt; kaznaCrys += amt;
+            localStorage.setItem('player_crystals', crystals.toString());
+            localStorage.setItem('barb_clan_crystals_kazna', kaznaCrys.toString());
+            let myDon = parseInt(localStorage.getItem('barb_my_crystals_donated') || '0') + amt;
+            localStorage.setItem('barb_my_crystals_donated', myDon.toString());
+            alert("Внесено!"); loadTabLogic('kazna');
+        };
+
+        window.upTotem = function(cost) {
             let kazna = parseInt(localStorage.getItem('barb_clan_kazna')) || 0;
             let totem = parseInt(localStorage.getItem('barb_clan_totem_lvl')) || 0;
-            if (kazna < cost) { alert("Недостаточно денег в казне клана!"); return; }
+            if (kazna < cost) { alert("В казне пусто!"); return; }
             kazna -= cost; totem += 1;
             localStorage.setItem('barb_clan_kazna', kazna.toString());
             localStorage.setItem('barb_clan_totem_lvl', totem.toString());
-            if (typeof window.addGameEvent === 'function') window.addGameEvent('boss', '🗿 Тотем Клана', `Тотем союза улучшен до +${totem}!`);
-            alert("Тотем успешно прокачан!"); loadTabLogic('totem');
+            alert(`Тотем прокачан до +${totem}!`); loadTabLogic('totem');
+        };
+
+        window.saveSoyuzAction = function() {
+            const slot = document.getElementById('soyuz-slot-sel').value;
+            const chosenClan = document.getElementById('soyuz-clan-sel').value;
+            localStorage.setItem(`barb_soyuz_${slot}`, chosenClan);
+            alert(`Союз обновлен!`); loadTabLogic('info');
         };
 
         window.hireBotAction = function() {
             let members = JSON.parse(localStorage.getItem('barb_clan_members')) || [];
-            const names = ["Олаф", "Харальд", "Кнут", "Сигурд", "Торстейн", "Ивар"];
+            const names = ["Олаф", "Харальд", "Кнут", "Сигурд"];
             const rName = names[Math.floor(Math.random() * names.length)] + `_${Math.floor(Math.random()*900+100)}`;
             members.push({ name: rName, type: "bot" });
             localStorage.setItem('barb_clan_members', JSON.stringify(members)); loadTabLogic('warriors');
@@ -201,15 +267,14 @@
         };
 
         window.saveClanDesc = function() {
-            const text = document.getElementById('clan-desc-text').value;
-            localStorage.setItem('barb_clan_desc', text); alert("Описание сохранено!"); toggleClanTab('edit');
+            localStorage.setItem('barb_clan_desc', document.getElementById('clan-desc-text').value); alert("Сохранено!"); toggleClanTab('edit');
         };
 
         window.leaveClanAction = function() {
-            if (confirm("Распустить клан? Все постройки и казна исчезнут!")) {
+            if (confirm("Распустить союз?")) {
                 localStorage.removeItem('barb_clan_name'); localStorage.removeItem('barb_clan_kazna');
                 localStorage.removeItem('barb_clan_totem_lvl'); localStorage.removeItem('barb_clan_desc');
-                localStorage.removeItem('barb_clan_members'); alert("Союз распущен."); initClanModule();
+                localStorage.removeItem('barb_clan_members'); initClanModule();
             }
         };
 
