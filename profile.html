@@ -168,7 +168,7 @@
     <div class="wap-spoiler">☠️ Проклятия</div>
     <div class="wap-spoiler">📝 Анкета</div>
 
-    <!-- Декоративный разделитель из скрина -->
+    <!-- Декоративный разделитель -->
     <div class="nav-divider"></div>
 
     <!-- КАНОНИЧНОЕ НИЖНЕЕ МЕНЮ С ДВУМЯ СТРЕЛОЧКАМИ »» -->
@@ -200,51 +200,75 @@
     </div>
 
 </div> <!-- /main-content -->
-
 <script>
+    // Проверка базы данных: записываем начальные нули и пятерки ТОЛЬКО если игрок зашел в первый раз
     function initNewPlayer() {
+        if (localStorage.getItem('barb_lvl') === null) localStorage.setItem('barb_lvl', '1');
+        if (localStorage.getItem('barb_str') === null) localStorage.setItem('barb_str', '5');
+        if (localStorage.getItem('barb_def') === null) localStorage.setItem('barb_def', '5');
+        if (localStorage.getItem('barb_dex') === null) localStorage.setItem('barb_dex', '5');
+        if (localStorage.getItem('barb_mst') === null) localStorage.setItem('barb_mst', '5');
+        if (localStorage.getItem('barb_vit') === null) localStorage.setItem('barb_vit', '5');
+        
+        if (localStorage.getItem('barb_silver') === null) localStorage.setItem('barb_silver', '0');
+        if (localStorage.getItem('barb_gold') === null) localStorage.setItem('barb_gold', '15');
+        if (localStorage.getItem('barb_gems') === null) localStorage.setItem('barb_gems', '0');
+        if (localStorage.getItem('barb_glory') === null) localStorage.setItem('barb_glory', '0');
+        if (localStorage.getItem('barb_exp') === null) localStorage.setItem('barb_exp', '0');
+        
+        if (localStorage.getItem('barb_clan_id') === null) localStorage.setItem('barb_clan_id', '');
+        if (localStorage.getItem('barb_brotherhood') === null) localStorage.setItem('barb_brotherhood', '');
+        
+        if (localStorage.getItem('stat_wins') === null) localStorage.setItem('stat_wins', '0');
+        if (localStorage.getItem('stat_losses') === null) localStorage.setItem('stat_losses', '0');
+        if (localStorage.getItem('stat_goblins') === null) localStorage.setItem('stat_goblins', '0');
+        
         if (!localStorage.getItem('barbarians_username')) {
             localStorage.setItem('barbarians_username', 'Варвар_' + Math.floor(Math.random() * 9000 + 1000));
         }
-        if (!localStorage.getItem('barb_lvl')) localStorage.setItem('barb_lvl', '1');
-        if (!localStorage.getItem('barb_str')) localStorage.setItem('barb_str', '5');
-        if (!localStorage.getItem('barb_def')) localStorage.setItem('barb_def', '5');
-        if (!localStorage.getItem('barb_dex')) localStorage.setItem('barb_dex', '5');
-        if (!localStorage.getItem('barb_mst')) localStorage.setItem('barb_mst', '5');
-        if (!localStorage.getItem('barb_vit')) localStorage.setItem('barb_vit', '5');
-        
-        if (!localStorage.getItem('barb_silver')) localStorage.setItem('barb_silver', '0');
-        if (!localStorage.getItem('barb_gold')) localStorage.setItem('barb_gold', '15');
-        if (!localStorage.getItem('barb_gems')) localStorage.setItem('barb_gems', '0');
-        if (!localStorage.getItem('barb_glory')) localStorage.setItem('barb_glory', '0');
-        
-        if (!localStorage.getItem('barb_clan_id')) localStorage.setItem('barb_clan_id', '');
-        if (!localStorage.getItem('barb_brotherhood')) localStorage.setItem('barb_brotherhood', '');
-        
-        if (!localStorage.getItem('stat_wins')) localStorage.setItem('stat_wins', '0');
-        if (!localStorage.getItem('stat_losses')) localStorage.setItem('stat_losses', '0');
-        if (!localStorage.getItem('stat_goblins')) localStorage.setItem('stat_goblins', '0');
     }
 
     document.addEventListener("DOMContentLoaded", function() {
+        // Проверяем сессию
         initNewPlayer();
 
+        // Отрисовка шапки из ядра
         if (typeof window.initCore === "function") {
             window.initCore();
         }
 
-        const username = localStorage.getItem('barbarians_username');
-        document.getElementById('prof-lvl').innerText = localStorage.getItem('barb_lvl');
-        document.getElementById('stat-lvl-copy').innerText = localStorage.getItem('barb_lvl');
-        document.getElementById('prof-glory').innerText = localStorage.getItem('barb_glory');
-        document.getElementById('stat-glory-copy').innerText = localStorage.getItem('barb_glory');
-        
-        document.getElementById('stat-str').innerText = localStorage.getItem('barb_str');
-        document.getElementById('stat-def').innerText = localStorage.getItem('barb_def');
-        document.getElementById('stat-dex').innerText = localStorage.getItem('barb_dex');
-        document.getElementById('stat-mst').innerText = localStorage.getItem('barb_mst');
-        document.getElementById('stat-vit').innerText = localStorage.getItem('barb_vit');
+        // Автоматически подтягиваем актуальные боевые результаты
+        const currentLvl = localStorage.getItem('barb_lvl') || '1';
+        const currentGlory = localStorage.getItem('barb_glory') || '0';
+        const currentExp = localStorage.getItem('barb_exp') || '0';
 
+        document.getElementById('prof-lvl').innerText = currentLvl;
+        document.getElementById('stat-lvl-copy').innerText = currentLvl;
+        document.getElementById('prof-glory').innerText = currentGlory;
+        document.getElementById('stat-glory-copy').innerText = currentGlory;
+        document.getElementById('stat-exp').innerText = currentExp + " / " + (parseInt(currentLvl) * 100);
+        
+        // Считываем обновленные в боях статы
+        document.getElementById('stat-str').innerText = localStorage.getItem('barb_str') || '5';
+        document.getElementById('stat-def').innerText = localStorage.getItem('barb_def') || '5';
+        document.getElementById('stat-dex').innerText = localStorage.getItem('barb_dex') || '5';
+        document.getElementById('stat-mst').innerText = localStorage.getItem('barb_mst') || '5';
+        
+        const vit = parseInt(localStorage.getItem('barb_vit') || '5');
+        document.getElementById('stat-vit').innerText = vit;
+        
+        // Перерасчет HP игрока по формуле: Живучесть * 20
+        const maxHp = vit * 20;
+        document.getElementById('stat-hp').innerText = maxHp;
+        document.getElementById('stat-hp-max').innerText = maxHp;
+        document.getElementById('stat-hp-reg').innerText = Math.floor(maxHp * 0.1);
+
+        // Обновляем счетчики побед и поражений с Арены
+        document.getElementById('stat-wins').innerText = localStorage.getItem('stat_wins') || '0';
+        document.getElementById('stat-losses').innerText = localStorage.getItem('stat_losses') || '0';
+        document.getElementById('stat-goblins').innerText = localStorage.getItem('stat_goblins') || '0';
+
+        // Проверяем принадлежность к клану
         const clan = localStorage.getItem('barb_clan_id');
         if(clan && clan.trim() !== "") {
             document.getElementById('prof-clan').className = "text-green";
