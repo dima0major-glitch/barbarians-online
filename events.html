@@ -9,7 +9,7 @@
         .header { background-color: #2c3e50; border: 1px solid #34495e; padding: 6px; text-align: center; margin-bottom: 8px; font-weight: bold; color: #00d2ff; }
         .w-block { background-color: #243342; border: 1px solid #2c3e50; padding: 8px; margin-bottom: 6px; font-size: 0.9em; position: relative; }
         
-        /* Цвета категорий как на скрине */
+        /* Цвета категорий для ленты логов */
         .cat-arena { color: #ff6b6b; font-weight: bold; }
         .cat-mine { color: #2ecc71; font-weight: bold; }
         .cat-gift { color: #3498db; font-weight: bold; }
@@ -21,13 +21,12 @@
         .btn-details:hover { background-color: #34495e; }
         
         .clear-btn { background-color: #c0392b; color: white; border: none; padding: 4px 8px; width: 100%; font-family: monospace; margin-bottom: 8px; cursor: pointer; }
-        .nav-back { text-align: center; margin-top: 12px; font-size: 0.9em; }
-        .nav-back a { color: #00d2ff; text-decoration: none; }
     </style>
 </head>
 <body>
 
-    <!-- Шапка из ядра global_core.js -->
+    <!-- Универсальные контейнеры шапки для автоматического рендера из global_core.js -->
+    <div id="header-container"></div>
     <div id="core-header"></div>
 
     <div class="header">⚔️ СОБЫТИЯ ЗА 3 ДНЯ</div>
@@ -37,11 +36,7 @@
     <!-- Сюда выводятся логи -->
     <div id="events-container"></div>
 
-    <div class="nav-back">
-        <a href="poselok.html">↺ Вернуться в Поселок</a>
-    </div>
-
-    <!-- Нижнее меню из ядра global_core.js -->
+    <!-- Автоматическое нижнее WAP-меню из ядра займет это место -->
     <div id="core-footer"></div>
 
     <script src="global_core.js"></script>
@@ -56,7 +51,7 @@
             }
 
             let html = '';
-            // Выводим новые события сверху (разворачиваем массив)
+            // Выводим новые события сверху
             events.slice().reverse().forEach(ev => {
                 let catClass = 'cat-mine';
                 if (ev.type === 'arena') catClass = 'cat-arena';
