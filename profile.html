@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <!-- Настройка крупного WAP-масштаба для мобильных экранов -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Варвары - Профиль персонажа</title>
+    <title>Варвары - Профиль</title>
     <style>
         /* Каноничный серо-синий WAP-стиль Норманнов */
         body {
@@ -55,7 +55,7 @@
         .wap-spoiler::after, .wap-nav-btn::after { content: '»»'; color: #00b4d8; font-size: 14px; font-weight: normal; }
         .wap-spoiler.active::after { content: '««'; }
         
-        /* Декоративная линия-разделитель перед меню переходов */
+        /* Декоративная линия-разделитель */
         .nav-divider {
             height: 4px;
             background: #415a77 linear-gradient(to right, #1b263b, #5c7799, #1b263b);
@@ -74,7 +74,7 @@
             margin-bottom: 5px;
         }
         
-        /* Ленты параметров */
+        /* Ленты параметров из оригинальных скринов */
         .wap-ribbon {
             background: #415a77 linear-gradient(to bottom, #5c7799, #2c3e55);
             color: #ffe6a7;
@@ -106,13 +106,14 @@
     </style>
 </head>
 <body>
+
     <!-- Автоматическая верхняя шапка ядра с ресурсами -->
     <script src="global_core.js"></script>
     <div id="core-header"></div>
 
     <div class="main-content">
 
-        <!-- Краткая сводка профиля без картинок -->
+        <!-- Краткая сводка профиля без лишних картинок -->
         <div class="profile-container">
             <div class="quick-info">
                 🟢 Сейчас в игре (<span id="prof-time">--:--</span>)<br>
@@ -144,6 +145,7 @@
             <ul class="param-list">
                 <li style="text-align: center; color: #aaa; font-style: italic;">Активные бонусы отсутствуют</li>
             </ul>
+
             <div class="wap-ribbon">Статистика</div>
             <ul class="param-list">
                 <li>👥 Друзей: <span id="stat-friends">0</span></li>
@@ -167,13 +169,13 @@
             </ul>
         </div>
 
-        <!-- Остальные WAP-спойлеры профиля персонажа -->
+        <!-- Каноничные WAP-спойлеры профиля -->
         <div class="wap-spoiler">🏅 Достижения</div>
         <div class="wap-spoiler">🎁 Подарки</div>
         <div class="wap-spoiler">☠️ Проклятия</div>
         <div class="wap-spoiler">📝 Анкета</div>
 
-        <!-- Декоративный коричнево-синий разделитель из скрина -->
+        <!-- Декоративный разделитель -->
         <div class="nav-divider"></div>
 
         <!-- КАНОНИЧНОЕ НИЖНЕЕ МЕНЮ С ДВУМЯ СТРЕЛОЧКАМИ »» -->
@@ -196,7 +198,7 @@
             <div class="wap-nav-btn">💰 Золото</div>
         </a>
 
-        <!-- Нижние служебные ссылки -->
+        <!-- Служебные ссылки в самом низу -->
         <div class="footer-links">
             <a href="about.html">Об игре</a>
             <a href="support.html">Поддержка</a>
@@ -206,7 +208,7 @@
 
     </div> <!-- /main-content -->
     <script>
-        // Инициализация базы данных: пишем начальные статы ТОЛЬКО если их вообще нет
+        // Инициализация базы данных: пишем начальные статы ТОЛЬКО если их вообще нет в браузере!
         function initNewPlayer() {
             if (localStorage.getItem('barb_lvl') === null) localStorage.setItem('barb_lvl', '1');
             if (localStorage.getItem('barb_str') === null) localStorage.setItem('barb_str', '5');
@@ -221,11 +223,10 @@
             if (localStorage.getItem('barb_glory') === null) localStorage.setItem('barb_glory', '0');
             if (localStorage.getItem('barb_exp') === null) localStorage.setItem('barb_exp', '0');
             
-            // КРИТИЧЕСКИЙ ФИКС: Выдаем новичку 3 боя из 3, чтобы Арена пускала в бой!
+            // Выдаем 3 боя из 3 на Арену, чтобы battle_result.html и симуляция вообще работали!
             if (localStorage.getItem('barb_battle_count') === null) localStorage.setItem('barb_battle_count', '3');
-            if (localStorage.getItem('battles') === null) localStorage.setItem('battles', '3');
             
-            // Каноничные счетчики боев для Арены
+            // Базовые счетчики для Арены
             if (localStorage.getItem('stat_wins') === null) localStorage.setItem('stat_wins', '0');
             if (localStorage.getItem('stat_losses') === null) localStorage.setItem('stat_losses', '0');
             if (localStorage.getItem('stat_goblins') === null) localStorage.setItem('stat_goblins', '0');
@@ -236,15 +237,15 @@
         }
 
         document.addEventListener("DOMContentLoaded", function() {
-            // Проверяем сессию и выдаем бои
+            // Проверяем и создаем только отсутствующие ключи
             initNewPlayer();
 
-            // Отрисовка верхней шапки ресурсов из ядра
+            // Автоматически запускаем прорисовку шапки из твоего ядра global_core.js
             if (typeof window.initCore === "function") {
                 window.initCore();
             }
 
-            // Динамический вывод уровня, славы и опыта из localStorage
+            // Динамический вывод уровня, славы и опыта из Арены / Походов
             const currentLvl = localStorage.getItem('barb_lvl') || '1';
             const currentGlory = localStorage.getItem('barb_glory') || '0';
             const currentExp = localStorage.getItem('barb_exp') || '0';
@@ -255,7 +256,7 @@
             document.getElementById('stat-glory-copy').innerText = currentGlory;
             document.getElementById('stat-exp').innerText = currentExp + " / " + (parseInt(currentLvl) * 100);
             
-            // Вывод базовых изменяемых характеристик
+            // Вывод характеристик, которые изменяет файл training.html
             document.getElementById('stat-str').innerText = localStorage.getItem('barb_str') || '5';
             document.getElementById('stat-def').innerText = localStorage.getItem('barb_def') || '5';
             document.getElementById('stat-dex').innerText = localStorage.getItem('barb_dex') || '5';
@@ -264,13 +265,13 @@
             const vit = parseInt(localStorage.getItem('barb_vit') || '5');
             document.getElementById('stat-vit').innerText = vit;
             
-            // Автоматический перерасчет здоровья по Живучести
+            // Автоматический перерасчет здоровья по Живучести (вит * 20)
             const maxHp = vit * 20;
             document.getElementById('stat-hp').innerText = maxHp;
             document.getElementById('stat-hp-max').innerText = maxHp;
             document.getElementById('stat-hp-reg').innerText = Math.floor(maxHp * 0.1);
 
-            // МАКСИМАЛЬНЫЙ СИНХРОН: Проверяем все варианты ключей побед, которые могла записать Арена
+            // Динамический вывод побед и поражений с Арены (из файла battle_result.html)
             const wins = localStorage.getItem('stat_wins') || localStorage.getItem('barb_wins') || localStorage.getItem('arena_wins') || '0';
             const losses = localStorage.getItem('stat_losses') || localStorage.getItem('barb_losses') || localStorage.getItem('arena_losses') || '0';
             
@@ -278,7 +279,7 @@
             document.getElementById('stat-losses').innerText = losses;
             document.getElementById('stat-goblins').innerText = localStorage.getItem('stat_goblins') || '0';
 
-            // Проверка клана
+            // Проверка принадлежности к клану игрока
             const clan = localStorage.getItem('barb_clan_id') || localStorage.getItem('barb_clan');
             if(clan && clan.trim() !== "") {
                 document.getElementById('prof-clan').className = "text-green";
