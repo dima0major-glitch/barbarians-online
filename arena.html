@@ -6,32 +6,25 @@
     <title>Варвары — Сражения</title>
     <style>
         body { background-color: #061118; color: #ffffff; font-family: Arial, sans-serif; margin: 0; padding: 0; user-select: none; }
-        
         .category-bar { background: linear-gradient(to bottom, #123524, #05140d); color: #00ffaa; font-size: 14px; font-weight: bold; text-align: center; padding: 6px 15px; border-top: 1px solid #1d5339; border-bottom: 1px solid #040f0a; box-shadow: inset 0 1px 2px rgba(255,255,255,0.1); text-transform: uppercase; }
-        
         .vs-container { background-color: #050d12; padding: 15px 10px; text-align: center; border-bottom: 1px solid #0f2231; }
         .vs-title { font-size: 14px; font-weight: bold; color: #ffffff; margin-bottom: 15px; }
         .vs-title span { color: #adc8d9; }
-        
         .avatars-row { display: flex; justify-content: center; align-items: center; gap: 25px; margin-bottom: 15px; }
         .avatar-box { width: 90px; height: 90px; border: 1px solid #1c8cd1; border-radius: 4px; display: flex; flex-direction: column; justify-content: center; align-items: center; background-color: #091822; }
         .avatar-box.enemy { border-color: #ff4d4d; background: linear-gradient(to bottom, #220909, #0f0404); }
         .avatar-big-icon { font-size: 40px; }
-
         .comparison-table { width: 220px; margin: 0 auto 20px auto; font-size: 14px; font-weight: bold; }
         .comp-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
         .comp-player { width: 60px; text-align: right; color: #ffffff; }
         .comp-icon { width: 40px; text-align: center; font-size: 16px; }
         .comp-enemy { width: 60px; text-align: left; color: #ffbfcc; }
-
         .btn-fight-container { margin-bottom: 15px; }
         .btn-fight { background: linear-gradient(to bottom, #7a2208, #421002); border: 1px solid #ff4d15; color: #ffccaa; font-size: 15px; font-weight: bold; padding: 8px 50px; border-radius: 4px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.6); text-shadow: 1px 1px 2px #000; width: 65%; }
         .btn-fight:active { background: #5a1805; border-color: #00ffaa; color: #00ffaa; }
         .btn-fight:disabled { background: #1e293b; border-color: #475569; color: #64748b; cursor: not-allowed; text-shadow: none; }
-
         .bot-taunt { font-size: 12px; color: #799bb3; line-height: 1.4; padding: 0 20px; margin-bottom: 5px; }
         .bot-taunt b { color: #adc8d9; display: block; margin-bottom: 4px; }
-
         .menu-container { margin-top: 2px; }
         .menu-link { background: linear-gradient(to bottom, #091b29, #050e16); padding: 13px 15px; margin-bottom: 2px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #0f2231; text-decoration: none; color: #adc8d9; font-size: 14px; font-weight: bold; }
         .menu-link.active-type { background: linear-gradient(to bottom, #1e3a5f, #0f1d30); border-left: 3px solid #38bdf8; color: #ffffff; }
@@ -40,9 +33,7 @@
     </style>
 </head>
 <body>
-    <!-- Шапка добавится автоматически из global_core.js -->
     <div id="core-header-placeholder"></div>
-
     <div class="category-bar">Сражения</div>
 
     <div class="vs-container">
@@ -95,7 +86,6 @@
             <span id="bot-phrase">Загрузка реплики...</span>
         </div>
     </div>
-    <!-- Все переключения идут через JavaScript-функцию changeFightType() без изменения файлов в URL -->
     <div class="menu-container">
         <a href="#" onclick="generateEnemy(); return false;" class="menu-link"><span>🪓 Следующий соперник</span><span class="menu-arrow">»»</span></a>
         <a href="#" id="link-junior" onclick="changeFightType('junior'); return false;" class="menu-link"><span>🦔 Найти Младшего</span><span class="menu-arrow">»»</span></a>
@@ -109,7 +99,6 @@
     <script src="global_core.js"></script>
     <script>
         let currentEnemy = {};
-        // Базовый тип по умолчанию
         let fightType = 'equal';
 
         const phrases = [
@@ -123,26 +112,19 @@
 
         const botNames = ["Ульф", "Торстейн", "Хакон", "Бьорн", "Гудмунд", "Рагнар", "Ивар", "Сигурд"];
 
-        // Функция изменения сложности без перезагрузки страницы (Защита от 404)
+        // Локальное переключение без обновления URL
         window.changeFightType = function(type) {
             fightType = type;
-            
-            // Убираем подсветку со всех кнопок меню
             const links = ['junior', 'equal', 'senior', 'mercenaries', 'boss'];
             links.forEach(l => {
                 const el = document.getElementById('link-' + l);
                 if(el) el.classList.remove('active-type');
             });
-
-            // Добавляем подсветку текущему выбранному типу
             const activeEl = document.getElementById('link-' + type);
             if(activeEl) activeEl.classList.add('active-type');
-
-            // Генерируем нового соперника под выбранный тип
             generateEnemy();
         };
         window.generateEnemy = function() {
-            // Читаем синхронизированные ключи игрока
             const pStr = parseInt(localStorage.getItem('barb_str') || '5');
             const pDef = parseInt(localStorage.getItem('barb_def') || '5');
             const pAgi = parseInt(localStorage.getItem('barb_dex') || '5'); 
@@ -150,7 +132,6 @@
             const pVit = parseInt(localStorage.getItem('barb_vit') || '5');
             const pLvl = parseInt(localStorage.getItem('barb_level') || '1');
 
-            // Контроль энергии и боев
             const battleCount = parseInt(localStorage.getItem('barb_battle_count') || '3');
             const countView = document.getElementById('battle-count-view');
             const fightBtn = document.getElementById('fight-action-btn');
@@ -160,7 +141,7 @@
             if (battleCount <= 0) {
                 if (fightBtn) {
                     fightBtn.disabled = true;
-                    fightBtn.textContent = "Нет энергии";
+                    fightBtn.textContent = "Нет боев"; // Исправлено по ТЗ
                 }
             } else {
                 if (fightBtn) {
@@ -169,7 +150,6 @@
                 }
             }
 
-            // Выводим параметры игрока на UI
             document.getElementById('p-name-vs').innerText = localStorage.getItem('barbarians_username') || "Ты";
             document.getElementById('p-str').innerText = pStr;
             document.getElementById('p-def').innerText = pDef;
@@ -177,7 +157,6 @@
             document.getElementById('p-mst').innerText = pMst;
             document.getElementById('p-vit').innerText = pVit;
 
-            // Настройка силы противника по коэффициентам
             let mod = 0;
             let typeName = "Ровня";
             let enemyLvl = pLvl;
@@ -188,7 +167,6 @@
             if (fightType === 'mercenaries') { mod = 4; typeName = "Наемник"; enemyLvl = pLvl + 2; }
             if (fightType === 'boss') { mod = 10; typeName = "Владыка"; enemyLvl = pLvl + 4; }
 
-            // Полная математическая сборка бота
             currentEnemy = {
                 name: botNames[Math.floor(Math.random() * botNames.length)] + ` [${typeName}]`,
                 lvl: enemyLvl,
@@ -199,7 +177,6 @@
                 vit: Math.max(1, pVit + mod + Math.floor(Math.random() * 3) - 1)
             };
 
-            // Выводим параметры врага на UI
             document.getElementById('e-name-vs').innerText = currentEnemy.name;
             document.getElementById('e-str').innerText = currentEnemy.str;
             document.getElementById('e-def').innerText = currentEnemy.def;
@@ -208,23 +185,18 @@
             document.getElementById('e-vit').innerText = currentEnemy.vit;
 
             document.getElementById('bot-phrase').innerText = phrases[Math.floor(Math.random() * phrases.length)];
-
-            // Записываем сгенерированного бота
             localStorage.setItem('current_enemy_data', JSON.stringify(currentEnemy));
         };
 
-        // Перенаправление на страницу расчета результата боя
         window.startBattle = function() {
             const battleCount = parseInt(localStorage.getItem('barb_battle_count') || '3');
             if (battleCount <= 0) {
                 alert("У вас закончились доступные бои на сегодня!");
                 return;
             }
-            // Вызываем файл результатов, передавая точный тип выбранного соперника
             window.location.href = `battle_result.html?type=${fightType}`;
         };
 
-        // Стартовый запуск генератора при входе
         document.addEventListener('DOMContentLoaded', () => {
             generateEnemy();
         });
