@@ -7,7 +7,7 @@
     <style>
         body { background-color: #061118; color: #ffffff; font-family: Arial, sans-serif; margin: 0; padding: 0; user-select: none; }
         
-        /* Специфичные стили только для экрана поединка */
+        /* Специфичные стили для экрана поединка */
         .category-bar { background: linear-gradient(to bottom, #123524, #05140d); color: #00ffaa; font-size: 14px; font-weight: bold; text-align: center; padding: 6px 15px; border-top: 1px solid #1d5339; border-bottom: 1px solid #040f0a; box-shadow: inset 0 1px 2px rgba(255,255,255,0.1); text-transform: uppercase; }
         
         .vs-container { background-color: #050d12; padding: 15px 10px; text-align: center; border-bottom: 1px solid #0f2231; }
@@ -28,6 +28,7 @@
         .btn-fight-container { margin-bottom: 15px; }
         .btn-fight { background: linear-gradient(to bottom, #7a2208, #421002); border: 1px solid #ff4d15; color: #ffccaa; font-size: 15px; font-weight: bold; padding: 8px 50px; border-radius: 4px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.6); text-shadow: 1px 1px 2px #000; width: 65%; }
         .btn-fight:active { background: #5a1805; border-color: #00ffaa; color: #00ffaa; }
+        .btn-fight:disabled { background: #1e293b; border-color: #475569; color: #64748b; cursor: not-allowed; text-shadow: none; }
 
         .bot-taunt { font-size: 12px; color: #799bb3; line-height: 1.4; padding: 0 20px; margin-bottom: 5px; }
         .bot-taunt b { color: #adc8d9; display: block; margin-bottom: 4px; }
@@ -35,11 +36,13 @@
         .menu-container { margin-top: 2px; }
         .menu-link { background: linear-gradient(to bottom, #091b29, #050e16); padding: 13px 15px; margin-bottom: 2px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #0f2231; text-decoration: none; color: #adc8d9; font-size: 14px; font-weight: bold; }
         .menu-arrow { color: #1c8cd1; font-weight: bold; letter-spacing: -2px; font-size: 15px; }
+        .battle-counter { font-size: 11px; color: #fbbf24; margin-top: 4px; font-weight: normal; }
     </style>
 </head>
 <body>
 
     <!-- Шапка добавится автоматически из global_core.js -->
+    <div id="core-header-placeholder"></div>
 
     <div class="category-bar">Сражения</div>
 
@@ -84,7 +87,8 @@
         </div>
 
         <div class="btn-fight-container">
-            <button class="btn-fight" onclick="startBattle()">Сражаться</button>
+            <button class="btn-fight" id="fight-action-btn" onclick="startBattle()">Сражаться</button>
+            <div class="battle-counter" id="battle-count-view">Доступно боев: 3/3</div>
         </div>
 
         <div class="bot-taunt">
@@ -92,17 +96,20 @@
             <span id="bot-phrase">Загрузка реплики...</span>
         </div>
     </div>
-
     <div class="menu-container">
-        <a href="#" onclick="generateEnemy(); return false;" class="menu-link"><span>🪓 Следующий</span><span class="menu-arrow">»»</span></a>
-        <a href="arena_fight.html?type=mercenaries" class="menu-link"><span>🔵 Кристальный наемник</span><span class="menu-arrow">»»</span></a>
-        <a href="arena_fight.html?type=boss" class="menu-link"><span>🟡 Золотой наемник</span><span class="menu-arrow">»»</span></a>
-        <a href="duel.html" class="menu-link"><span>⚔️ Дуэль (Назад)</span><span class="menu-arrow">»»</span></a>
-        <a href="index.html" class="menu-link"><span>🏠 Главная</span><span class="menu-arrow">»»</span></a>
+        <a href="#" onclick="generateEnemy(); return false;" class="menu-link"><span>🪓 Следующий соперник</span><span class="menu-arrow">»»</span></a>
+        <a href="arena.html?type=equal" class="menu-link"><span>🟢 Найти Равного</span><span class="menu-arrow">»»</span></a>
+        <a href="arena.html?type=senior" class="menu-link"><span>🔴 Найти Старшего</span><span class="menu-arrow">»»</span></a>
+        <a href="arena.html?type=mercenaries" class="menu-link"><span>🔵 Кристальный наемник</span><span class="menu-arrow">»»</span></a>
+        <a href="arena.html?type=boss" class="menu-link"><span>🟡 Золотой наемник</span><span class="menu-arrow">»»</span></a>
+        <a href="hero.html" class="menu-link"><span>📊 В меню персонажа (Назад)</span><span class="menu-arrow">»»</span></a>
     </div>
+
+    <script src="global_core.js"></script>
     <script>
         let currentEnemy = {};
         const urlParams = new URLSearchParams(window.location.search);
+        // Доступные типы: 'equal' (Ровня), 'junior', 'senior' (Старшие), 'mercenaries', 'boss'
         const fightType = urlParams.get('type') || 'equal';
 
         const phrases = [
@@ -117,37 +124,80 @@
         const botNames = ["Ульф", "Торстейн", "Хакон", "Бьорн", "Гудмунд", "Рагнар", "Ивар", "Сигурд"];
 
         function generateEnemy() {
+            // Исправление рассинхрона: Читаем правильные ключи LocalStorage игрока
             const pStr = parseInt(localStorage.getItem('barb_str') || '5');
             const pDef = parseInt(localStorage.getItem('barb_def') || '5');
-            const pAgi = parseInt(localStorage.getItem('barb_agi') || '5');
+            const pAgi = parseInt(localStorage.getItem('barb_dex') || '5'); // Исправлено на barb_dex
             const pMst = parseInt(localStorage.getItem('barb_mst') || '5');
             const pVit = parseInt(localStorage.getItem('barb_vit') || '5');
-            const pLvl = parseInt(localStorage.getItem('barb_lvl') || '1');
+            const pLvl = parseInt(localStorage.getItem('barb_level') || '1'); // Исправлено на barb_level
 
+            // Проверка лимита доступных боев
+            const battleCount = parseInt(localStorage.getItem('barb_battle_count') || '3');
+            const countView = document.getElementById('battle-count-view');
+            const fightBtn = document.getElementById('fight-action-btn');
+
+            if (countView) {
+                countView.textContent = `Доступно боев сегодня: ${battleCount} / 3`;
+            }
+
+            if (battleCount <= 0) {
+                if (fightBtn) {
+                    fightBtn.disabled = true;
+                    fightBtn.textContent = "Нет энергии";
+                }
+            } else {
+                if (fightBtn) {
+                    fightBtn.disabled = false;
+                    fightBtn.textContent = "Сражаться";
+                }
+            }
+
+            // Рендерим статы игрока в левую колонку таблицы
             document.getElementById('p-name-vs').innerText = localStorage.getItem('barbarians_username') || "Ты";
             document.getElementById('p-str').innerText = pStr;
             document.getElementById('p-def').innerText = pDef;
             document.getElementById('p-agi').innerText = pAgi;
             document.getElementById('p-mst').innerText = pMst;
             document.getElementById('p-vit').innerText = pVit;
-
+            // Вычисляем статы противника на основе выбранной сложности (fightType)
             let mod = 0;
-            let typeName = "Воин";
-            if (fightType === 'junior') { mod = -2; typeName = "Ополченец"; }
-            if (fightType === 'senior') { mod = 3; typeName = "Ветеран"; }
-            if (fightType === 'mercenaries') { mod = 5; typeName = "Наемник"; }
-            if (fightType === 'boss') { mod = 12; typeName = "Владыка"; }
+            let typeName = "Ровня";
+            let enemyLvl = pLvl;
 
+            if (fightType === 'junior') { 
+                mod = -2; 
+                typeName = "Ополченец"; 
+                enemyLvl = Math.max(1, pLvl - 1); 
+            }
+            if (fightType === 'senior') { 
+                mod = 2; 
+                typeName = "Ветеран"; 
+                enemyLvl = pLvl + 1; 
+            }
+            if (fightType === 'mercenaries') { 
+                mod = 4; 
+                typeName = "Наемник"; 
+                enemyLvl = pLvl + 2; 
+            }
+            if (fightType === 'boss') { 
+                mod = 10; 
+                typeName = "Владыка"; 
+                enemyLvl = pLvl + 4; 
+            }
+
+            // Математическая сборка объекта противника с небольшим рандомом (+/- 1)
             currentEnemy = {
                 name: botNames[Math.floor(Math.random() * botNames.length)] + ` [${typeName}]`,
+                lvl: enemyLvl,
                 str: Math.max(1, pStr + mod + Math.floor(Math.random() * 3) - 1),
                 def: Math.max(1, pDef + mod + Math.floor(Math.random() * 3) - 1),
                 agi: Math.max(1, pAgi + mod + Math.floor(Math.random() * 3) - 1),
                 mst: Math.max(1, pMst + mod + Math.floor(Math.random() * 3) - 1),
-                vit: Math.max(1, pVit + mod + Math.floor(Math.random() * 3) - 1),
-                lvl: Math.max(1, pLvl + Math.floor(mod/2))
+                vit: Math.max(1, pVit + mod + Math.floor(Math.random() * 3) - 1)
             };
 
+            // Рендерим статы противника в правую колонку таблицы сравнения
             document.getElementById('e-name-vs').innerText = currentEnemy.name;
             document.getElementById('e-str').innerText = currentEnemy.str;
             document.getElementById('e-def').innerText = currentEnemy.def;
@@ -155,35 +205,28 @@
             document.getElementById('e-mst').innerText = currentEnemy.mst;
             document.getElementById('e-vit').innerText = currentEnemy.vit;
 
+            // Обновляем реплику противника
             document.getElementById('bot-phrase').innerText = phrases[Math.floor(Math.random() * phrases.length)];
+
+            // Фиксируем сгенерированного бота в памяти перед боем
+            localStorage.setItem('current_enemy_data', JSON.stringify(currentEnemy));
         }
 
+        // Функция запуска симуляции по кнопке "Сражаться"
         function startBattle() {
-            let battles = localStorage.getItem('barb_battle_count') !== null ? parseInt(localStorage.getItem('barb_battle_count')) : 3;
-            
-            if (battles <= 0) {
-                alert("У вас нет доступных боев! Подождите регенерации.");
-                window.location.href = 'duel.html';
+            const battleCount = parseInt(localStorage.getItem('barb_battle_count') || '3');
+            if (battleCount <= 0) {
+                alert("У вас закончились доступные бои на сегодня!");
                 return;
             }
-
-            // Списываем 1 бой
-            battles -= 1;
-            localStorage.setItem('barb_battle_count', battles);
-
-            // Если боев стало меньше максимума, заводим точку отсчета таймера
-            if (battles === 2) {
-                localStorage.setItem('barb_last_regen', Date.now());
-            }
-
-            // Передаем данные врага на страницу симуляции боя
-            localStorage.setItem('current_enemy_data', JSON.stringify(currentEnemy));
+            // Перенаправляем игрока на экран расчета с сохранением параметра сложности (?type=...)
             window.location.href = `battle_result.html?type=${fightType}`;
         }
 
-        document.addEventListener("DOMContentLoaded", generateEnemy);
+        // Генерируем противника сразу при загрузке страницы Сражений
+        document.addEventListener('DOMContentLoaded', () => {
+            generateEnemy();
+        });
     </script>
-    <!-- Подключаем наше единое автоматическое ядро интерфейса и времени -->
-    <script src="global_core.js"></script>
 </body>
 </html>
