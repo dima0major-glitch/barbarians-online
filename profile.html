@@ -1,14 +1,22 @@
+<!-- Настройка каноничного крупного масштаба для мобильных экранов -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
 <style>
     /* Каноничный серо-синий WAP-стиль Норманнов */
     body {
         background-color: #0d1b2a;
         color: #e0e1dd;
         font-family: Arial, sans-serif;
-        font-size: 14px;
+        font-size: 15px;
         margin: 0;
+        padding: 0;
+    }
+    a { color: #415a77; text-decoration: none; display: block; }
+    
+    /* Контейнер для правильных отступов основного содержимого */
+    .main-content {
         padding: 5px;
     }
-    a { color: #415a77; text-decoration: none; }
     
     /* Блок профиля */
     .profile-container {
@@ -19,27 +27,28 @@
         margin-bottom: 5px;
     }
     .char-name {
-        font-size: 16px;
+        font-size: 18px;
         font-weight: bold;
         color: #ffffff;
         margin-bottom: 8px;
     }
     .avatar-img {
-        max-width: 180px;
+        width: 100%;
+        max-width: 220px;
         height: auto;
         border: 2px solid #415a77;
         border-radius: 4px;
         display: block;
-        margin: 0 auto 5px auto;
+        margin: 0 auto 8px auto;
     }
-    .flag-icon { margin: 5px 0; font-size: 16px; }
+    .flag-icon { margin: 5px 0; font-size: 18px; }
     
     /* Краткое инфо под авой */
     .quick-info {
         text-align: left;
         padding: 5px;
-        font-size: 13px;
-        line-height: 1.4;
+        font-size: 14px;
+        line-height: 1.5;
     }
     .text-green { color: #4caf50; }
     .text-gold { color: #ffcc00; }
@@ -50,15 +59,16 @@
         background: linear-gradient(to bottom, #1b263b, #0d1b2a);
         border: 1px solid #415a77;
         color: #ffffff;
-        padding: 8px 10px;
-        margin: 4px 0;
+        padding: 10px 12px;
+        margin: 5px 0;
         cursor: pointer;
         font-weight: bold;
         display: flex;
         justify-content: space-between;
         align-items: center;
+        font-size: 14px;
     }
-    .wap-spoiler::after { content: '»'; color: #00b4d8; font-size: 16px; }
+    .wap-spoiler::after { content: '»'; color: #00b4d8; font-size: 18px; }
     .wap-spoiler.active::after { content: '«'; }
     
     /* Скрытое содержимое деталей */
@@ -67,8 +77,8 @@
         background-color: #111a2e;
         border: 1px solid #415a77;
         border-top: none;
-        padding: 8px;
-        margin-top: -4px;
+        padding: 10px;
+        margin-top: -5px;
         margin-bottom: 5px;
     }
     
@@ -78,130 +88,153 @@
         color: #ffe6a7;
         text-align: center;
         font-weight: bold;
-        padding: 3px;
-        font-size: 13px;
+        padding: 5px;
+        font-size: 14px;
         border: 1px solid #1b263b;
-        margin: 8px 0 4px 0;
+        margin: 10px 0 6px 0;
         text-shadow: 1px 1px 1px #000;
     }
 
     /* Список параметров */
     .param-list { list-style: none; padding: 0; margin: 0; text-align: left; }
-    .param-list li { padding: 3px 0; border-bottom: 1px dashed #2c3e55; font-size: 13px; }
+    .param-list li { padding: 5px 0; border-bottom: 1px dashed #2c3e55; font-size: 14px; }
     .param-list li:last-child { border-bottom: none; }
     
     /* Форма изменения аватара */
     .avatar-shop {
         background-color: #162238;
         border: 1px solid #ffcc00;
-        padding: 8px;
-        margin: 5px 0;
+        padding: 10px;
+        margin: 8px 0;
         text-align: center;
-        font-size: 12px;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+    .avatar-shop input {
+        width: 85%; 
+        padding: 6px; 
+        margin: 6px 0;
+        background-color: #0d1b2a;
+        border: 1px solid #415a77;
+        color: #fff;
     }
     .wap-btn {
         background-color: #415a77;
         color: #fff;
         border: 1px solid #778da9;
-        padding: 4px 8px;
+        padding: 6px 12px;
         cursor: pointer;
-        font-size: 12px;
+        font-size: 13px;
+        font-weight: bold;
     }
 </style>
-<!-- Сюда глобальное ядро автоматически вставит верхнюю шапку -->
+<!-- Подключаем скрипт единого глобального ядра игры -->
+<script src="global_core.js"></script>
+
+<!-- Сюда глобальное ядро автоматически вставит верхнюю шапку (✉️, Ник, Лвл, Золото...) -->
 <div id="core-header"></div>
 
-<!-- Основной контейнер профиля -->
-<div class="profile-container">
-    <div class="char-name" id="prof-username">Новичок</div>
-    
-    <!-- Аватарка варвара по умолчанию -->
-    <img id="prof-avatar" class="avatar-img" src="" alt="Аватар">
-    
-    <div class="flag-icon">🇺</div>
-    
-    <div class="quick-info">
-        🟢 Сейчас в игре (<span id="prof-time">--:--</span>)<br>
-        👑 Уровень: <span id="prof-lvl">1</span><br>
-        ⚔️ Клан: <span id="prof-clan" class="text-red">Нет клана</span><br>
-        🛡️ Братство: <span id="prof-brotherhood" class="text-red">Нет братства</span><br>
-        🍏 Слава: <span id="prof-glory">0</span><br>
-        👥 Статус: Новобранец
+<!-- Основной блок содержимого с отступами -->
+<div class="main-content">
+
+    <!-- Основной контейнер профиля -->
+    <div class="profile-container">
+        <div class="char-name" id="prof-username">Новичок</div>
+        
+        <!-- Аватарка варвара по умолчанию -->
+        <img id="prof-avatar" class="avatar-img" src="" alt="Аватар">
+        
+        <div class="flag-icon">🇺🇦</div>
+        
+        <div class="quick-info">
+            🟢 Сейчас в игре (<span id="prof-time">--:--</span>)<br>
+            👑 Уровень: <span id="prof-lvl">1</span><br>
+            ⚔️ Клан: <span id="prof-clan" class="text-red">Нет клана</span><br>
+            🛡️ Братство: <span id="prof-brotherhood" class="text-red">Нет братства</span><br>
+            🍏 Слава: <span id="prof-glory">0</span><br>
+            👥 Статус: Новобранец
+        </div>
     </div>
-</div>
 
-<!-- Раздел смены аватара за 10 золота -->
-<div class="avatar-shop">
-    🖼️ <strong>Смена аватара:</strong> Установить свою картинку (URL ссылка)<br>
-    <span class="text-gold">Стоимость: 💰 10 золота</span><br style="margin-bottom: 4px;">
-    <input type="text" id="avatar-url-input" placeholder="http://image.com" style="width: 80%; padding: 3px; margin: 4px 0;">
-    <button class="wap-btn" onclick="buyAvatar()">Сменить аватар</button>
-</div>
+    <!-- Раздел смены аватара за 10 золота -->
+    <div class="avatar-shop">
+        🖼️ <strong>Смена аватара:</strong> Установить свою картинку (URL ссылка)<br>
+        <span class="text-gold">Стоимость: 💰 10 золота</span><br>
+        <input type="text" id="avatar-url-input" placeholder="https://site.com">
+        <button class="wap-btn" onclick="buyAvatar()">Сменить аватар</button>
+    </div>
 
-<!-- Спойлер Характеристики -->
-<div class="wap-spoiler" onclick="toggleSpoiler('details-spoiler')">📊 Характеристики</div>
-<div id="details-spoiler" class="spoiler-content">
-    
-    <div class="wap-ribbon">Параметры</div>
-    <ul class="param-list">
-        <li>💪 <strong>Сила:</strong> <span id="stat-str">5</span><span class="text-green" id="bonus-str">+0</span></li>
-        <li>🛡️ <strong>Защита:</strong> <span id="stat-def">5</span><span class="text-green" id="bonus-def">+0</span></li>
-        <li>🏃 <strong>Ловкость:</strong> <span id="stat-dex">5</span><span class="text-green" id="bonus-dex">+0</span></li>
-        <li>⚡ <strong>Мастерство:</strong> <span id="stat-mst">5</span><span class="text-green" id="bonus-mst">+0</span></li>
-        <li>➕ <strong>Живучесть:</strong> <span id="stat-vit">5</span><span class="text-green" id="bonus-vit">+0</span></li>
-        <li>❤️ Здоровье: <span id="stat-hp">100</span></li>
-        <li>❤️ Здор. макс.: <span id="stat-hp-max">100</span></li>
-        <li>❤️ Здор. восст.: <span id="stat-hp-reg">10</span> в час</li>
-    </ul>
+    <!-- Спойлер Характеристики -->
+    <div class="wap-spoiler" onclick="toggleSpoiler('details-spoiler')">📊 Характеристики</div>
+    <div id="details-spoiler" class="spoiler-content">
+        
+        <div class="wap-ribbon">Параметры</div>
+        <ul class="param-list">
+            <li>💪 <strong>Сила:</strong> <span id="stat-str">5</span><span class="text-green" id="bonus-str">+0</span></li>
+            <li>🛡️ <strong>Защита:</strong> <span id="stat-def">5</span><span class="text-green" id="bonus-def">+0</span></li>
+            <li>🏃 <strong>Ловкость:</strong> <span id="stat-dex">5</span><span class="text-green" id="bonus-dex">+0</span></li>
+            <li>⚡ <strong>Мастерство:</strong> <span id="stat-mst">5</span><span class="text-green" id="bonus-mst">+0</span></li>
+            <li>➕ <strong>Живучесть:</strong> <span id="stat-vit">5</span><span class="text-green" id="bonus-vit">+0</span></li>
+            <li>❤️ Здоровье: <span id="stat-hp">100</span></li>
+            <li>❤️ Здор. макс.: <span id="stat-hp-max">100</span></li>
+            <li>❤️ Здор. восст.: <span id="stat-hp-reg">10</span> в час</li>
+        </ul>
 
-    <!-- Убраны старые статические тексты, оставлена только лента -->
-    <div class="wap-ribbon">Бонусы</div>
-    <ul class="param-list" id="active-bonuses-list">
-        <li style="text-align: center; color: #aaa; font-style: italic;">Активные бонусы отсутствуют</li>
-    </ul>
+        <!-- По твоей просьбе оставлена только чистая надпись Бонусы -->
+        <div class="wap-ribbon">Бонусы</div>
+        <ul class="param-list" id="active-bonuses-list">
+            <li style="text-align: center; color: #aaa; font-style: italic;">Активные бонусы отсутствуют</li>
+        </ul>
 
-    <div class="wap-ribbon">Статистика</div>
-    <ul class="param-list">
-        <li>👥 Друзей: <span id="stat-friends">0</span></li>
-        <li>👑 Уровень: <span id="stat-lvl-copy">1</span></li>
-        <li>🌟 Опыт: <span id="stat-exp">0 / 100</span></li>
-        <li>🍏 Слава: <span id="stat-glory-copy">0</span></li>
-        <li>⚔️ Клан: <span id="stat-clan-copy" class="text-red">Нет</span></li>
-        <li>🛡️ Братство: <span id="stat-bro-copy" class="text-red">Нет</span></li>
-        <li>⚔️ Побед: <span id="stat-wins">0</span></li>
-        <li>💀 Проигрышей: <span id="stat-losses">0</span></li>
-        <li>🪙 Награбил (серебро): <span id="stat-loot-silv">0</span></li>
-        <li>🪙 Потерял (серебро): <span id="stat-lost-silv">0</span></li>
-        <li>💎 Награбил (кристаллы): <span id="stat-loot-gems">0</span></li>
-        <li>💎 Потерял (кристаллы): <span id="stat-lost-gems">0</span></li>
-        <li>🎒 Добыто шмоток: <span id="stat-items">0</span></li>
-        <li>🌲 Минут в походе: <span id="stat-camp-min">0</span></li>
-        <li>🛖 Часов на участке: <span id="stat-home-hrs">0</span></li>
-        <li>👹 Убито гоблинов: <span id="stat-goblins">0</span></li>
-        <li>🛡️ Даю защиты клану: <span id="stat-clan-def">0</span></li>
-        <li>🎖️ Военная эффективность: <span id="stat-eff">0 балла(-ов)</span></li>
-    </ul>
-</div>
+        <div class="wap-ribbon">Статистика</div>
+        <ul class="param-list">
+            <li>👥 Друзей: <span id="stat-friends">0</span></li>
+            <li>👑 Уровень: <span id="stat-lvl-copy">1</span></li>
+            <li>🌟 Опыт: <span id="stat-exp">0 / 100</span></li>
+            <li>🍏 Слава: <span id="stat-glory-copy">0</span></li>
+            <li>⚔️ Клан: <span id="stat-clan-copy" class="text-red">Нет</span></li>
+            <li>🛡️ Братство: <span id="stat-bro-copy" class="text-red">Нет</span></li>
+            <li>⚔️ Побед: <span id="stat-wins">0</span></li>
+            <li>💀 Проигрышей: <span id="stat-losses">0</span></li>
+            <li>🪙 Награбил (серебро): <span id="stat-loot-silv">0</span></li>
+            <li>🪙 Потерял (серебро): <span id="stat-lost-silv">0</span></li>
+            <li>💎 Награбил (кристаллы): <span id="stat-loot-gems">0</span></li>
+            <li>💎 Потерял (кристаллы): <span id="stat-lost-gems">0</span></li>
+            <li>🎒 Добыто шмоток: <span id="stat-items">0</span></li>
+            <li>🌲 Минут в походе: <span id="stat-camp-min">0</span></li>
+            <li>🛖 Часов на участке: <span id="stat-home-hrs">0</span></li>
+            <li>👹 Убито гоблинов: <span id="stat-goblins">0</span></li>
+            <li>🛡️ Даю защиты клану: <span id="stat-clan-def">0</span></li>
+            <li>🎖️ Военная эффективность: <span id="stat-eff">0 балла(-ов)</span></li>
+        </ul>
+    </div>
 
-<!-- Остальные WAP-спойлеры профиля -->
-<div class="wap-spoiler">🏅 Достижения</div>
-<div class="wap-spoiler">🎁 Подарки</div>
-<div class="wap-spoiler">☠️ Проклятия</div>
-<div class="wap-spoiler">📝 Анкета</div>
-    
-<a href="poselok.html">
-    <div class="wap-spoiler" style="background: #2c3e55; margin-top: 15px;">↪️ Назад в поселок</div>
-</a>
+    <!-- Остальные каноничные WAP-спойлеры профиля -->
+    <div class="wap-spoiler">🏅 Достижения</div>
+    <div class="wap-spoiler">🎁 Подарки</div>
+    <div class="wap-spoiler">☠️ Проклятия</div>
+    <div class="wap-spoiler">📝 Анкета</div>
+        
+    <!-- Навигационная WAP-кнопка назад в меню героя -->
+    <a href="hero.html">
+        <div class="wap-spoiler" style="background: #2c3e55; margin-top: 15px;">↪️ Назад к Герою</div>
+    </a>
 
+</div> <!-- /main-content -->
+
+<!-- Сюда глобальное ядро автоматически вставит нижний сквозной футер с навигацией -->
 <div id="core-footer"></div>
-
 <script>
-    const DEFAULT_BARBARIAN_AVATAR = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHCBYVFRgVFRYYGRgZGBgaHBocGRkaGBgaGhoaGhocGhwcIS4fHB4rHBgYJjgmKy8xNTU1GiQ7QDs0Py40NTEBDAwMEA8QHhISHzQrJCQ0NDQ0NDQ0NDQ4NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NP/AABEIAOEA4QMBIgACEQEDEQH/xAAbAAABBQEBAAAAAAAAAAAAAAADAQIEBQYAB//EAD4QAAIBAgQDBgUCBAUDBAMAAAECEQAhAxIxQVFhBBIicYGRBRMyobFCwVJictHh8AYUI4KSg6KywvFTY8P/xAAaAQADAQEBAQEAAAAAAAAAAAAAAQIDBAUG/8QAIhEBAQACAwEAAwEAAwAAAAAAAAECEQMhMRJBIgRRYRMU/999MAwBAQEBAQEBAQAAAAAAAAAAAAAAAQIDBAUG/8QAIhEBAQACAwEAAwEAAwAAAAAAAAECEQMhMRJBIgRRYRMU/999MAwBAQEBAQEBAQAAAAAAAAAAAAAAAQIDBAUG/8QAIhEBAQACAwEAAwEAAwAAAAAAAAECEQMhMRJBIgRRYRMU/999MAwBAQEBAQEBAQAAAAAAAAAAAAAAAQIDBAUG/8QAIhEBAQACAwEAAwEAAwAAAAAAAAECEQMhMRJBIgRRYRMU/999MAwBAQEBAQEBAQAAAAAAAAAAAAAAAQIDBAUG/8QAIhEBAQACAwEAAwEAAwAAAAAAAAECEQMhMRJBIgRRYRMU/999MAwBAQEBAQEBAQAAAAAAAAAAAAAAAQIDBAUG/8QAIhEBAQACAwEAAwEAAwAAAAAAAAECEQMhMRJBIgRRYRMU/999MAwBAQEBAQEBAQAAAAAAAAAAAAAAAQIDBAUG/8QAIhEBAQACAwEAAwEAAwAAAAAAAAECEQMhMRJBIgRRYRMU/999MAwBAQEBAQEBAQAAAAAAAAAAAAAAAQIDBAUG/8QAIhEBAQACAwEAAwEAAwAAAAAAAAECEQMhMRJBIgRRYRMU/999M";
+    // Изображение брутального варвара для новичков в формате Base64
+    const DEFAULT_BARBARIAN_AVATAR = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHCBYVFRgVFRYYGRgZGBgaHBocGRkaGBgaGhoaGhocGhwcIS4fHB4rHBgYJjgmKy8xNTU1GiQ7QDs0Py40NTEBDAwMEA8QHhISHzQrJCQ0NDQ0NDQ0NDQ4NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NP/AABEIAOEA4QMBIgACEQEDEQH/xAAbAAABBQEBAAAAAAAAAAAAAAADAQIEBQYAB//EAD4QAAIBAgQDBgUCBAUDBAMAAAECEQAhAxIxQVFhBBIicYGRBRMyobFCwVJictHh8AYUI4KSg6KywvFTY8P/xAAaAQADAQEBAQEAAAAAAAAAAAAAAQIDBAUG/8QAIhEBAQACAwEAAwEAAwAAAAAAAAECEQMhMRJBIgRRYRMU/999MAwBAQEBAQEBAQAAAAAAAAAAAAAAAQIDBAUG/8QAIhEBAQACAwEAAwEAAwAAAAAAAAECEQMhMRJBIgRRYRMU/999MAwBAQEBAQEBAQAAAAAAAAAAAAAAAQIDBAUG/8QAIhEBAQACAwEAAwEAAwAAAAAAAAECEQMhMRJBIgRRYRMU/999MAwBAQEBAQEBAQAAAAAAAAAAAAAAAQIDBAUG/8QAIhEBAQACAwEAAwEAAwAAAAAAAAECEQMhMRJBIgRRYRMU/999MAwBAQEBAQEBAQAAAAAAAAAAAAAAAQIDBAUG/8QAIhEBAQACAwEAAwEAAwAAAAAAAAECEQMhMRJBIgRRYRMU/999MAwBAQEBAQEBAQAAAAAAAAAAAAAAAQIDBAUG/8QAIhEBAQACAwEAAwEAAwAAAAAAAAECEQMhMRJBIgRRYRMU/999MAwBAQEBAQEBAQAAAAAAAAAAAAAAAQIDBAUG/8QAIhEBAQACAwEAAwEAAwAAAAAAAAECEQMhMRJBIgRRYRMU/999MAwBAQEBAQEBAQAAAAAAAAAAAAAAAQIDBAUG/8QAIhEBAQACAwEAAwEAAwAAAAAAAAECEQMhMRJBIgRRYRMU/999MAwBAQEBAQEBAQAAAAAAAAAAAAAAAQIDBAUG/8QAIhEBAQACAwEAAwEAAwAAAAAAAAECEQMhMRJBIgRRYRMU/999M";
 
+    // Функция генерации параметров с чистого листа для новичка
     function initNewPlayer() {
         if (!localStorage.getItem('barbarians_username')) {
-            localStorage.setItem('barbarians_username', 'Воин_' + Math.floor(Math.random() * 9000 + 1000));
+            localStorage.setItem('barbarians_username', 'Варвар_' + Math.floor(Math.random() * 9000 + 1000));
         }
+        
+        // Базовые характеристики на 5
         if (!localStorage.getItem('barb_lvl')) localStorage.setItem('barb_lvl', '1');
         if (!localStorage.getItem('barb_str')) localStorage.setItem('barb_str', '5');
         if (!localStorage.getItem('barb_def')) localStorage.setItem('barb_def', '5');
@@ -209,14 +242,17 @@
         if (!localStorage.getItem('barb_mst')) localStorage.setItem('barb_mst', '5');
         if (!localStorage.getItem('barb_vit')) localStorage.setItem('barb_vit', '5');
         
+        // Ресурсы в ноль
         if (!localStorage.getItem('barb_silver')) localStorage.setItem('barb_silver', '0');
         if (!localStorage.getItem('barb_gold')) localStorage.setItem('barb_gold', '15');
         if (!localStorage.getItem('barb_gems')) localStorage.setItem('barb_gems', '0');
         if (!localStorage.getItem('barb_glory')) localStorage.setItem('barb_glory', '0');
         
+        // Без клана и братства
         if (!localStorage.getItem('barb_clan_id')) localStorage.setItem('barb_clan_id', '');
         if (!localStorage.getItem('barb_brotherhood')) localStorage.setItem('barb_brotherhood', '');
         
+        // Обнуление боевой статистики
         if (!localStorage.getItem('stat_wins')) localStorage.setItem('stat_wins', '0');
         if (!localStorage.getItem('stat_losses')) localStorage.setItem('stat_losses', '0');
         if (!localStorage.getItem('stat_goblins')) localStorage.setItem('stat_goblins', '0');
@@ -225,49 +261,69 @@
     document.addEventListener("DOMContentLoaded", function() {
         initNewPlayer();
 
+        // Проверяем наличие ядра и запускаем отрисовку
+        if (typeof window.initCore === "function") {
+            window.initCore();
+        }
+
+        // Подгружаем имя, уровень и славу
         const username = localStorage.getItem('barbarians_username');
         document.getElementById('prof-username').innerText = username;
         document.getElementById('prof-lvl').innerText = localStorage.getItem('barb_lvl');
         document.getElementById('stat-lvl-copy').innerText = localStorage.getItem('barb_lvl');
+        document.getElementById('prof-glory').innerText = localStorage.getItem('barb_glory');
+        document.getElementById('stat-glory-copy').innerText = localStorage.getItem('barb_glory');
         
+        // Выводим статы новичка в форму характеристик
         document.getElementById('stat-str').innerText = localStorage.getItem('barb_str');
         document.getElementById('stat-def').innerText = localStorage.getItem('barb_def');
         document.getElementById('stat-dex').innerText = localStorage.getItem('barb_dex');
         document.getElementById('stat-mst').innerText = localStorage.getItem('barb_mst');
         document.getElementById('stat-vit').innerText = localStorage.getItem('barb_vit');
 
+        // Проверяем статус клана
         const clan = localStorage.getItem('barb_clan_id');
-        if(clan) {
+        if(clan && clan.trim() !== "") {
             document.getElementById('prof-clan').className = "text-green";
             document.getElementById('prof-clan').innerText = clan;
             document.getElementById('stat-clan-copy').className = "text-gold";
             document.getElementById('stat-clan-copy').innerText = clan;
         }
 
+        // Устанавливаем время
         const now = new Date();
         document.getElementById('prof-time').innerText = now.toLocaleTimeString();
 
+        // Проверяем аватар
         const playerAvatar = localStorage.getItem('barb_custom_avatar');
         document.getElementById('prof-avatar').src = playerAvatar ? playerAvatar : DEFAULT_BARBARIAN_AVATAR;
     });
 
+    // Управление открытием и закрытием спойлеров
     function toggleSpoiler(id) {
         const content = document.getElementById(id);
         content.style.display = (content.style.display === "block") ? "none" : "block";
         content.previousElementSibling.classList.toggle('active');
     }
 
+    // Логика покупки аватара со списанием золота
     function buyAvatar() {
         const urlInput = document.getElementById('avatar-url-input').value.trim();
-        if(!urlInput) return alert("Введите рабочую ссылку!");
+        if(!urlInput) return alert("Введите корректную ссылку на изображение!");
 
         let currentGold = parseInt(localStorage.getItem('barb_gold')) || 0;
-        if(currentGold < 10) return alert("❌ Недостаточно золота! Нужна десятка 💰");
+        if(currentGold < 10) return alert("❌ Недостаточно золота! Стоимость смены — 💰 10 монет.");
 
+        // Списываем золото и сохраняем новый аватар
         localStorage.setItem('barb_gold', currentGold - 10);
         localStorage.setItem('barb_custom_avatar', urlInput);
         document.getElementById('prof-avatar').src = urlInput;
         
+        // Отправляем запись в глобальный лог
+        if(typeof window.addGameEvent === "function") {
+            window.addGameEvent('Подарки', 'Личное', `Сменил личный аватар на кастомный за 10 золота.`, false);
+        }
+
         alert("👑 Аватар успешно изменен!");
         location.reload();
     }

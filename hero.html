@@ -1,105 +1,192 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Варвары — Профиль героя</title>
-    <style>
-        body { background-color: #061118; color: #ffffff; font-family: Arial, sans-serif; margin: 0; padding: 0; user-select: none; }
-        .category-bar { background: linear-gradient(to bottom, #d4c2a8, #bba78c); color: #3d240e; font-size: 14px; font-weight: bold; text-align: center; padding: 5px 15px; margin: 10px 0 5px 0; border-top: 1px solid #ebd9c0; border-bottom: 1px solid #8e785d; box-shadow: inset 0 1px 2px rgba(255,255,255,0.4); display: flex; justify-content: space-between; align-items: center; }
-        .category-bar::before, .category-bar::after { content: "⚜️"; font-size: 12px; color: #6a4f31; }
-        .stats-block { padding: 8px 15px; font-size: 14px; line-height: 1.6; }
-        .stat-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
-        .highlight-title { font-weight: bold; color: #adc8d9; }
-        .yellow-text { color: #ffff00; }
-        .green-text { color: #00ffaa; }
-        .menu-link { background: linear-gradient(to bottom, #091b29, #050e16); padding: 13px 15px; margin-top: 15px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #0f2231; border-bottom: 1px solid #0f2231; text-decoration: none; color: #adc8d9; font-size: 14px; font-weight: bold; }
-        .menu-arrow { color: #1c8cd1; font-weight: bold; letter-spacing: -2px; }
-    </style>
-</head>
-<body>
-    <div class="category-bar">Параметры</div>
-    <div class="stats-block">
-        <div class="stat-row"><div>💪 <span class="highlight-title">Сила:</span> <span id="stat-str">5</span></div></div>
-        <div class="stat-row"><div>🛡️ <span class="highlight-title">Защита:</span> <span id="stat-def">5</span></div></div>
-        <div class="stat-row"><div>🏃 <span class="highlight-title">Ловкость:</span> <span id="stat-agi">5</span></div></div>
-        <div class="stat-row"><div>⚡ <span class="highlight-title">Мастерство:</span> <span id="stat-mst">5</span></div></div>
-        <div class="stat-row"><div>➕ <span class="highlight-title">Живучесть:</span> <span id="stat-vit">5</span></div></div>
-        <hr style="border-color: #0f2231; margin: 8px 0;">
-        <div>❤️ <span class="highlight-title">Здоровье:</span> <span id="char-hp">250</span></div>
-        <div>💚 <span class="highlight-title">Здор. макс.:</span> <span id="char-hp-max">250</span></div>
-        <div>❤️ <span class="highlight-title">Здор. восст.:</span> 30 в час</div>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<style>
+    /* Каноничный серо-синий WAP-стиль Норманнов */
+    body {
+        background-color: #0d1b2a;
+        color: #e0e1dd;
+        font-family: Arial, sans-serif;
+        font-size: 15px;
+        margin: 0;
+        padding: 0;
+    }
+    a { text-decoration: none; display: block; }
+    
+    .main-content {
+        padding: 5px;
+    }
+    
+    /* Блок отображения героя */
+    .hero-container {
+        background-color: #1b263b;
+        border: 1px solid #415a77;
+        padding: 15px 10px;
+        text-align: center;
+        margin-bottom: 5px;
+    }
+    .hero-title {
+        font-size: 18px;
+        font-weight: bold;
+        color: #ffffff;
+        margin-bottom: 12px;
+    }
+    .avatar-img {
+        width: 100%;
+        max-width: 200px;
+        height: auto;
+        border: 2px solid #415a77;
+        border-radius: 4px;
+        display: block;
+        margin: 0 auto;
+    }
+
+    /* WAP-Кнопки меню */
+    .wap-menu-btn {
+        background: linear-gradient(to bottom, #1b263b, #0d1b2a);
+        border: 1px solid #415a77;
+        color: #ffffff;
+        padding: 10px 12px;
+        margin: 4px 0;
+        cursor: pointer;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 14px;
+    }
+    .wap-menu-btn::after { content: '»'; color: #00b4d8; font-size: 18px; }
+    
+    /* Специфический стиль для кнопки Назад/Главная */
+    .btn-nav {
+        background: linear-gradient(to bottom, #2c3e55, #162238);
+    }
+
+    /* Всплывающее WAP-окно для покупки Аватарки */
+    .avatar-modal {
+        display: none;
+        background-color: #111a2e;
+        border: 1px solid #ffcc00;
+        padding: 12px;
+        margin: 5px 0;
+        text-align: center;
+        font-size: 13px;
+    }
+    .avatar-modal input {
+        width: 85%;
+        padding: 6px;
+        margin: 8px 0;
+        background-color: #0d1b2a;
+        border: 1px solid #415a77;
+        color: #fff;
+    }
+    .wap-btn {
+        background-color: #415a77;
+        color: #fff;
+        border: 1px solid #778da9;
+        padding: 6px 15px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: bold;
+    }
+    .text-gold { color: #ffcc00; }
+</style>
+<!-- Подключаем единое ядро игры -->
+<script src="global_core.js"></script>
+
+<!-- Верхняя шапка ядра -->
+<div id="core-header"></div>
+
+<div class="main-content">
+
+    <!-- Контейнер с аватаром -->
+    <div class="hero-container">
+        <div class="hero-title">Герой</div>
+        <img id="hero-avatar-img" class="avatar-img" src="" alt="Герой">
     </div>
-    <div class="category-bar">Бонусы</div>
-    <div class="stats-block" style="color: #8faec4;">
-        <div>Одежда: 💪 +0 🛡️ +0 🏃 +0 ⚡ +0 ➕ +0</div>
-        <div>Бонусы одежды: 💪 +0 🛡️ +0 🏃 +0 ⚡ +0</div>
+
+    <!-- КНОПКИ МЕНЮ ИЗ СКРИНШОТА -->
+    
+    <!-- Переход на созданный нами profile.html (где лежат все параметры и статы по 5) -->
+    <a href="profile.html">
+        <div class="wap-menu-btn">🤠 Детали</div>
+    </a>
+    
+    <div class="wap-menu-btn">📝 Анкета (редактирование)</div>
+    
+    <a href="profile.html">
+        <div class="wap-menu-btn">🤠 Профиль</div>
+    </a>
+    
+    <div class="wap-menu-btn">💪 Тренировка</div>
+    <div class="wap-menu-btn">⚔️ Экипировка</div>
+    <div class="wap-menu-btn">📝 Надписи</div>
+    
+    <!-- Кнопка Аватарка: при нажатии открывает меню смены прямо здесь -->
+    <div class="wap-menu-btn" onclick="toggleAvatarShop()">📝 Аватарка</div>
+    
+    <!-- Скрытый блок покупки, который плавно открывается по нажатию -->
+    <div id="avatar-shop-block" class="avatar-modal">
+        🖼️ <strong>Установка личной аватарки</strong><br>
+        Вставь URL-ссылку на картинку в поле ниже:<br>
+        <span class="text-gold">Стоимость услуги: 💰 10 золота</span><br>
+        <input type="text" id="pop-avatar-url" placeholder="https://site.com">
+        <br>
+        <button class="wap-btn" onclick="buyHeroAvatar()">Применить за 10 золота</button>
     </div>
-    <div class="category-bar">Статистика</div>
-    <div class="stats-block">
-        <div>👥 <span class="highlight-title">Друзей:</span> 0</div>
-        <div class="green-text">👑 <span class="highlight-title" style="color:#00ffaa;">Уровень:</span> <span id="char-lvl">1</span></div>
-        <div>⭐ <span class="highlight-title">Опыт:</span> <span id="char-exp">0</span> / <span id="char-exp-max">15</span></div>
-        <div class="yellow-text">🏆 <span class="highlight-title" style="color:#ffff00;">Слава:</span> <span id="char-fame">0</span></div>
-        <div>🏰 <span class="highlight-title">Клан:</span> Не состоит в клане</div>
-        <div class="yellow-text">🪙 <span class="highlight-title" style="color:#ffff00;">Серебро в сумке:</span> <span id="char-silver">10000</span></div>
-        <div>💰 <span class="highlight-title">Золото в сумке:</span> <span id="char-gold">15</span></div>
-        <div>💎 <span class="highlight-title">Кристаллы:</span> <span id="char-gems">0</span></div>
-    </div>
-    <a href="index.html" class="menu-link"><span>🏠 Вернуться на главную</span><span class="menu-arrow">»»</span></a>
-    <script>
-        function getMaxExpForLvl(level) {
-            if (level <= 1) return 15;
-            return Math.floor(Math.pow(level - 1, 2) * 10 + 15);
+
+    <div class="wap-menu-btn">👥 Пригласить</div>
+    
+    <a href="poselok.html">
+        <div class="wap-menu-btn btn-nav">↪️ Назад</div>
+    </a>
+    
+    <a href="index.html">
+        <div class="wap-menu-btn btn-nav">🏠 Главная</div>
+    </a>
+
+</div> <!-- /main-content -->
+
+<!-- Нижний футер ядра -->
+<div id="core-footer"></div>
+
+<script>
+    // Дефолтный брутальный варвар для новичков
+    const DEFAULT_HERO_AVATAR = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHCBYVFRgVFRYYGRgZGBgaHBocGRkaGBgaGhoaGhocGhwcIS4fHB4rHBgYJjgmKy8xNTU1GiQ7QDs0Py40NTEBDAwMEA8QHhISHzQrJCQ0NDQ0NDQ0NDQ4NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NP/AABEIAOEA4QMBIgACEQEDEQH/xAAbAAABBQEBAAAAAAAAAAAAAAADAQIEBQYAB//EAD4QAAIBAgQDBgUCBAUDBAMAAAECEQAhAxIxQVFhBBIicYGRBRMyobFCwVJictHh8AYUI4KSg6KywvFTY8P/xAAaAQADAQEBAQEAAAAAAAAAAAAAAQIDBAUG/8QAIhEBAQACAwEAAwEAAwAAAAAAAAECEQMhMRJBIgRRYRMU/999MAwBAQEBAQEBAQAAAAAAAAAAAAAAAQIDBAUG/8QAIhEBAQACAwEAAwEAAwAAAAAAAAECEQMhMRJBIgRRYRMU/999MAwBAQEBAQEBAQAAAAAAAAAAAAAAAQIDBAUG/8QAIhEBAQACAwEAAwEAAwAAAAAAAAECEQMhMRJBIgRRYRMU/999MAwBAQEBAQEBAQAAAAAAAAAAAAAAAQIDBAUG/8QAIhEBAQACAwEAAwEAAwAAAAAAAAECEQMhMRJBIgRRYRMU/999MAwBAQEBAQEBAQAAAAAAAAAAAAAAAQIDBAUG/8QAIhEBAQACAwEAAwEAAwAAAAAAAAECEQMhMRJBIgRRYRMU/999MAwBAQEBAQEBAQAAAAAAAAAAAAAAAQIDBAUG/8QAIhEBAQACAwEAAwEAAwAAAAAAAAECEQMhMRJBIgRRYRMU/999MAwBAQEBAQEBAQAAAAAAAAAAAAAAAQIDBAUG/8QAIhEBAQACAwEAAwEAAwAAAAAAAAECEQMhMRJBIgRRYRMU/999MAwBAQEBAQEBAQAAAAAAAAAAAAAAAQIDBAUG/8QAIhEBAQACAwEAAwEAAwAAAAAAAAECEQMhMRJBIgRRYRMU/999M";
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Проверяем и отрисовываем шапки ядра
+        if (typeof window.initCore === "function") window.initCore();
+
+        // Подгружаем аватарку игрока (если покупал — свою, если нет — варвара)
+        const currentAvatar = localStorage.getItem('barb_custom_avatar');
+        document.getElementById('hero-avatar-img').src = currentAvatar ? currentAvatar : DEFAULT_HERO_AVATAR;
+    });
+
+    // Открытие/закрытие плашки смены аватара
+    function toggleAvatarShop() {
+        const block = document.getElementById('avatar-shop-block');
+        block.style.display = (block.style.display === "block") ? "none" : "block";
+    }
+
+    // Покупка аватара за 10 золота прямо с экрана Героя
+    function buyHeroAvatar() {
+        const inputUrl = document.getElementById('pop-avatar-url').value.trim();
+        if(!inputUrl) return alert("Введите рабочую URL ссылку на картинку!");
+
+        let gold = parseInt(localStorage.getItem('barb_gold')) || 0;
+        if(gold < 10) return alert("❌ Недостаточно золота! Нужно 💰 10 монет.");
+
+        // Списание и сохранение
+        localStorage.setItem('barb_gold', gold - 10);
+        localStorage.setItem('barb_custom_avatar', inputUrl);
+        document.getElementById('hero-avatar-img').src = inputUrl;
+        
+        // Отправка события в events.html через ядро
+        if(typeof window.addGameEvent === "function") {
+            window.addGameEvent('Подарки', 'Личное', `Установлена новая аватарка через меню Героя.`, false);
         }
 
-        function loadHeroData() {
-            let userSilver = localStorage.getItem('barb_silver') || '10000';
-            let lvl = parseInt(localStorage.getItem('barb_lvl') || '1');
-            let gold = localStorage.getItem('barb_gold') || '15';
-            let gems = localStorage.getItem('barb_gems') || '0';
-            let fame = localStorage.getItem('barb_fame') || '0';
-            let exp = parseInt(localStorage.getItem('barb_exp') || '0');
-
-            let str = parseInt(localStorage.getItem('barb_str') || '5');
-            let def = parseInt(localStorage.getItem('barb_def') || '5');
-            let agi = parseInt(localStorage.getItem('barb_agi') || '5');
-            let mst = parseInt(localStorage.getItem('barb_mst') || '5');
-            let vit = parseInt(localStorage.getItem('barb_vit') || '5');
-
-            let equipped = JSON.parse(localStorage.getItem('barb_equipped') || '{}');
-            for (let slot in equipped) {
-                let item = equipped[slot];
-                if (item.bonus) {
-                    if (item.bonus.str) str += item.bonus.str;
-                    if (item.bonus.def) def += item.bonus.def;
-                    if (item.bonus.agi) agi += item.bonus.agi;
-                    if (item.bonus.mst) mst += item.bonus.mst;
-                    if (item.bonus.vit) vit += item.bonus.vit;
-                }
-            }
-
-            let maxHp = 250 + (vit * 20);
-            let maxExp = getMaxExpForLvl(lvl);
-
-            document.getElementById('stat-str').innerText = str;
-            document.getElementById('stat-def').innerText = def;
-            document.getElementById('stat-agi').innerText = agi;
-            document.getElementById('stat-mst').innerText = mst;
-            document.getElementById('stat-vit').innerText = vit;
-            document.getElementById('char-hp').innerText = maxHp;
-            document.getElementById('char-hp-max').innerText = maxHp;
-            
-            document.getElementById('char-lvl').innerText = lvl;
-            document.getElementById('char-exp').innerText = exp;
-            document.getElementById('char-exp-max').innerText = maxExp;
-            document.getElementById('char-fame').innerText = fame;
-            document.getElementById('char-silver').innerText = userSilver;
-            document.getElementById('char-gold').innerText = gold;
-            document.getElementById('char-gems').innerText = gems;
-        }
-        document.addEventListener("DOMContentLoaded", loadHeroData);
-    </script>
-    <script src="global_core.js"></script>
-</body>
-</html>
+        alert("👑 Картинка успешно обновлена!");
+        location.reload(); // Перезагружаем, чтобы обновилось золото в верхней шапке ядра
+    }
+</script>
