@@ -1,283 +1,295 @@
-<meta charset="UTF-8">
-<!-- Настройка крупного масштаба для мобильных экранов -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<style>
-    /* Каноничный серо-синий WAP-стиль Норманнов */
-    body {
-        background-color: #0d1b2a;
-        color: #e0e1dd;
-        font-family: Arial, sans-serif;
-        font-size: 15px;
-        margin: 0;
-        padding: 0;
-    }
-    a { color: #ffffff; text-decoration: none; display: block; }
-    
-    .main-content {
-        padding: 5px;
-    }
-    
-    /* Блок основной информации */
-    .profile-container {
-        background-color: #1b263b;
-        border: 1px solid #415a77;
-        padding: 12px;
-        text-align: left;
-        margin-bottom: 5px;
-    }
-    
-    .quick-info {
-        font-size: 14px;
-        line-height: 1.6;
-    }
-    .text-green { color: #4caf50; }
-    .text-gold { color: #ffcc00; }
-    .text-red { color: #e63946; }
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <!-- Настройка крупного WAP-масштаба для мобильных экранов -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Варвары - Профиль персонажа</title>
+    <style>
+        /* Каноничный серо-синий WAP-стиль Норманнов */
+        body {
+            background-color: #0d1b2a;
+            color: #e0e1dd;
+            font-family: Arial, sans-serif;
+            font-size: 15px;
+            margin: 0;
+            padding: 0;
+        }
+        a { color: #ffffff; text-decoration: none; display: block; }
+        
+        .main-content {
+            padding: 5px;
+        }
+        
+        /* Блок основной информации */
+        .profile-container {
+            background-color: #1b263b;
+            border: 1px solid #415a77;
+            padding: 12px;
+            text-align: left;
+            margin-bottom: 5px;
+        }
+        
+        .quick-info {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .text-green { color: #4caf50; }
+        .text-gold { color: #ffcc00; }
+        .text-red { color: #e63946; }
 
-    /* WAP-Кнопки спойлеров и навигации */
-    .wap-spoiler, .wap-nav-btn {
-        background: linear-gradient(to bottom, #1b263b, #0d1b2a);
-        border: 1px solid #415a77;
-        color: #ffffff;
-        padding: 10px 12px;
-        margin: 4px 0;
-        cursor: pointer;
-        font-weight: bold;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 14px;
-    }
-    .wap-spoiler::after, .wap-nav-btn::after { content: '»»'; color: #00b4d8; font-size: 14px; font-weight: normal; }
-    .wap-spoiler.active::after { content: '««'; }
-    
-    /* Декоративная линия-разделитель перед меню переходов */
-    .nav-divider {
-        height: 4px;
-        background: #415a77 linear-gradient(to right, #1b263b, #5c7799, #1b263b);
-        margin: 12px 0 8px 0;
-        border-radius: 2px;
-    }
+        /* WAP-Кнопки спойлеров и навигации */
+        .wap-spoiler, .wap-nav-btn {
+            background: linear-gradient(to bottom, #1b263b, #0d1b2a);
+            border: 1px solid #415a77;
+            color: #ffffff;
+            padding: 10px 12px;
+            margin: 4px 0;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+        .wap-spoiler::after, .wap-nav-btn::after { content: '»»'; color: #00b4d8; font-size: 14px; font-weight: normal; }
+        .wap-spoiler.active::after { content: '««'; }
+        
+        /* Декоративная линия-разделитель перед меню переходов */
+        .nav-divider {
+            height: 4px;
+            background: #415a77 linear-gradient(to right, #1b263b, #5c7799, #1b263b);
+            margin: 12px 0 8px 0;
+            border-radius: 2px;
+        }
 
-    /* Скрытые детали */
-    .spoiler-content {
-        display: none;
-        background-color: #111a2e;
-        border: 1px solid #415a77;
-        border-top: none;
-        padding: 10px;
-        margin-top: -5px;
-        margin-bottom: 5px;
-    }
-    
-    /* Ленты параметров */
-    .wap-ribbon {
-        background: #415a77 linear-gradient(to bottom, #5c7799, #2c3e55);
-        color: #ffe6a7;
-        text-align: center;
-        font-weight: bold;
-        padding: 5px;
-        font-size: 14px;
-        border: 1px solid #1b263b;
-        margin: 10px 0 6px 0;
-        text-shadow: 1px 1px 1px #000;
-    }
+        /* Скрытые детали */
+        .spoiler-content {
+            display: none;
+            background-color: #111a2e;
+            border: 1px solid #415a77;
+            border-top: none;
+            padding: 10px;
+            margin-top: -5px;
+            margin-bottom: 5px;
+        }
+        
+        /* Ленты параметров */
+        .wap-ribbon {
+            background: #415a77 linear-gradient(to bottom, #5c7799, #2c3e55);
+            color: #ffe6a7;
+            text-align: center;
+            font-weight: bold;
+            padding: 5px;
+            font-size: 14px;
+            border: 1px solid #1b263b;
+            margin: 10px 0 6px 0;
+            text-shadow: 1px 1px 1px #000;
+        }
 
-    .param-list { list-style: none; padding: 0; margin: 0; text-align: left; }
-    .param-list li { padding: 5px 0; border-bottom: 1px dashed #2c3e55; font-size: 14px; }
-    .param-list li:last-child { border-bottom: none; }
+        .param-list { list-style: none; padding: 0; margin: 0; text-align: left; }
+        .param-list li { padding: 5px 0; border-bottom: 1px dashed #2c3e55; font-size: 14px; }
+        .param-list li:last-child { border-bottom: none; }
 
-    /* Служебные ссылки в самом низу */
-    .footer-links {
-        text-align: center;
-        padding: 15px 5px;
-        font-size: 13px;
-    }
-    .footer-links a {
-        display: inline-block;
-        color: #778da9;
-        margin: 0 8px;
-    }
-    .footer-links a:hover { color: #ffffff; }
-</style>
-<!-- Автоматическая верхняя шапка ядра с ресурсами -->
-<script src="global_core.js"></script>
-<div id="core-header"></div>
+        /* Служебные ссылки в самом низу */
+        .footer-links {
+            text-align: center;
+            padding: 15px 5px;
+            font-size: 13px;
+        }
+        .footer-links a {
+            display: inline-block;
+            color: #778da9;
+            margin: 0 8px;
+        }
+        .footer-links a:hover { color: #ffffff; }
+    </style>
+</head>
+<body>
+    <!-- Автоматическая верхняя шапка ядра с ресурсами -->
+    <script src="global_core.js"></script>
+    <div id="core-header"></div>
 
-<div class="main-content">
+    <div class="main-content">
 
-    <!-- Краткая сводка профиля без картинок -->
-    <div class="profile-container">
-        <div class="quick-info">
-            🟢 Сейчас в игре (<span id="prof-time">--:--</span>)<br>
-            👑 Уровень: <span id="prof-lvl">1</span><br>
-            ⚔️ Клан: <span id="prof-clan" class="text-red">Нет клана</span><br>
-            🛡️ Братство: <span id="prof-brotherhood" class="text-red">Нет братства</span><br>
-            🍏 Слава: <span id="prof-glory">0</span><br>
-            👥 Статус: Новобранец
+        <!-- Краткая сводка профиля без картинок -->
+        <div class="profile-container">
+            <div class="quick-info">
+                🟢 Сейчас в игре (<span id="prof-time">--:--</span>)<br>
+                👑 Уровень: <span id="prof-lvl">1</span><br>
+                ⚔️ Клан: <span id="prof-clan" class="text-red">Нет клана</span><br>
+                🛡️ Братство: <span id="prof-brotherhood" class="text-red">Нет братства</span><br>
+                🍏 Слава: <span id="prof-glory">0</span><br>
+                👥 Статус: Новобранец
+            </div>
         </div>
-    </div>
 
-    <!-- Спойлер Характеристики -->
-    <div class="wap-spoiler" onclick="toggleSpoiler('details-spoiler')">📊 Характеристики</div>
-    <div id="details-spoiler" class="spoiler-content">
-        
-        <div class="wap-ribbon">Параметры</div>
-        <ul class="param-list">
-            <li>💪 <strong>Сила:</strong> <span id="stat-str">5</span><span class="text-green" id="bonus-str">+0</span></li>
-            <li>🛡️ <strong>Защита:</strong> <span id="stat-def">5</span><span class="text-green" id="bonus-def">+0</span></li>
-            <li>🏃 <strong>Ловкость:</strong> <span id="stat-dex">5</span><span class="text-green" id="bonus-dex">+0</span></li>
-            <li>⚡ <strong>Мастерство:</strong> <span id="stat-mst">5</span><span class="text-green" id="bonus-mst">+0</span></li>
-            <li>➕ <strong>Живучесть:</strong> <span id="stat-vit">5</span><span class="text-green" id="bonus-vit">+0</span></li>
-            <li>❤️ Здоровье: <span id="stat-hp">100</span></li>
-            <li>❤️ Здор. макс.: <span id="stat-hp-max">100</span></li>
-            <li>❤️ Здор. восст.: <span id="stat-hp-reg">10</span> в час</li>
-        </ul>
+        <!-- Спойлер Характеристики -->
+        <div class="wap-spoiler" onclick="toggleSpoiler('details-spoiler')">📊 Характеристики</div>
+        <div id="details-spoiler" class="spoiler-content">
+            
+            <div class="wap-ribbon">Параметры</div>
+            <ul class="param-list">
+                <li>💪 <strong>Сила:</strong> <span id="stat-str">5</span><span class="text-green" id="bonus-str">+0</span></li>
+                <li>🛡️ <strong>Защита:</strong> <span id="stat-def">5</span><span class="text-green" id="bonus-def">+0</span></li>
+                <li>🏃 <strong>Ловкость:</strong> <span id="stat-dex">5</span><span class="text-green" id="bonus-dex">+0</span></li>
+                <li>⚡ <strong>Мастерство:</strong> <span id="stat-mst">5</span><span class="text-green" id="bonus-mst">+0</span></li>
+                <li>➕ <strong>Живучесть:</strong> <span id="stat-vit">5</span><span class="text-green" id="bonus-vit">+0</span></li>
+                <li>❤️ Здоровье: <span id="stat-hp">100</span></li>
+                <li>❤️ Здор. макс.: <span id="stat-hp-max">100</span></li>
+                <li>❤️ Здор. восст.: <span id="stat-hp-reg">10</span> в час</li>
+            </ul>
 
-        <div class="wap-ribbon">Бонусы</div>
-        <ul class="param-list">
-            <li style="text-align: center; color: #aaa; font-style: italic;">Активные бонусы отсутствуют</li>
-        </ul>
+            <div class="wap-ribbon">Бонусы</div>
+            <ul class="param-list">
+                <li style="text-align: center; color: #aaa; font-style: italic;">Активные бонусы отсутствуют</li>
+            </ul>
+            <div class="wap-ribbon">Статистика</div>
+            <ul class="param-list">
+                <li>👥 Друзей: <span id="stat-friends">0</span></li>
+                <li>👑 Уровень: <span id="stat-lvl-copy">1</span></li>
+                <li>🌟 Опыт: <span id="stat-exp">0 / 100</span></li>
+                <li>🍏 Слава: <span id="stat-glory-copy">0</span></li>
+                <li>⚔️ Клан: <span id="stat-clan-copy" class="text-red">Нет</span></li>
+                <li>🛡️ Братство: <span id="stat-bro-copy" class="text-red">Нет</span></li>
+                <li>⚔️ Побед: <span id="stat-wins">0</span></li>
+                <li>💀 Проигрышей: <span id="stat-losses">0</span></li>
+                <li>🪙 Награбил (серебро): <span id="stat-loot-silv">0</span></li>
+                <li>🪙 Потерял (серебро): <span id="stat-lost-silv">0</span></li>
+                <li>💎 Награбил (кристаллы): <span id="stat-loot-gems">0</span></li>
+                <li>💎 Потерял (кристаллы): <span id="stat-lost-gems">0</span></li>
+                <li>🎒 Добыто шмоток: <span id="stat-items">0</span></li>
+                <li>🌲 Минут в походе: <span id="stat-camp-min">0</span></li>
+                <li>🛖 Часов на участке: <span id="stat-home-hrs">0</span></li>
+                <li>👹 Убито гоблинов: <span id="stat-goblins">0</span></li>
+                <li>🛡️ Даю защиты клану: <span id="stat-clan-def">0</span></li>
+                <li>🎖️ Военная эффективность: <span id="stat-eff">0 балла(-ов)</span></li>
+            </ul>
+        </div>
 
-        <div class="wap-ribbon">Статистика</div>
-        <ul class="param-list">
-            <li>👥 Друзей: <span id="stat-friends">0</span></li>
-            <li>👑 Уровень: <span id="stat-lvl-copy">1</span></li>
-            <li>🌟 Опыт: <span id="stat-exp">0 / 100</span></li>
-            <li>🍏 Слава: <span id="stat-glory-copy">0</span></li>
-            <li>⚔️ Клан: <span id="stat-clan-copy" class="text-red">Нет</span></li>
-            <li>🛡️ Братство: <span id="stat-bro-copy" class="text-red">Нет</span></li>
-            <li>⚔️ Побед: <span id="stat-wins">0</span></li>
-            <li>💀 Проигрышей: <span id="stat-losses">0</span></li>
-            <li>🪙 Награбил (серебро): <span id="stat-loot-silv">0</span></li>
-            <li>🪙 Потерял (серебро): <span id="stat-lost-silv">0</span></li>
-            <li>💎 Награбил (кристаллы): <span id="stat-loot-gems">0</span></li>
-            <li>💎 Потерял (кристаллы): <span id="stat-lost-gems">0</span></li>
-            <li>🎒 Добыто шмоток: <span id="stat-items">0</span></li>
-            <li>🌲 Минут в походе: <span id="stat-camp-min">0</span></li>
-            <li>🛖 Часов на участке: <span id="stat-home-hrs">0</span></li>
-            <li>👹 Убито гоблинов: <span id="stat-goblins">0</span></li>
-            <li>🛡️ Даю защиты клану: <span id="stat-clan-def">0</span></li>
-            <li>🎖️ Военная эффективность: <span id="stat-eff">0 балла(-ов)</span></li>
-        </ul>
-    </div>
+        <!-- Остальные WAP-спойлеры профиля персонажа -->
+        <div class="wap-spoiler">🏅 Достижения</div>
+        <div class="wap-spoiler">🎁 Подарки</div>
+        <div class="wap-spoiler">☠️ Проклятия</div>
+        <div class="wap-spoiler">📝 Анкета</div>
 
-    <!-- Базовые WAP-спойлеры профиля -->
-    <div class="wap-spoiler">🏅 Достижения</div>
-    <div class="wap-spoiler">🎁 Подарки</div>
-    <div class="wap-spoiler">☠️ Проклятия</div>
-    <div class="wap-spoiler">📝 Анкета</div>
+        <!-- Декоративный коричнево-синий разделитель из скрина -->
+        <div class="nav-divider"></div>
 
-    <!-- Декоративный разделитель -->
-    <div class="nav-divider"></div>
+        <!-- КАНОНИЧНОЕ НИЖНЕЕ МЕНЮ С ДВУМЯ СТРЕЛОЧКАМИ »» -->
+        <a href="index.html">
+            <div class="wap-nav-btn">🛖 Главная</div>
+        </a>
+        <a href="hero.html">
+            <div class="wap-nav-btn">🤠 Герой</div>
+        </a>
+        <a href="mail.html">
+            <div class="wap-nav-btn">✉️ Почта</div>
+        </a>
+        <a href="chat.html">
+            <div class="wap-nav-btn">💬 Чат</div>
+        </a>
+        <a href="forum.html">
+            <div class="wap-nav-btn">🗣️ Форум</div>
+        </a>
+        <a href="gold_shop.html">
+            <div class="wap-nav-btn">💰 Золото</div>
+        </a>
 
-    <!-- КАНОНИЧНОЕ НИЖНЕЕ МЕНЮ С ДВУМЯ СТРЕЛОЧКАМИ »» -->
-    <a href="index.html">
-        <div class="wap-nav-btn">🛖 Главная</div>
-    </a>
-    <a href="hero.html">
-        <div class="wap-nav-btn">🤠 Герой</div>
-    </a>
-    <a href="mail.html">
-        <div class="wap-nav-btn">✉️ Почта</div>
-    </a>
-    <a href="chat.html">
-        <div class="wap-nav-btn">💬 Чат</div>
-    </a>
-    <a href="forum.html">
-        <div class="wap-nav-btn">🗣️ Форум</div>
-    </a>
-    <a href="gold_shop.html">
-        <div class="wap-nav-btn">💰 Золото</div>
-    </a>
+        <!-- Нижние служебные ссылки -->
+        <div class="footer-links">
+            <a href="about.html">Об игре</a>
+            <a href="support.html">Поддержка</a>
+            <a href="settings.html">Настройки</a>
+            <a href="logout.html">Выйти</a>
+        </div>
 
-    <!-- Нижние текстовые ссылки -->
-    <div class="footer-links">
-        <a href="about.html">Об игре</a>
-        <a href="support.html">Поддержка</a>
-        <a href="settings.html">Настройки</a>
-        <a href="logout.html">Выйти</a>
-    </div>
-
-</div> <!-- /main-content -->
-<script>
-    // Умная функция-ищейка: ищет совпадения по фрагментам ключей в localStorage
-    function scanStorageFor(fragments, defaultValue) {
-        // Сначала ищем точное совпадение
-        for (let i = 0; i < localStorage.length; i++) {
-            let key = localStorage.key(i);
-            for (let f of fragments) {
-                if (key === f) return localStorage.getItem(key);
+    </div> <!-- /main-content -->
+    <script>
+        // Инициализация базы данных: пишем нули ТОЛЬКО если игрок зашел в первый раз в жизни
+        function initNewPlayer() {
+            if (localStorage.getItem('barb_lvl') === null) localStorage.setItem('barb_lvl', '1');
+            if (localStorage.getItem('barb_str') === null) localStorage.setItem('barb_str', '5');
+            if (localStorage.getItem('barb_def') === null) localStorage.setItem('barb_def', '5');
+            if (localStorage.getItem('barb_dex') === null) localStorage.setItem('barb_dex', '5');
+            if (localStorage.getItem('barb_mst') === null) localStorage.setItem('barb_mst', '5');
+            if (localStorage.getItem('barb_vit') === null) localStorage.setItem('barb_vit', '5');
+            
+            if (localStorage.getItem('barb_silver') === null) localStorage.setItem('barb_silver', '0');
+            if (localStorage.getItem('barb_gold') === null) localStorage.setItem('barb_gold', '15');
+            if (localStorage.getItem('barb_gems') === null) localStorage.setItem('barb_gems', '0');
+            if (localStorage.getItem('barb_glory') === null) localStorage.setItem('barb_glory', '0');
+            if (localStorage.getItem('barb_exp') === null) localStorage.setItem('barb_exp', '0');
+            
+            // Каноничные счетчики боев, которые изменяет файл симуляции боя battle_result.html
+            if (localStorage.getItem('stat_wins') === null) localStorage.setItem('stat_wins', '0');
+            if (localStorage.getItem('stat_losses') === null) localStorage.setItem('stat_losses', '0');
+            if (localStorage.getItem('stat_goblins') === null) localStorage.setItem('stat_goblins', '0');
+            
+            if (!localStorage.getItem('barbarians_username')) {
+                localStorage.setItem('barbarians_username', 'Варвар_' + Math.floor(Math.random() * 9000 + 1000));
             }
         }
-        // Если точного нет, ищем любое частичное упоминание слова в ключе
-        for (let i = 0; i < localStorage.length; i++) {
-            let key = localStorage.key(i);
-            for (let f of fragments) {
-                if (key.toLowerCase().includes(f.toLowerCase())) {
-                    return localStorage.getItem(key);
-                }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            // Вызываем проверку сессии
+            initNewPlayer();
+
+            // Отрисовка верхней шапки ресурсов из твоего ядра global_core.js
+            if (typeof window.initCore === "function") {
+                window.initCore();
             }
+
+            // Динамический вывод уровня, славы и опыта из Арены / Походов
+            const currentLvl = localStorage.getItem('barb_lvl') || '1';
+            const currentGlory = localStorage.getItem('barb_glory') || '0';
+            const currentExp = localStorage.getItem('barb_exp') || '0';
+
+            document.getElementById('prof-lvl').innerText = currentLvl;
+            document.getElementById('stat-lvl-copy').innerText = currentLvl;
+            document.getElementById('prof-glory').innerText = currentGlory;
+            document.getElementById('stat-glory-copy').innerText = currentGlory;
+            document.getElementById('stat-exp').innerText = currentExp + " / " + (parseInt(currentLvl) * 100);
+            
+            // Вывод изменяемых статов (после прокачки или тренировки)
+            document.getElementById('stat-str').innerText = localStorage.getItem('barb_str') || '5';
+            document.getElementById('stat-def').innerText = localStorage.getItem('barb_def') || '5';
+            document.getElementById('stat-dex').innerText = localStorage.getItem('barb_dex') || '5';
+            document.getElementById('stat-mst').innerText = localStorage.getItem('barb_mst') || '5';
+            
+            const vit = parseInt(localStorage.getItem('barb_vit') || '5');
+            document.getElementById('stat-vit').innerText = vit;
+            
+            // Автоматический перерасчет здоровья по Живучести (вит * 20)
+            const maxHp = vit * 20;
+            document.getElementById('stat-hp').innerText = maxHp;
+            document.getElementById('stat-hp-max').innerText = maxHp;
+            document.getElementById('stat-hp-reg').innerText = Math.floor(maxHp * 0.1);
+
+            // Динамический вывод побед и поражений с Арены (из файла battle_result.html)
+            document.getElementById('stat-wins').innerText = localStorage.getItem('stat_wins') || localStorage.getItem('barb_wins') || '0';
+            document.getElementById('stat-losses').innerText = localStorage.getItem('stat_losses') || localStorage.getItem('barb_losses') || '0';
+            document.getElementById('stat-goblins').innerText = localStorage.getItem('stat_goblins') || '0';
+
+            // Проверка состоятельности в клане игрока
+            const clan = localStorage.getItem('barb_clan_id') || localStorage.getItem('barb_clan');
+            if(clan && clan.trim() !== "") {
+                document.getElementById('prof-clan').className = "text-green";
+                document.getElementById('prof-clan').innerText = clan;
+                document.getElementById('stat-clan-copy').className = "text-gold";
+                document.getElementById('stat-clan-copy').innerText = clan;
+            }
+
+            const now = new Date();
+            document.getElementById('prof-time').innerText = now.toLocaleTimeString();
+        });
+
+        // Функция раскрытия спойлеров деталей
+        function toggleSpoiler(id) {
+            const content = document.getElementById(id);
+            content.style.display = (content.style.display === "block") ? "none" : "block";
+            content.previousElementSibling.classList.toggle('active');
         }
-        return defaultValue;
-    }
-
-    document.addEventListener("DOMContentLoaded", function() {
-        // Отрисовка верхней панели ядра
-        if (typeof window.initCore === "function") {
-            window.initCore();
-        }
-
-        // 1. УРОВЕНЬ
-        const lvl = scanStorageFor(['barb_lvl', 'lvl', 'level'], '1');
-        document.getElementById('prof-lvl').innerText = lvl;
-        document.getElementById('stat-lvl-copy').innerText = lvl;
-
-        // 2. СЛАВА
-        const glory = scanStorageFor(['glory', 'slava', 'слава'], '0');
-        document.getElementById('prof-glory').innerText = glory;
-        document.getElementById('stat-glory-copy').innerText = glory;
-
-        // 3. ОПЫТ
-        const exp = scanStorageFor(['exp', 'experience', 'опыт'], '0');
-        document.getElementById('stat-exp').innerText = exp + " / " + (parseInt(lvl) * 100);
-
-        // 4. ХАРАКТЕРИСТИКИ
-        document.getElementById('stat-str').innerText = scanStorageFor(['str', 'сила', 'power'], '5');
-        document.getElementById('stat-def').innerText = scanStorageFor(['def', 'defence', 'защита'], '5');
-        document.getElementById('stat-dex').innerText = scanStorageFor(['dex', 'ловкость', 'agility'], '5');
-        document.getElementById('stat-mst').innerText = scanStorageFor(['mst', 'mastery', 'мастерство'], '5');
-        
-        const vit = parseInt(scanStorageFor(['vit', 'vitality', 'живучесть'], '5'));
-        document.getElementById('stat-vit').innerText = vit;
-
-        // Автоматический перерасчет здоровья по Живучести
-        const maxHp = vit * 20;
-        document.getElementById('stat-hp').innerText = maxHp;
-        document.getElementById('stat-hp-max').innerText = maxHp;
-        document.getElementById('stat-hp-reg').innerText = Math.floor(maxHp * 0.1);
-
-        // 5. ПОБЕДЫ И ПОРАЖЕНИЯ (Полный скан памяти на боевые термины)
-        document.getElementById('stat-wins').innerText = scanStorageFor(['stat_wins', 'wins', 'pobedi', 'побед'], '0');
-        document.getElementById('stat-losses').innerText = scanStorageFor(['stat_losses', 'losses', 'proigrish', 'поражен'], '0');
-        document.getElementById('stat-goblins').innerText = scanStorageFor(['goblin', 'гоблин'], '0');
-
-        // Проверка клана
-        const clan = scanStorageFor(['clan', 'клан'], '');
-        if(clan && clan.trim() !== "") {
-            document.getElementById('prof-clan').className = "text-green";
-            document.getElementById('prof-clan').innerText = clan;
-            document.getElementById('stat-clan-copy').className = "text-gold";
-            document.getElementById('stat-clan-copy').innerText = clan;
-        }
-
-        const now = new Date();
-        document.getElementById('prof-time').innerText = now.toLocaleTimeString();
-    });
-
-    function toggleSpoiler(id) {
-        const content = document.getElementById(id);
-        content.style.display = (content.style.display === "block") ? "none" : "block";
-        content.previousElementSibling.classList.toggle('active');
-    }
-</script>
+    </script>
+</body>
+</html>
