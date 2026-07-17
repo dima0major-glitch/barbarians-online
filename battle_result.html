@@ -37,18 +37,34 @@
         .win-text { color: #00ffaa; font-weight: bold; font-size: 15px; margin-bottom: 5px; }
         .lose-text { color: #ff4d4d; font-weight: bold; font-size: 15px; margin-bottom: 5px; }
         .section-sub { color: #ffffff; margin-top: 10px; font-weight: bold; }
+        
+        /* Классический скрытый WAP-спойлер логов */
+        .spoiler-btn {
+            background-color: #091b29;
+            color: #38bdf8;
+            border: 1px solid #0f2231;
+            padding: 6px 10px;
+            display: inline-block;
+            margin-top: 10px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+        }
         .combat-logs { 
             font-size: 11px; 
             background: #03080b; 
             padding: 8px; 
             border-radius: 4px; 
             border: 1px solid #0f2231; 
-            margin-top: 10px; 
-            max-height: 150px; 
+            margin-top: 5px; 
+            max-height: 180px; 
             overflow-y: auto; 
             line-height: 1.4; 
             color: #799bb3; 
+            display: none; /* Скрыто по умолчанию */
         }
+        
         .menu-container { margin-top: 2px; }
         .menu-link { 
             background: linear-gradient(to bottom, #091b29, #050e16); 
@@ -67,7 +83,7 @@
     </style>
 </head>
 <body>
-    <!-- Место для автоматической шапки из global_core.js -->
+    <!-- Автоматическая шапка от ядра игры -->
     <div id="core-header-placeholder"></div>
 
     <div class="category-bar">Итог боя</div>
@@ -86,22 +102,35 @@
         <div><span id="p-name-hp">Игрок</span>: <span id="p-final-hp">0</span></div>
         <div><span id="e-name-hp">Враг</span>: <span id="e-final-hp">0</span></div>
         
-        <div class="section-sub">Детали (Лог по раундам):</div>
-        <div class="combat-logs" id="log-box"></div>
+        <!-- Кнопка просмотра деталей боя внизу -->
+        <div>
+            <div class="spoiler-btn" id="toggle-log-btn" onclick="toggleCombatLog()">➕ Показать детали боя</div>
+            <div class="combat-logs" id="log-box"></div>
+        </div>
     </div>
 
-    <!-- Текстовые ссылки переходов (WAP-style) -->
+    <!-- Исправленные WAP-ссылки переходов (укажите arena.html или ваш файл дуэлей) -->
     <div class="menu-container">
         <a href="arena.html" id="next-fight-btn" class="menu-link"><span>🪓 Следующий бой</span><span class="menu-arrow">»»</span></a>
-        <a href="arena.html" class="menu-link"><span>⚔️ Вернуться на Арену</span><span class="menu-arrow">»»</span></a>
+        <a href="arena.html" id="back-arena-btn" class="menu-link"><span>⚔️ Вернуться на Арену</span><span class="menu-arrow">»»</span></a>
         <a href="profile.html" class="menu-link"><span>📊 В характеристики</span><span class="menu-arrow">»»</span></a>
         <a href="hero.html" class="menu-link"><span>🏠 На главную</span><span class="menu-arrow">»»</span></a>
     </div>
 
-    <!-- Подключаем сквозное ядро игры -->
     <script src="global_core.js"></script>
     <script>
-        // Прогрессия опыта
+        // Функция раскрытия деталей боя по клику игрока
+        function toggleCombatLog() {
+            const logBox = document.getElementById('log-box');
+            const btn = document.getElementById('toggle-log-btn');
+            if (logBox.style.display === 'block') {
+                logBox.style.display = 'none';
+                btn.textContent = '➕ Показать детали боя';
+            } else {
+                logBox.style.display = 'block';
+                btn.textContent = '➖ Скрыть детали боя';
+            }
+        }
         function getMaxExpForLvl(level) {
             if (level <= 1) return 15;
             return Math.floor(Math.pow(level - 1, 2) * 10 + 15);
@@ -111,13 +140,13 @@
             const savedName = localStorage.getItem('barbarians_username') || "Воин";
             const enemyData = JSON.parse(localStorage.getItem('current_enemy_data'));
             
-            // Если зашли напрямую без генерации врага — уходим на Арену
+            // Если зашли без противника — уходим на Арену
             if (!enemyData) { window.location.href = 'arena.html'; return; }
 
             const urlParams = new URLSearchParams(window.location.search);
+            // Получаем тип боя: 'equal' (Ровня) или 'senior' (Старшие)
             const currentFightType = urlParams.get('type') || 'equal';
 
-            // Безопасное числовое приведение параметров игрока
             let pLvl = parseInt(localStorage.getItem('barb_level') || '1');
             let pGold = parseInt(localStorage.getItem('barb_gold') || '15');
             let pSilver = parseInt(localStorage.getItem('barb_silver') || '1000');
@@ -130,7 +159,6 @@
             let pMst = parseInt(localStorage.getItem('barb_mst') || '5');
             let pVit = parseInt(localStorage.getItem('barb_vit') || '5');
 
-            // Подсчет бонусов экипировки
             let equipped = JSON.parse(localStorage.getItem('barb_equipped') || '{}');
             for (let slot in equipped) {
                 let item = equipped[slot];
@@ -143,7 +171,6 @@
                 }
             }
 
-            // Безопасное числовое приведение параметров противника
             let eLvl = parseInt(enemyData.lvl || enemyData.level || 1);
             let eStr = parseInt(enemyData.str || 5);
             let eDef = parseInt(enemyData.def || 5);
@@ -151,7 +178,6 @@
             let eMst = parseInt(enemyData.mst || 5);
             let eVit = parseInt(enemyData.vit || 5);
 
-            // Динамический расчет запаса здоровья
             let pMaxHp = pVit * 20;
             let eMaxHp = eVit * 20;
             let pCurrentHp = pMaxHp; 
@@ -161,12 +187,10 @@
             let eDmgSum = 0; 
             let logHtml = "";
 
-            // Математический цикл симуляции по раундам
             for (let round = 1; round <= 20; round++) {
                 if (pCurrentHp <= 0 || eCurrentHp <= 0) break;
                 logHtml += `<b>Раунд ${round}:</b><br/>`;
                 
-                // --- АТАКА ИГРОКА ---
                 let pIsDodge = Math.random() < (eAgi * 0.005);
                 if (pIsDodge) { 
                     logHtml += `• ${enemyData.name} увернулся!<br/>`; 
@@ -184,7 +208,6 @@
                 
                 if (eCurrentHp <= 0) break;
 
-                // --- АТАКА ВРАГА ---
                 let eIsDodge = Math.random() < (pAgi * 0.005);
                 if (eIsDodge) { 
                     logHtml += `• Ты увернулся!<br/>`; 
@@ -200,7 +223,6 @@
                     logHtml += `• ${enemyData.name} нанес удар на <span style="color:#ffbfcc">${finalDmgE}</span> ${eIsCrit?'💥 КРИТ!':''}<br/>`;
                 }
             }
-            // Определение результатов боя
             let isWin = (eCurrentHp <= 0 && pCurrentHp > 0) || (pCurrentHp > 0 && eCurrentHp > 0 && pCurrentHp >= eCurrentHp);
             let outcomeText = isWin ? `<div class="win-text">🏆 ПОБЕДА!</div>` : `<div class="lose-text">💀 ПОРАЖЕНИЕ</div>`;
             let reasonText = isWin ? `Ты одолел соперника ${enemyData.name}!` : `${enemyData.name} оказался сильнее...`;
@@ -210,60 +232,52 @@
             let rewFame = 0;
             let silverLoss = 0;
 
-            // Расчет наград по правилам ТЗ
             if (isWin) {
-                rewFame = Math.floor(2 + Math.random() * 3);
-                
-                if (currentFightType === 'mercenaries' || currentFightType === 'by_level') {
-                    rewGold = Math.floor(10 + Math.random() * 6);
-                    rewExp = Math.floor(5 + Math.random() * 5);
-                } else if (currentFightType === 'boss') {
-                    rewGold = Math.floor(30 + Math.random() * 21);
-                    rewExp = Math.floor(15 + Math.random() * 11);
-                } else if (currentFightType === 'senior') {
-                    rewGold = Math.floor(15 + Math.random() * 10);
-                    rewExp = Math.floor(25 + Math.random() * 16); // 25-40 опыта за Старших
+                // Динамическое золото за победу
+                rewGold = Math.floor(5 + Math.random() * 5) * eLvl;
+
+                // --- НОВЫЙ ЖЕСТКИЙ БАЛАНС НАГРАД ПО ТЗ ---
+                if (currentFightType === 'senior') {
+                    // Старшие: ровно 2 опыта, слава 1 или 2 случайным образом
+                    rewExp = 2;
+                    rewFame = Math.floor(1 + Math.random() * 2); // 1 или 2
                 } else {
-                    rewGold = Math.floor(5 + Math.random() * 5) * eLvl;
-                    rewExp = Math.floor(3 + Math.random() * 4);
+                    // Ровня (или любые другие по умолчанию): ровно 1 опыта, 0 славы
+                    rewExp = 1;
+                    rewFame = 0;
                 }
 
-                // Инкремент побед для работающего профиля
                 let wins = parseInt(localStorage.getItem('stat_wins') || '0');
                 localStorage.setItem('stat_wins', (wins + 1).toString());
 
             } else {
-                // Штраф на серебро при поражении
+                // Штраф серебра при проигрыше
                 silverLoss = Math.floor(30 + Math.random() * 51); 
                 if (pSilver < silverLoss) silverLoss = pSilver; 
                 
                 pSilver -= silverLoss;
                 localStorage.setItem('barb_silver', pSilver.toString());
 
-                // Запись «Потерял серебра» для статистики профиля
                 let lostSilverStat = parseInt(localStorage.getItem('stat_lost_silver') || '0');
                 localStorage.setItem('stat_lost_silver', (lostSilverStat + silverLoss).toString());
 
-                // Утешительный опыт
-                rewExp = Math.floor(1 + Math.random() * 2);
+                // При поражении опыт и слава не даются
+                rewExp = 0;
+                rewFame = 0;
                 
-                // Инкремент проигрышей для работающего профиля
                 let losses = parseInt(localStorage.getItem('stat_losses') || '0');
                 localStorage.setItem('stat_losses', (losses + 1).toString());
             }
 
-            // Изменение текущего баланса
             pGold += rewGold;
             pExp += rewExp;
             pFame += rewFame;
 
-            // Расход доступных ежедневных боев Арены
             let battleCount = parseInt(localStorage.getItem('barb_battle_count') || '3');
             if (battleCount > 0) {
                 localStorage.setItem('barb_battle_count', (battleCount - 1).toString());
             }
 
-            // Расчет повышения уровня
             let maxExp = getMaxExpForLvl(pLvl);
             let leveledUp = false;
             while (pExp >= maxExp) {
@@ -273,13 +287,12 @@
                 leveledUp = true;
             }
 
-            // Сохранение изменений в LocalStorage
             localStorage.setItem('barb_level', pLvl.toString());
             localStorage.setItem('barb_gold', pGold.toString());
             localStorage.setItem('barb_exp', pExp.toString());
             localStorage.setItem('barb_fame', pFame.toString());
 
-            // Вывод данных в HTML-элементы экрана
+            // Вывод строки награды на экран
             document.getElementById('battle-outcome').innerHTML = outcomeText;
             document.getElementById('battle-reason').textContent = reasonText;
             
@@ -288,7 +301,7 @@
                 rewardsResultHtml = `🪙 Золото: +${rewGold} | 📈 Опыт: +${rewExp}`;
                 if (rewFame > 0) rewardsResultHtml += ` | 👑 Слава: +${rewFame}`;
             } else {
-                rewardsResultHtml = `🔻 Потеряно серебра: <span style="color:#ff4d4d">-${silverLoss}</span> | 📈 Опыт: +${rewExp}`;
+                rewardsResultHtml = `🔻 Потеряно серебра: <span style="color:#ff4d4d">-${silverLoss}</span> | 📈 Опыт: +0`;
             }
 
             if (leveledUp) {
@@ -296,7 +309,6 @@
             }
             document.getElementById('battle-rewards').innerHTML = rewardsResultHtml;
 
-            // Отображение урона и здоровья участников
             document.getElementById('p-name-dmg').textContent = savedName;
             document.getElementById('p-total-dmg').textContent = pDmgSum;
             document.getElementById('e-name-dmg').textContent = enemyData.name;
@@ -307,17 +319,14 @@
             document.getElementById('e-name-hp').textContent = enemyData.name;
             document.getElementById('e-final-hp').textContent = `${Math.max(0, eCurrentHp)} / ${eMaxHp}`;
 
-            // Заполнение текстового лога по раундам
             document.getElementById('log-box').innerHTML = logHtml;
 
-            // Очищаем противника для предотвращения перезапуска боя по клавише F5
+            // Удаление временного моба для предотвращения F5-эксплойта
             localStorage.removeItem('current_enemy_data');
 
-            // Принудительный вызов перерисовки шапки, если функция есть в ядре
             if (typeof updateCoreHeader === 'function') { updateCoreHeader(); }
         }
 
-        // Автозапуск симуляции после построения интерфейса
         document.addEventListener('DOMContentLoaded', runBattleSimulation);
     </script>
 </body>
