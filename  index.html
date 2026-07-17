@@ -7,7 +7,7 @@
     <style>
         body { background-color: #061118; color: #ffffff; font-family: Arial, sans-serif; margin: 0; padding: 0; user-select: none; }
         
-        /* Стили для глобальной шапки (оставляем здесь, так как ядро генерирует только HTML) */
+        /* Стили для глобальной шапки */
         .game-banner { background: linear-gradient(to bottom, #112d3e, #091a26); border-bottom: 2px solid #1c8cd1; padding: 8px; text-align: center; font-size: 16px; font-weight: bold; color: #ffffff; text-shadow: 1px 1px 3px #000; }
         .game-header { background: linear-gradient(to bottom, #091a26, #051017); border-bottom: 2px solid #142a3a; padding: 8px 5px; font-size: 12px; color: #b0cbdc; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
         .header-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px; line-height: 1.4; }
@@ -36,7 +36,7 @@
 </head>
 <body>
 
-    <!-- Шапка игры сюда вставится автоматически из global_core.js -->
+    <!-- Шапка игры вставится автоматически из global_core.js -->
 
     <div class="welcome-block">
         <div class="welcome-title">Добро пожаловать!</div>
@@ -44,11 +44,12 @@
     </div>
     
     <div class="menu-container">
+        <!-- КНОПКИ ИСПРАВЛЕНЫ ПОД ТЕКУЩУЮ АРХИТЕКТУРУ -->
         <a href="events.html" class="menu-link"><span>⭐ События</span><span class="menu-arrow">»»</span></a>
         <a href="quests.html" class="menu-link"><span>📜 Задания</span><span class="menu-arrow">»»</span></a>
         <a href="duel.html" class="menu-link"><span>⚔️ Дуэль</span><span class="menu-arrow">»»</span></a>
-        <a href="village.html" class="menu-link"><span>🏡 Поселок</span><span class="menu-arrow">»»</span></a>
-        <a href="raid.html" class="menu-link"><span>🛡️ Поход</span><span class="menu-arrow">»»</span></a>
+        <a href="poselok.html" class="menu-link"><span>🏡 Поселок</span><span class="menu-arrow">»»</span></a>
+        <a href="campaign.html" class="menu-link"><span>🛡️ Поход</span><span class="menu-arrow">»»</span></a>
         <a href="fafnir.html" class="menu-link"><span>🐉 Фафнир</span><span class="menu-arrow">»»</span></a>
         <a href="dungeon.html" class="menu-link"><span>🌋 Подземелье</span><span class="menu-arrow">»»</span></a>
         <a href="undead.html" class="menu-link"><span>💀 Нежить</span><span class="menu-arrow">»»</span></a>
@@ -65,8 +66,11 @@
         <a href="mail.html" class="menu-link"><span>✉️ Почта</span><span class="menu-arrow">»»</span></a>
         <a href="chat.html" class="menu-link"><span>💬 Чат</span><span class="menu-arrow">»»</span></a>
         <a href="forum.html" class="menu-link"><span>🗣️ Форум</span><span class="menu-arrow">»»</span></a>
-        <a href="donate.html" class="menu-link"><span>💰 Золото</span><span class="menu-arrow">»»</span></a>
+        <a href="shop.html" class="menu-link"><span>💰 Золото</span><span class="menu-arrow">»»</span></a>
     </div>
+
+    <!-- Автогенерация сквозного нижнего меню для синхронизации со всеми страницами -->
+    <div id="core-footer"></div>
 
     <div class="footer-links">
         <a href="about.html">Об игре</a>
