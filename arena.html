@@ -8,6 +8,7 @@
         body { background-color: #061118; color: #ffffff; font-family: Arial, sans-serif; margin: 0; padding: 0; user-select: none; }
         .category-bar { background: linear-gradient(to bottom, #123524, #05140d); color: #00ffaa; font-size: 14px; font-weight: bold; text-align: center; padding: 6px 15px; border-top: 1px solid #1d5339; border-bottom: 1px solid #040f0a; box-shadow: inset 0 1px 2px rgba(255,255,255,0.1); text-transform: uppercase; letter-spacing: 1px; }
         
+        /* Монолитная структура экранов */
         .arena-screen { display: block; }
         .result-screen { display: none; }
 
@@ -37,13 +38,11 @@
         .lose-text { color: #ff4d4d; font-weight: bold; font-size: 15px; margin-bottom: 5px; }
         .section-sub { color: #ffffff; margin-top: 10px; font-weight: bold; }
         .spoiler-btn { background-color: #091b29; color: #38bdf8; border: 1px solid #0f2231; padding: 6px 10px; display: inline-block; margin-top: 10px; text-decoration: none; font-size: 13px; font-weight: bold; cursor: pointer; }
-        .combat-logs { font-size: 11px; background: #03080b; padding: 8px; border-radius: 4px; border: 1px solid #0f2231; margin-top: 5px; max-height: 150px; overflow-y: auto; line-height: 1.4; color: #799bb3; display: none; }
+        .combat-logs { font-size: 11px; background: #03080b; padding: 8px; border-radius: 4px; border: 1px solid #0f2231; margin-top: 5px; max-height: 150px; overflow-y: auto; line-height: 1.4; color: #799bb3; display: none; text-align: left; }
     </style>
 </head>
 <body>
-    <!-- Место для сквозной шапки от ядра -->
     <div id="core-header-placeholder"></div>
-
     <!-- ================= ЭКРАН 1: АРЕНА (ВЫБОР) ================= -->
     <div id="screen-arena" class="arena-screen">
         <div class="category-bar">Арена</div>
@@ -56,7 +55,7 @@
         </div>
 
         <div class="vs-card">
-            <div class="vs-title"><span id="p-name-vs">Ты</span> против <span id="e-name-vs">Выбери противника</span></div>
+            <div class="vs-title"><span id="p-name-vs">Ты</span> против <span id="e-name-vs">-</span></div>
             <div class="comparison-table">
                 <div class="comp-row"><div class="comp-player" id="p-str">5</div><div class="comp-icon">💪</div><div class="comp-enemy" id="e-str">-</div></div>
                 <div class="comp-row"><div class="comp-player" id="p-def">5</div><div class="comp-icon">🛡️</div><div class="comp-enemy" id="e-def">-</div></div>
@@ -66,7 +65,7 @@
             </div>
             <div style="margin-bottom: 5px;">
                 <button class="btn-fight" id="fight-action-btn" onclick="runInstantBattleLogic()">Сражаться</button>
-                <div class="battle-counter" id="battle-count-view">Доступно боев: 3/3</div>
+                <div class="battle-counter" id="battle-count-view">Доступно боев: 3</div>
             </div>
         </div>
 
@@ -76,7 +75,7 @@
             <a href="#" id="link-senior" onclick="selectCategory('senior'); return false;" class="menu-link"><span>⚔️ 🔺 Старшие</span><span class="menu-arrow">»»</span></a>
             <a href="#" id="link-mercenaries" onclick="selectCategory('mercenaries'); return false;" class="menu-link"><span>🔵 Кристальный наемник</span><span class="menu-arrow">»»</span></a>
             <a href="#" id="link-boss" onclick="selectCategory('boss'); return false;" class="menu-link"><span>🟡 Золотой наемник (Владыка)</span><span class="menu-arrow">»»</span></a>
-            <a href="hero.html" class="menu-link"><span>📊 В меню персонажа (Назад)</span><span class="menu-arrow">»»</span></a>
+            <a href="profile.html" class="menu-link"><span>📊 В характеристики (Назад)</span><span class="menu-arrow">»»</span></a>
         </div>
     </div>
 
@@ -101,85 +100,93 @@
         </div>
         <div class="menu-container">
             <a href="#" onclick="backToArenaSelection(); return false;" class="menu-link"><span>🪓 Следующий бой</span><span class="menu-arrow">»»</span></a>
-            <a href="hero.html" class="menu-link"><span>🏠 В меню персонажа</span><span class="menu-arrow">»»</span></a>
+            <a href="profile.html" class="menu-link"><span>📊 В характеристики</span><span class="menu-arrow">»»</span></a>
         </div>
     </div>
 
     <script src="global_core.js"></script>
     <script>
-        let currentEnemy = null;
-        let selectedType = 'equal';
-        const botNames = ["Ульф", "Торстейн", "Хакон", "Бьорн", "Гудмунд", "Рагнар", "Ивар", "Сигурд"];
+        let currentCategory = 'equal';
+        let enemyData = {};
 
-        function toggleCombatLog() {
-            const logBox = document.getElementById('log-box');
-            const btn = document.getElementById('toggle-log-btn');
-            if (logBox.style.display === 'block') { logBox.style.display = 'none'; btn.textContent = '➕ Показать детали боя'; } 
-            else { logBox.style.display = 'block'; btn.textContent = '➖ Скрыть детали боя'; }
+        window.addEventListener('DOMContentLoaded', () => {
+            initArenaPage();
+        });
+
+        function initArenaPage() {
+            const savedName = localStorage.getItem('barbarians_username') || "Воин";
+            document.getElementById('p-name-vs').textContent = savedName;
+            document.getElementById('p-name-dmg').textContent = savedName;
+            document.getElementById('p-name-hp').textContent = savedName;
+
+            document.getElementById('p-str').textContent = localStorage.getItem('barb_str') || '5';
+            document.getElementById('p-def').textContent = localStorage.getItem('barb_def') || '5';
+            document.getElementById('p-agi').textContent = localStorage.getItem('barb_dex') || '5';
+            document.getElementById('p-mst').textContent = localStorage.getItem('barb_mst') || '5';
+            document.getElementById('p-vit').textContent = localStorage.getItem('barb_vit') || '5';
+
+            if(localStorage.getItem('barb_battle_count') === null) {
+                localStorage.setItem('barb_battle_count', '3');
+            }
+            updateBattleCounterView();
+            selectCategory('equal');
         }
 
-        window.selectCategory = function(categoryType) {
-            selectedType = categoryType;
-            ['equal', 'junior', 'senior', 'mercenaries', 'boss'].forEach(item => {
-                const el = document.getElementById('link-' + item); if (el) el.classList.remove('active-category');
+        function updateBattleCounterView() {
+            let count = parseInt(localStorage.getItem('barb_battle_count') || '0');
+            const btn = document.getElementById('fight-action-btn');
+            const view = document.getElementById('battle-count-view');
+            
+            if (count <= 0) {
+                btn.textContent = "Нет боев";
+                btn.disabled = true;
+                view.textContent = "Доступно боев: 0/3 (Обновление завтра)";
+            } else {
+                btn.textContent = "Сражаться";
+                btn.disabled = false;
+                view.textContent = `Доступно боев: ${count}/3`;
+            }
+        }
+
+        function selectCategory(category) {
+            currentCategory = category;
+            const links = ['equal', 'junior', 'senior', 'mercenaries', 'boss'];
+            links.forEach(id => {
+                const el = document.getElementById('link-' + id);
+                if (el) el.classList.remove('active-category');
             });
-            const activeEl = document.getElementById('link-' + categoryType); if (activeEl) activeEl.classList.add('active-category');
-            generateEnemyData();
-        };
 
-        window.generateEnemyData = function() {
-            const pStr = parseInt(localStorage.getItem('barb_str') || '5');
-            const pDef = parseInt(localStorage.getItem('barb_def') || '5');
-            const pAgi = parseInt(localStorage.getItem('barb_dex') || '5'); 
-            const pMst = parseInt(localStorage.getItem('barb_mst') || '5');
-            const pVit = parseInt(localStorage.getItem('barb_vit') || '5');
-            const pLvl = parseInt(localStorage.getItem('barb_level') || '1');
+            const activeEl = document.getElementById('link-' + category);
+            if (activeEl) activeEl.classList.add('active-category');
 
-            const battleCount = parseInt(localStorage.getItem('barb_battle_count') || '3');
-            document.getElementById('battle-count-view').textContent = `Доступно боев сегодня: ${battleCount} / 3`;
-
-            const fightBtn = document.getElementById('fight-action-btn');
-            if (battleCount <= 0) { fightBtn.disabled = true; fightBtn.textContent = "Нет боев"; } 
-            else { fightBtn.disabled = false; fightBtn.textContent = "Сражаться"; }
-
-            document.getElementById('p-name-vs').innerText = localStorage.getItem('barbarians_username') || "Ты";
-            document.getElementById('p-str').innerText = pStr; document.getElementById('p-def').innerText = pDef;
-            document.getElementById('p-agi').innerText = pAgi; document.getElementById('p-mst').innerText = pMst;
-            document.getElementById('p-vit').innerText = pVit;
-
-            let mod = 0; let typeLabel = "Ровня"; let enemyLvl = pLvl;
-            if (selectedType === 'junior') { mod = -2; typeLabel = "Младший"; enemyLvl = Math.max(1, pLvl - 1); }
-            if (selectedType === 'equal') { mod = 0; typeLabel = "Ровня"; enemyLvl = pLvl; }
-            if (selectedType === 'senior') { mod = 2; typeLabel = "Старший"; enemyLvl = pLvl + 1; }
-            if (selectedType === 'mercenaries') { mod = 4; typeLabel = "Крист. Наемник"; enemyLvl = pLvl + 2; }
-            if (selectedType === 'boss') { mod = 10; typeLabel = "Золотой Владыка"; enemyLvl = pLvl + 4; }
-
-            currentEnemy = {
-                name: botNames[Math.floor(Math.random() * botNames.length)] + ` [${typeLabel}]`,
-                lvl: enemyLvl,
-                str: Math.max(1, pStr + mod + Math.floor(Math.random() * 3) - 1),
-                def: Math.max(1, pDef + mod + Math.floor(Math.random() * 3) - 1),
-                agi: Math.max(1, pAgi + mod + Math.floor(Math.random() * 3) - 1),
-                mst: Math.max(1, pMst + mod + Math.floor(Math.random() * 3) - 1),
-                vit: Math.max(1, pVit + mod + Math.floor(Math.random() * 3) - 1)
-            };
-
-            document.getElementById('e-name-vs').innerText = currentEnemy.name;
-            document.getElementById('e-str').innerText = currentEnemy.str; document.getElementById('e-def').innerText = currentEnemy.def;
-            document.getElementById('e-agi').innerText = currentEnemy.agi; document.getElementById('e-mst').innerText = currentEnemy.mst;
-            document.getElementById('e-vit').innerText = currentEnemy.vit;
-        };
-        window.runInstantBattleLogic = function() {
-            const battleCount = parseInt(localStorage.getItem('barb_battle_count') || '3');
-            if (battleCount <= 0) return;
-
-            const savedName = localStorage.getItem('barbarians_username') || "Воин";
             let pLvl = parseInt(localStorage.getItem('barb_level') || '1');
-            let pGold = parseInt(localStorage.getItem('barb_gold') || '15');
-            let pSilver = parseInt(localStorage.getItem('barb_silver') || '1000');
-            let pCrystals = parseInt(localStorage.getItem('barb_crystals') || '0');
-            let pExp = parseInt(localStorage.getItem('barb_exp') || '0');
-            let pFame = parseInt(localStorage.getItem('barb_fame') || '0');
+
+            if (category === 'equal') {
+                enemyData = { name: "Разбойник Ровня", lvl: pLvl, str: 5, def: 5, dex: 5, mst: 5, vit: 5 };
+            } else if (category === 'junior') {
+                enemyData = { name: "Слабый Новобранец", lvl: Math.max(1, pLvl - 1), str: 3, def: 4, dex: 3, mst: 3, vit: 4 };
+            } else if (category === 'senior') {
+                enemyData = { name: "Опытный Викинг", lvl: pLvl + 1, str: 7, def: 6, dex: 6, mst: 6, vit: 6 };
+            } else if (category === 'mercenaries') {
+                enemyData = { name: "Кристальный наемник", lvl: pLvl + 2, str: 8, def: 8, dex: 7, mst: 8, vit: 8 };
+            } else if (category === 'boss') {
+                enemyData = { name: "Золотой Владыка", lvl: pLvl + 4, str: 12, def: 10, dex: 9, mst: 11, vit: 12 };
+            }
+
+            document.getElementById('e-name-vs').textContent = `${enemyData.name} [${enemyData.lvl} ур]`;
+            document.getElementById('e-str').textContent = enemyData.str;
+            document.getElementById('e-def').textContent = enemyData.def;
+            document.getElementById('e-agi').textContent = enemyData.dex;
+            document.getElementById('e-mst').textContent = enemyData.mst;
+            document.getElementById('e-vit').textContent = enemyData.vit;
+        }
+        function runInstantBattleLogic() {
+            let count = parseInt(localStorage.getItem('barb_battle_count') || '0');
+            if (count <= 0) return;
+
+            count--;
+            localStorage.setItem('barb_battle_count', count.toString());
+            updateBattleCounterView();
 
             let pStr = parseInt(localStorage.getItem('barb_str') || '5');
             let pDef = parseInt(localStorage.getItem('barb_def') || '5');
@@ -187,112 +194,172 @@
             let pMst = parseInt(localStorage.getItem('barb_mst') || '5');
             let pVit = parseInt(localStorage.getItem('barb_vit') || '5');
 
-            let pMaxHp = pVit * 20; let eMaxHp = currentEnemy.vit * 20;
-            let pCurrentHp = pMaxHp; let eCurrentHp = eMaxHp;
-            let pDmgSum = 0; let eDmgSum = 0; let logHtml = "";
+            let pMaxHp = pVit * 20;
+            let eMaxHp = enemyData.vit * 20;
+            let pCurrentHp = pMaxHp; 
+            let eCurrentHp = eMaxHp;
+            
+            let pDmgSum = 0; 
+            let eDmgSum = 0; 
+            let logHtml = "";
 
             for (let round = 1; round <= 20; round++) {
                 if (pCurrentHp <= 0 || eCurrentHp <= 0) break;
                 logHtml += `<b>Раунд ${round}:</b><br/>`;
-                if (Math.random() < (currentEnemy.agi * 0.005)) { logHtml += `• ${currentEnemy.name} увернулся!<br/>`; } 
-                else {
-                    let pIsCrit = Math.random() < (pMst * 0.01);
-                    let finalDmg = pIsCrit ? Math.floor((pStr * 3 - currentEnemy.def) * 1.5) : (pStr * 3 - currentEnemy.def);
-                    finalDmg = Math.floor(Math.max(10, finalDmg) * (1 + (Math.random() * 0.2 - 0.1)));
-                    eCurrentHp -= finalDmg; pDmgSum += finalDmg;
-                    logHtml += `• Ты нанес удар на <span style="color:#e5e5e5">${finalDmg}</span> ${pIsCrit?'💥 КРИТ!':''}<br/>`;
-                }
-                if (eCurrentHp <= 0) break;
-                if (Math.random() < (pAgi * 0.005)) { logHtml += `• Ты увернулся!<br/>`; } 
-                else {
-                    let eIsCrit = Math.random() < (currentEnemy.mst * 0.01);
-                    let finalDmgE = eIsCrit ? Math.floor((currentEnemy.str * 3 - pDef) * 1.5) : (currentEnemy.str * 3 - pDef);
-                    finalDmgE = Math.floor(Math.max(10, finalDmgE) * (1 + (Math.random() * 0.2 - 0.1)));
-                    pCurrentHp -= finalDmgE; eDmgSum += finalDmgE;
-                    logHtml += `• ${currentEnemy.name} нанес удар на <span style="color:#ffbfcc">${finalDmgE}</span> ${eIsCrit?'💥 КРИТ!':''}<br/>`;
-                }
-            }
 
-            let isWin = (eCurrentHp <= 0 && pCurrentHp > 0) || (pCurrentHp > 0 && eCurrentHp > 0 && pCurrentHp >= eCurrentHp);
-            let addSilver = 0; let addGold = 0; let addCrystals = 0; let lossSilver = 0; let rewExp = 0; let rewFame = 0;
-
-            if (isWin) {
-                if (selectedType === 'senior') { rewExp = 2; rewFame = Math.floor(1 + Math.random() * 2); } 
-                else { rewExp = 1; rewFame = 0; }
-
-                if (selectedType === 'mercenaries') {
-                    addSilver = Math.floor(1050 + Math.random() * 451); // Победа: больше 1000 серебра
-                    addCrystals = Math.floor(1 + Math.random() * 3); // Выбить 1-3 кристалла
-                } else if (selectedType === 'boss') {
-                    addSilver = Math.floor(1100 + Math.random() * 401); // Победа: больше 1000 серебра
-                    addGold = Math.floor(5 + Math.random() * 11); // Выбить 5-15 золота
+                let eEvadeChance = Math.max(5, Math.min(50, (enemyData.dex - pAgi) * 3 + 10));
+                if (Math.random() * 100 < eEvadeChance) {
+                    logHtml += `• Враг уклонился от твоего удара!<br/>`;
                 } else {
-                    let enemyWalletBase = currentEnemy.lvl * 4000;
-                    let lootPercent = Math.floor(10 + Math.random() * 21); // Забираем процент от 10% до 30%
-                    addSilver = Math.floor(enemyWalletBase * (lootPercent / 100));
-                    if (addSilver < 100) addSilver = Math.floor(150 + Math.random() * 200);
-                    if (Math.random() < 0.15) { addCrystals = 1; } // 15% Шанс выбить кристалл с обычных
+                    let pBaseDmg = Math.max(1, pStr - Math.floor(enemyData.def / 2));
+                    let pCritChance = Math.max(5, Math.min(50, pMst * 2));
+                    if (Math.random() * 100 < pCritChance) {
+                        pBaseDmg = Math.floor(pBaseDmg * 1.5);
+                        logHtml += `• Крит! Ты наносишь врагу 💥 ${pBaseDmg} урона.<br/>`;
+                    } else {
+                        logHtml += `• Ты ударил врага на ⚔️ ${pBaseDmg} урона.<br/>`;
+                    }
+                    eCurrentHp -= pBaseDmg;
+                    pDmgSum += pBaseDmg;
                 }
 
-                pSilver += addSilver; pGold += addGold; pCrystals += addCrystals;
-                localStorage.setItem('stat_wins', (parseInt(localStorage.getItem('stat_wins') || '0') + 1).toString());
-                localStorage.setItem('stat_earned_silver', (parseInt(localStorage.getItem('stat_earned_silver') || '0') + addSilver).toString());
-            } else {
-                // Проигрыш: Отнимает серебро рандомно до -500 (от 150 до 500)
-                lossSilver = Math.floor(150 + Math.random() * 351); 
-                if (pSilver < lossSilver) lossSilver = pSilver;
-                pSilver -= lossSilver;
-                rewExp = 0; rewFame = 0;
+                if (eCurrentHp <= 0) { logHtml += `⚡ Враг пал без сил!<br/>`; break; }
 
-                localStorage.setItem('stat_losses', (parseInt(localStorage.getItem('stat_losses') || '0') + 1).toString());
-                localStorage.setItem('stat_lost_silver', (parseInt(localStorage.getItem('stat_lost_silver') || '0') + lossSilver).toString());
+                let pEvadeChance = Math.max(5, Math.min(50, (pAgi - enemyData.dex) * 3 + 10));
+                if (Math.random() * 100 < pEvadeChance) {
+                    logHtml += `• Ты ловко уклонился от удара противника!<br/>`;
+                } else {
+                    let eBaseDmg = Math.max(1, enemyData.str - Math.floor(pDef / 2));
+                    let eCritChance = Math.max(5, Math.min(50, enemyData.mst * 2));
+                    if (Math.random() * 100 < eCritChance) {
+                        eBaseDmg = Math.floor(eBaseDmg * 1.5);
+                        logHtml += `• Враг бьет критом! Нанесено 💥 ${eBaseDmg} урона.<br/>`;
+                    } else {
+                        logHtml += `• Враг ранил тебя на ⚔️ ${eBaseDmg} урона.<br/>`;
+                    }
+                    pCurrentHp -= eBaseDmg;
+                    eDmgSum += eBaseDmg;
+                }
+
+                if (pCurrentHp <= 0) { logHtml += `💀 Вы потеряли сознание!<br/>`; break; }
             }
 
-            pExp += rewExp; pFame += rewFame;
-            localStorage.setItem('barb_battle_count', (battleCount - 1).toString());
+            if (pCurrentHp < 0) pCurrentHp = 0;
+            if (eCurrentHp < 0) eCurrentHp = 0;
+            let outcomeText = "";
+            let reasonText = "";
+            let rewardText = "";
+            let playerWon = pCurrentHp > eCurrentHp;
 
-            let maxExp = pLvl <= 1 ? 15 : Math.floor(Math.pow(pLvl - 1, 2) * 10 + 15);
-            let leveledUp = false;
-            while (pExp >= maxExp) { pExp -= maxExp; pLvl += 1; maxExp = pLvl <= 1 ? 15 : Math.floor(Math.pow(pLvl - 1, 2) * 10 + 15); leveledUp = true; }
+            let wins = parseInt(localStorage.getItem('stat_wins') || '0');
+            let losses = parseInt(localStorage.getItem('stat_losses') || '0');
+            let earnedSilver = parseInt(localStorage.getItem('stat_earned_silver') || '0');
+            let lostSilver = parseInt(localStorage.getItem('stat_lost_silver') || '0');
 
-            localStorage.setItem('barb_level', pLvl.toString()); localStorage.setItem('barb_gold', pGold.toString());
-            localStorage.setItem('barb_silver', pSilver.toString()); localStorage.setItem('barb_crystals', pCrystals.toString());
-            localStorage.setItem('barb_exp', pExp.toString()); localStorage.setItem('barb_fame', pFame.toString());
+            let silverWallet = parseInt(localStorage.getItem('barb_silver') || '1000');
+            let goldWallet = parseInt(localStorage.getItem('barb_gold') || '15');
+            let crystalWallet = parseInt(localStorage.getItem('barb_crystals') || '0');
+            let playerExp = parseInt(localStorage.getItem('barb_exp') || '0');
+            let playerFame = parseInt(localStorage.getItem('barb_fame') || '0');
 
-            document.getElementById('battle-outcome').innerHTML = isWin ? `<div class="win-text">🏆 ПОБЕДА!</div>` : `<div class="lose-text">💀 ПОРАЖЕНИЕ</div>`;
-            document.getElementById('battle-reason').textContent = isWin ? `Ты одолел соперника ${currentEnemy.name}!` : `${currentEnemy.name} оказался сильнее...`;
-            
-            let rewardsHtml = "";
-            if (isWin) {
-                rewardsHtml = `🥈 Серебро: +${addSilver} | 📈 Опыт: +${rewExp}`;
-                if (addGold > 0) rewardsHtml += ` | 🪙 Золото: +${addGold}`;
-                if (addCrystals > 0) rewardsHtml += ` | 💎 Кристаллы: +${addCrystals}`;
-                if (rewFame > 0) rewardsHtml += ` | 👑 Слава: +${rewFame}`;
+            if (playerWon) {
+                wins++;
+                localStorage.setItem('stat_wins', wins.toString());
+                outcomeText = `<div class="win-text">🎉 ПОБЕДА!</div>`;
+                reasonText = `Вы одолели противника за раунды боя и отстояли честь Норманнов.`;
+
+                let addExp = 0, addFame = 0, addSilver = 0, addGold = 0, addCrystals = 0;
+
+                if (currentCategory === 'equal' || currentCategory === 'junior') {
+                    addExp = 1;
+                    addSilver = Math.floor(Math.random() * (30 - 10 + 1) + 10);
+                    if (Math.random() * 100 < 15) addCrystals = 1;
+                } else if (currentCategory === 'senior') {
+                    addExp = 2;
+                    addFame = Math.floor(Math.random() * 2) + 1;
+                    addSilver = Math.floor(Math.random() * (30 - 10 + 1) + 10);
+                    if (Math.random() * 100 < 15) addCrystals = 1;
+                } else if (currentCategory === 'mercenaries') {
+                    addExp = 2;
+                    addSilver = Math.floor(Math.random() * (1500 - 1050 + 1) + 1050);
+                    addCrystals = Math.floor(Math.random() * 3) + 1;
+                } else if (currentCategory === 'boss') {
+                    addExp = 3;
+                    addSilver = Math.floor(Math.random() * (1500 - 1100 + 1) + 1100);
+                    addGold = Math.floor(Math.random() * (15 - 5 + 1) + 5);
+                }
+
+                silverWallet += addSilver; goldWallet += addGold; crystalWallet += addCrystals;
+                playerExp += addExp; playerFame += addFame; earnedSilver += addSilver;
+                localStorage.setItem('stat_earned_silver', earnedSilver.toString());
+
+                rewardText = `🔹 Опыт: +${addExp}<br/>🔸 Слава: +${addFame}<br/>🪙 Серебро: +${addSilver}<br/>`;
+                if(addGold > 0) rewardText += `✨ Золото: +${addGold}<br/>`;
+                if(addCrystals > 0) rewardText += `💎 Кристаллы: +${addCrystals}<br/>`;
+
+                let lvl = parseInt(localStorage.getItem('barb_level') || '1');
+                let maxExpNeeded = lvl <= 1 ? 15 : Math.floor(Math.pow(lvl - 1, 2) * 10 + 15);
+                if (playerExp >= maxExpNeeded) {
+                    playerExp -= maxExpNeeded; lvl++;
+                    localStorage.setItem('barb_level', lvl.toString());
+                    rewardText += `<br/><span style="color:#fbbf24; font-weight:bold;">🚀 УРОВЕНЬ ПОВЫШЕН ДО ${lvl}!</span>`;
+                }
             } else {
-                rewardsHtml = `🔻 Потеряно серебра: <span style="color:#ff4d4d">-${lossSilver}</span> | 📈 Опыт: +0`;
-            }
-            if (leveledUp) rewardsHtml += `<br/><span style="color:#fbbf24; font-weight:bold;">⚡ УРОВЕНЬ ПОВЫШЕН ДО ${pLvl}!</span>`;
-            document.getElementById('battle-rewards').innerHTML = rewardsHtml;
+                losses++;
+                localStorage.setItem('stat_losses', losses.toString());
+                outcomeText = `<div class="lose-text">💀 ПОРАЖЕНИЕ</div>`;
+                reasonText = `Враг оказался сильнее. Вы потеряли сознание и часть ресурсов.`;
 
-            document.getElementById('p-name-dmg').textContent = savedName; document.getElementById('p-total-dmg').textContent = pDmgSum;
-            document.getElementById('e-name-dmg').textContent = currentEnemy.name; document.getElementById('e-total-dmg').textContent = eDmgSum;
-            document.getElementById('p-name-hp').textContent = savedName; document.getElementById('p-final-hp').textContent = `${Math.max(0, pCurrentHp)} / ${pMaxHp}`;
-            document.getElementById('e-name-hp').textContent = currentEnemy.name; document.getElementById('e-final-hp').textContent = `${Math.max(0, eCurrentHp)} / ${eMaxHp}`;
-            
+                let penalty = Math.floor(Math.random() * (500 - 150 + 1) + 150);
+                if (silverWallet < penalty) penalty = silverWallet;
+                silverWallet -= penalty; lostSilver += penalty;
+                localStorage.setItem('stat_lost_silver', lostSilver.toString());
+
+                rewardText = `🔹 Опыт: 0<br/>🔸 Слава: 0<br/>🔻 Потеряно серебра: -${penalty} 🪙`;
+            }
+
+            localStorage.setItem('barb_silver', silverWallet.toString());
+            localStorage.setItem('barb_gold', goldWallet.toString());
+            localStorage.setItem('barb_crystals', crystalWallet.toString());
+            localStorage.setItem('barb_exp', playerExp.toString());
+            localStorage.setItem('barb_fame', playerFame.toString());
+
+            document.getElementById('battle-outcome').innerHTML = outcomeText;
+            document.getElementById('battle-reason').textContent = reasonText;
+            document.getElementById('battle-rewards').innerHTML = rewardText;
+            document.getElementById('p-total-dmg').textContent = pDmgSum;
+            document.getElementById('e-total-dmg').textContent = eDmgSum;
+            document.getElementById('p-final-hp').textContent = `${pCurrentHp} HP`;
+            document.getElementById('e-final-hp').textContent = `${eCurrentHp} HP`;
             document.getElementById('log-box').innerHTML = logHtml;
-            if (typeof updateCoreHeader === 'function') updateCoreHeader();
+            document.getElementById('e-name-dmg').textContent = enemyData.name;
+            document.getElementById('e-name-hp').textContent = enemyData.name;
 
             document.getElementById('screen-arena').style.display = 'none';
             document.getElementById('screen-result').style.display = 'block';
-        };
+        }
 
-        window.backToArenaSelection = function() {
+        function backToArenaSelection() {
             document.getElementById('screen-result').style.display = 'none';
             document.getElementById('screen-arena').style.display = 'block';
-            generateEnemyData();
-        };
+            const logBox = document.getElementById('log-box');
+            const btn = document.getElementById('toggle-log-btn');
+            logBox.style.display = 'none';
+            btn.textContent = '➕ Показать детали боя';
+            selectCategory(currentCategory);
+        }
 
-        document.addEventListener('DOMContentLoaded', () => { generateEnemyData(); });
+        function toggleCombatLog() {
+            const logBox = document.getElementById('log-box');
+            const btn = document.getElementById('toggle-log-btn');
+            if (logBox.style.display === 'block') {
+                logBox.style.display = 'none';
+                btn.textContent = '➕ Показать детали боя';
+            } else {
+                logBox.style.display = 'block';
+                btn.textContent = '➖ Скрыть детали боя';
+            }
+        }
     </script>
 </body>
 </html>
