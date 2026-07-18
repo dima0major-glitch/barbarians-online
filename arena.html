@@ -8,12 +8,10 @@
         body { background-color: #061118; color: #ffffff; font-family: Arial, sans-serif; margin: 0; padding: 0; user-select: none; }
         .category-bar { background: linear-gradient(to bottom, #123524, #05140d); color: #00ffaa; font-size: 14px; font-weight: bold; text-align: center; padding: 6px 15px; border-top: 1px solid #1d5339; border-bottom: 1px solid #040f0a; box-shadow: inset 0 1px 2px rgba(255,255,255,0.1); text-transform: uppercase; letter-spacing: 1px; }
         
-        /* Блок превью арены со скриншота */
         .arena-preview { background-color: #050d12; border: 1px solid #0f2231; padding: 15px; margin: 6px; text-align: center; border-radius: 4px; }
         .arena-img-placeholder { border: 1px solid #1c8cd1; background-color: #091822; padding: 15px; border-radius: 4px; margin-bottom: 8px; color: #799bb3; font-size: 12px; text-transform: uppercase; font-weight: bold; }
         .arena-motto { font-style: italic; color: #adc8d9; font-size: 13px; }
 
-        /* Таблица сравнения характеристик (появляется при выборе) */
         .vs-card { background-color: #050d12; border: 1px solid #0f2231; padding: 10px; margin: 6px; border-radius: 4px; text-align: center; }
         .vs-title { font-size: 13px; font-weight: bold; color: #ffffff; margin-bottom: 10px; }
         .comparison-table { width: 220px; margin: 0 auto 10px auto; font-size: 14px; font-weight: bold; }
@@ -22,12 +20,10 @@
         .comp-icon { width: 40px; text-align: center; font-size: 15px; }
         .comp-enemy { width: 60px; text-align: left; color: #ffbfcc; }
 
-        /* Кнопка нападения */
         .btn-fight { background: linear-gradient(to bottom, #7a2208, #421002); border: 1px solid #ff4d15; color: #ffccaa; font-size: 14px; font-weight: bold; padding: 8px 0; border-radius: 4px; cursor: pointer; width: 80%; max-width: 240px; text-shadow: 1px 1px 2px #000; box-shadow: 0 2px 4px rgba(0,0,0,0.5); }
         .btn-fight:disabled { background: #1e293b; border-color: #475569; color: #64748b; cursor: not-allowed; text-shadow: none; box-shadow: none; }
         .battle-counter { font-size: 11px; color: #fbbf24; margin-top: 4px; }
 
-        /* Стилизация меню категорий точь-в-точь как на вашем скриншоте */
         .menu-container { margin-top: 4px; }
         .menu-link { background: linear-gradient(to bottom, #091b29, #050e16); padding: 12px 15px; margin-bottom: 2px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #0f2231; text-decoration: none; color: #adc8d9; font-size: 14px; font-weight: bold; }
         .menu-link.active-category { background: linear-gradient(to bottom, #123524, #05140d); border-left: 3px solid #00ffaa; color: #ffffff; }
@@ -35,12 +31,9 @@
     </style>
 </head>
 <body>
-    <!-- Сюда global_core.js автоматически добавит вашу шапку -->
     <div id="core-header-placeholder"></div>
-
     <div class="category-bar">Арена</div>
 
-    <!-- Верхняя карточка со скриншота -->
     <div class="arena-preview">
         <div class="arena-img-placeholder">
             <span style="font-size: 24px; display: block; margin-bottom: 4px;">🏟️</span>
@@ -49,7 +42,6 @@
         <div class="arena-motto">Покажи, на что ты способен!</div>
     </div>
 
-    <!-- Всплывающее WAP-окно поединка (меняется динамически при клике на категории ниже) -->
     <div class="vs-card">
         <div class="vs-title"><span id="p-name-vs">Ты</span> против <span id="e-name-vs">Выбери противника</span></div>
         
@@ -67,7 +59,6 @@
         </div>
     </div>
 
-    <!-- Меню категорий со скриншота (теперь переключает JS-функции без перезагрузок и 404 ошибок) -->
     <div class="menu-container">
         <a href="#" id="link-equal" onclick="selectCategory('equal'); return false;" class="menu-link active-category">
             <span>⚔️ Ровня</span><span class="menu-arrow">»»</span>
@@ -99,35 +90,26 @@
 
         const botNames = ["Ульф", "Торстейн", "Хакон", "Бьорн", "Гудмунд", "Рагнар", "Ивар", "Сигурд"];
 
-        // Функция смены категории без перезагрузки страницы (Убирает 404 аппаратно)
         window.selectCategory = function(categoryType) {
             selectedType = categoryType;
-
-            // Сбрасываем активный класс со всех пунктов меню
             const list = ['equal', 'junior', 'senior', 'mercenaries', 'boss', 'by_level'];
             list.forEach(item => {
                 const el = document.getElementById('link-' + item);
                 if (el) el.classList.remove('active-category');
             });
-
-            // Подсвечиваем выбранный пункт зеленым цветом (как на Арене)
             const activeEl = document.getElementById('link-' + categoryType);
             if (activeEl) activeEl.classList.add('active-category');
-
-            // Обновляем противника под выбранную сложность
             updateArenaData();
         };
 
         window.updateArenaData = function() {
-            // Считываем статы вашего персонажа
             const pStr = parseInt(localStorage.getItem('barb_str') || '5');
             const pDef = parseInt(localStorage.getItem('barb_def') || '5');
-            const pAgi = parseInt(localStorage.getItem('barb_dex') || '5'); // Ловкость синхронизирована с barb_dex
+            const pAgi = parseInt(localStorage.getItem('barb_dex') || '5'); 
             const pMst = parseInt(localStorage.getItem('barb_mst') || '5');
             const pVit = parseInt(localStorage.getItem('barb_vit') || '5');
             const pLvl = parseInt(localStorage.getItem('barb_level') || '1');
 
-            // Проверяем счетчик доступных боев
             const battleCount = parseInt(localStorage.getItem('barb_battle_count') || '3');
             document.getElementById('battle-count-view').textContent = `Доступно боев сегодня: ${battleCount} / 3`;
 
@@ -140,7 +122,6 @@
                 fightBtn.textContent = "Сражаться";
             }
 
-            // Выводим левую колонку (Игрок)
             document.getElementById('p-name-vs').innerText = localStorage.getItem('barbarians_username') || "Ты";
             document.getElementById('p-str').innerText = pStr;
             document.getElementById('p-def').innerText = pDef;
@@ -148,11 +129,7 @@
             document.getElementById('p-mst').innerText = pMst;
             document.getElementById('p-vit').innerText = pVit;
 
-            // Настройка модификаторов под категории
-            let mod = 0;
-            let typeLabel = "Ровня";
-            let enemyLvl = pLvl;
-
+            let mod = 0; let typeLabel = "Ровня"; let enemyLvl = pLvl;
             if (selectedType === 'junior') { mod = -2; typeLabel = "Младший"; enemyLvl = Math.max(1, pLvl - 1); }
             if (selectedType === 'equal') { mod = 0; typeLabel = "Ровня"; enemyLvl = pLvl; }
             if (selectedType === 'senior') { mod = 2; typeLabel = "Старший"; enemyLvl = pLvl + 1; }
@@ -160,7 +137,6 @@
             if (selectedType === 'boss') { mod = 10; typeLabel = "Владыка"; enemyLvl = pLvl + 4; }
             if (selectedType === 'by_level') { mod = 1; typeLabel = "Рейтинговый"; enemyLvl = pLvl; }
 
-            // Математическая сборка бота
             currentEnemy = {
                 name: botNames[Math.floor(Math.random() * botNames.length)] + ` [${typeLabel}]`,
                 lvl: enemyLvl,
@@ -171,7 +147,6 @@
                 vit: Math.max(1, pVit + mod + Math.floor(Math.random() * 3) - 1)
             };
 
-            // Выводим правую колонку (Враг)
             document.getElementById('e-name-vs').innerText = currentEnemy.name;
             document.getElementById('e-str').innerText = currentEnemy.str;
             document.getElementById('e-def').innerText = currentEnemy.def;
@@ -179,21 +154,19 @@
             document.getElementById('e-mst').innerText = currentEnemy.mst;
             document.getElementById('e-vit').innerText = currentEnemy.vit;
 
-            // Записываем параметры бота в оперативную память перед боем
             localStorage.setItem('current_enemy_data', JSON.stringify(currentEnemy));
         };
 
         window.startBattle = function() {
             const battleCount = parseInt(localStorage.getItem('barb_battle_count') || '3');
-            if (battleCount <= 0) {
-                alert("У вас закончились доступные бои на сегодня!");
-                return;
-            }
-            // Переход на расчет результата боя (с параметром типа)
-            window.location.href = "battle_result.html?type=" + selectedType;
+            if (battleCount <= 0) { alert("У вас закончились доступные бои на сегодня!"); return; }
+            
+            // КИЛЛЕР-ФИЧА ДЛЯ УБИЙСТВА КЭША: Добавляем динамический параметр кэш-бастинга v=...
+            // Это принудительно заставит сервера GitHub выдать свежий файл battle_result.html
+            const antiCacheBuster = Date.now();
+            window.location.href = "battle_result.html?type=" + selectedType + "&v=" + antiCacheBuster;
         };
 
-        // Запуск при открытии страницы
         document.addEventListener('DOMContentLoaded', () => {
             updateArenaData();
         });
