@@ -9,7 +9,6 @@
         .category-bar { background: linear-gradient(to bottom, #123524, #05140d); color: #00ffaa; font-size: 14px; font-weight: bold; text-align: center; padding: 6px 15px; border-top: 1px solid #1d5339; border-bottom: 1px solid #040f0a; box-shadow: inset 0 1px 2px rgba(255,255,255,0.1); text-transform: uppercase; }
         .vs-container { background-color: #050d12; padding: 15px 10px; text-align: center; border-bottom: 1px solid #0f2231; }
         .vs-title { font-size: 14px; font-weight: bold; color: #ffffff; margin-bottom: 15px; }
-        .vs-title span { color: #adc8d9; }
         .avatars-row { display: flex; justify-content: center; align-items: center; gap: 25px; margin-bottom: 15px; }
         .avatar-box { width: 90px; height: 90px; border: 1px solid #1c8cd1; border-radius: 4px; display: flex; flex-direction: column; justify-content: center; align-items: center; background-color: #091822; }
         .avatar-box.enemy { border-color: #ff4d4d; background: linear-gradient(to bottom, #220909, #0f0404); }
@@ -21,7 +20,6 @@
         .comp-enemy { width: 60px; text-align: left; color: #ffbfcc; }
         .btn-fight-container { margin-bottom: 15px; }
         .btn-fight { background: linear-gradient(to bottom, #7a2208, #421002); border: 1px solid #ff4d15; color: #ffccaa; font-size: 15px; font-weight: bold; padding: 8px 50px; border-radius: 4px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.6); text-shadow: 1px 1px 2px #000; width: 65%; }
-        .btn-fight:active { background: #5a1805; border-color: #00ffaa; color: #00ffaa; }
         .btn-fight:disabled { background: #1e293b; border-color: #475569; color: #64748b; cursor: not-allowed; text-shadow: none; }
         .bot-taunt { font-size: 12px; color: #799bb3; line-height: 1.4; padding: 0 20px; margin-bottom: 5px; }
         .bot-taunt b { color: #adc8d9; display: block; margin-bottom: 4px; }
@@ -38,42 +36,17 @@
 
     <div class="vs-container">
         <div class="vs-title"><span id="p-name-vs">Ты</span> против <span id="e-name-vs">Соперника</span></div>
-        
         <div class="avatars-row">
-            <div class="avatar-box">
-                <span class="avatar-big-icon">👤</span>
-            </div>
-            <div class="avatar-box enemy">
-                <span class="avatar-big-icon">💀</span>
-            </div>
+            <div class="avatar-box"><span class="avatar-big-icon">👤</span></div>
+            <div class="avatar-box enemy"><span class="avatar-big-icon">💀</span></div>
         </div>
 
         <div class="comparison-table">
-            <div class="comp-row">
-                <div class="comp-player" id="p-str">5</div>
-                <div class="comp-icon">💪</div>
-                <div class="comp-enemy" id="e-str">5</div>
-            </div>
-            <div class="comp-row">
-                <div class="comp-player" id="p-def">5</div>
-                <div class="comp-icon">🛡️</div>
-                <div class="comp-enemy" id="e-def">5</div>
-            </div>
-            <div class="comp-row">
-                <div class="comp-player" id="p-agi">5</div>
-                <div class="comp-icon">🏃</div>
-                <div class="comp-enemy" id="e-agi">5</div>
-            </div>
-            <div class="comp-row">
-                <div class="comp-player" id="p-mst">5</div>
-                <div class="comp-icon">⚡</div>
-                <div class="comp-enemy" id="e-mst">5</div>
-            </div>
-            <div class="comp-row">
-                <div class="comp-player" id="p-vit">5</div>
-                <div class="comp-icon">➕</div>
-                <div class="comp-enemy" id="e-vit">5</div>
-            </div>
+            <div class="comp-row"><div class="comp-player" id="p-str">5</div><div class="comp-icon">💪</div><div class="comp-enemy" id="e-str">5</div></div>
+            <div class="comp-row"><div class="comp-player" id="p-def">5</div><div class="comp-icon">🛡️</div><div class="comp-enemy" id="e-def">5</div></div>
+            <div class="comp-row"><div class="comp-player" id="p-agi">5</div><div class="comp-icon">🏃</div><div class="comp-enemy" id="e-agi">5</div></div>
+            <div class="comp-row"><div class="comp-player" id="p-mst">5</div><div class="comp-icon">⚡</div><div class="comp-enemy" id="e-mst">5</div></div>
+            <div class="comp-row"><div class="comp-player" id="p-vit">5</div><div class="comp-icon">➕</div><div class="comp-enemy" id="e-vit">5</div></div>
         </div>
 
         <div class="btn-fight-container">
@@ -86,6 +59,7 @@
             <span id="bot-phrase">Загрузка реплики...</span>
         </div>
     </div>
+
     <div class="menu-container">
         <a href="#" onclick="generateEnemy(); return false;" class="menu-link"><span>🪓 Следующий соперник</span><span class="menu-arrow">»»</span></a>
         <a href="#" id="link-junior" onclick="changeFightType('junior'); return false;" class="menu-link"><span>🦔 Найти Младшего</span><span class="menu-arrow">»»</span></a>
@@ -101,29 +75,17 @@
         let currentEnemy = {};
         let fightType = 'equal';
 
-        const phrases = [
-            "Твои кости украсят мои ворота!",
-            "Сегодня вороны будут пировать твоей плотью!",
-            "Твой топор слишком легок для настоящего воина!",
-            "Сдавайся сразу, сэкономь мне время!",
-            "Я раздавлю тебя одним ударом щита!",
-            "Одинхейм ждет тебя, слабак!"
-        ];
-
+        const phrases = ["Твои кости украсят мои ворота!", "Сегодня вороны будут пировать твоей плотью!", "Твой топор слишком легок для настоящего воина!", "Сдавайся сразу, сэкономь мне время!", "Я раздавлю тебя одним ударом щита!", "Одинхейм ждет тебя, слабак!"];
         const botNames = ["Ульф", "Торстейн", "Хакон", "Бьорн", "Гудмунд", "Рагнар", "Ивар", "Сигурд"];
 
-        // Локальное переключение без обновления URL
         window.changeFightType = function(type) {
             fightType = type;
             const links = ['junior', 'equal', 'senior', 'mercenaries', 'boss'];
-            links.forEach(l => {
-                const el = document.getElementById('link-' + l);
-                if(el) el.classList.remove('active-type');
-            });
-            const activeEl = document.getElementById('link-' + type);
-            if(activeEl) activeEl.classList.add('active-type');
+            links.forEach(l => { const el = document.getElementById('link-' + l); if(el) el.classList.remove('active-type'); });
+            const activeEl = document.getElementById('link-' + type); if(activeEl) activeEl.classList.add('active-type');
             generateEnemy();
         };
+
         window.generateEnemy = function() {
             const pStr = parseInt(localStorage.getItem('barb_str') || '5');
             const pDef = parseInt(localStorage.getItem('barb_def') || '5');
@@ -139,15 +101,9 @@
             if (countView) countView.textContent = `Доступно боев сегодня: ${battleCount} / 3`;
 
             if (battleCount <= 0) {
-                if (fightBtn) {
-                    fightBtn.disabled = true;
-                    fightBtn.textContent = "Нет боев"; // Исправлено по ТЗ
-                }
+                if (fightBtn) { fightBtn.disabled = true; fightBtn.textContent = "Нет боев"; }
             } else {
-                if (fightBtn) {
-                    fightBtn.disabled = false;
-                    fightBtn.textContent = "Сражаться";
-                }
+                if (fightBtn) { fightBtn.disabled = false; fightBtn.textContent = "Сражаться"; }
             }
 
             document.getElementById('p-name-vs').innerText = localStorage.getItem('barbarians_username') || "Ты";
@@ -157,10 +113,7 @@
             document.getElementById('p-mst').innerText = pMst;
             document.getElementById('p-vit').innerText = pVit;
 
-            let mod = 0;
-            let typeName = "Ровня";
-            let enemyLvl = pLvl;
-
+            let mod = 0; let typeName = "Ровня"; let enemyLvl = pLvl;
             if (fightType === 'junior') { mod = -2; typeName = "Младший"; enemyLvl = Math.max(1, pLvl - 1); }
             if (fightType === 'equal') { mod = 0; typeName = "Ровня"; enemyLvl = pLvl; }
             if (fightType === 'senior') { mod = 2; typeName = "Старший"; enemyLvl = pLvl + 1; }
@@ -190,16 +143,13 @@
 
         window.startBattle = function() {
             const battleCount = parseInt(localStorage.getItem('barb_battle_count') || '3');
-            if (battleCount <= 0) {
-                alert("У вас закончились доступные бои на сегодня!");
-                return;
-            }
-            window.location.href = `battle_result.html?type=${fightType}`;
+            if (battleCount <= 0) { alert("У вас закончились доступные бои на сегодня!"); return; }
+            
+            // Чистое перенаправление без искажения путей репозитория
+            window.location.href = "battle_result.html?type=" + fightType;
         };
 
-        document.addEventListener('DOMContentLoaded', () => {
-            generateEnemy();
-        });
+        document.addEventListener('DOMContentLoaded', () => { generateEnemy(); });
     </script>
 </body>
 </html>
