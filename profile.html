@@ -299,34 +299,60 @@
         }
     </script>
 </body>
-</html>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-    // 1. Считываем данные персонажа из LocalStorage
-    let pLvl = localStorage.getItem('barb_level') || '1';
+    // 1. Считываем данные уровня, опыта и славы
+    let pLvl = localStorage.getItem('barb_level') || '5';
     let pExp = localStorage.getItem('barb_exp') || '0';
     let maxExp = pLvl <= 1 ? 15 : Math.floor(Math.pow(pLvl - 1, 2) * 10 + 15);
     let pFame = localStorage.getItem('barb_fame') || '0';
-    // 2. Считываем боевые результаты с Арены
+    // 2. Считываем статистику боев
     let wins = localStorage.getItem('stat_wins') || '0';
     let losses = localStorage.getItem('stat_losses') || '0';
     let earnedSilver = localStorage.getItem('stat_earned_silver') || '0';
     let lostSilver = localStorage.getItem('stat_lost_silver') || '0';
     let crystals = localStorage.getItem('barb_crystals') || '0';
-    // 3. Умный поиск строк на твоем экране по тексту
-    const links = document.querySelectorAll('.menu-link, div, span, li, td');
-    links.forEach(el => {
-        let txt = el.innerHTML;
-        if (!txt || txt.includes('<a') || txt.includes('<div')) return;
-        // 4. Подставляем живые данные строго по названиям с твоего скриншота
-        if (txt.includes('Уровень:')) el.innerHTML = `👑 Уровень: ${pLvl}`;
-        if (txt.includes('Опыт:')) el.innerHTML = `⭐ Опыт: ${pExp} / ${maxExp}`;
-        if (txt.includes('Слава:')) el.innerHTML = `🍏 Слава: ${pFame}`;
-        if (txt.includes('Побед:')) el.innerHTML = `⚔️ Побед: ${wins}`;
-        if (txt.includes('Проигравшей:')) el.innerHTML = `💀 Проигравшей: ${losses}`;
-        if (txt.includes('Награбил (серебро):')) el.innerHTML = `🪙 Награбил (серебро): ${earnedSilver}`;
-        if (txt.includes('Потерял (серебро):')) el.innerHTML = `🪙 Потерял (серебро): ${lostSilver}`;
-        if (txt.includes('Награбил (кристаллы):')) el.innerHTML = `💎 Награбил (кристаллы): ${crystals}`;
+
+    // Автоматически находим и стираем картинку флага
+    document.querySelectorAll('img').forEach(img => {
+        if (img.src.includes('flag') || img.alt.includes('🇺🇦')) {
+            img.remove();
+        }
+    });
+    // 3. Ищем текстовые элементы на странице
+    const allElements = document.querySelectorAll('div, span, li, td, p, body *');
+    allElements.forEach(el => {
+        if (el.children.length > 0 && !el.textContent.includes(':')) return;
+        let txt = el.innerHTML.trim();
+        if (txt.includes('🇺🇦')) el.innerHTML = txt.replace('🇺🇦', '');
+        // 4. Аккуратно меняем только цифры, сохраняя иконки
+        if (txt.includes('Уровень:')) {
+            el.innerHTML = el.innerHTML.replace(/Уровень:\s*\d+/, `Уровень: ${pLvl}`);
+        }
+        if (txt.includes('Слава:')) {
+            el.innerHTML = el.innerHTML.replace(/Слава:\s*\d+/, `Слава: ${pFame}`);
+        }
+        if (txt.includes('Опыт:')) {
+            el.innerHTML = el.innerHTML.replace(/Опыт:\s*[\d\s\/]+/, `Опыт: ${pExp} / ${maxExp}`);
+        }
+        // 5. Обновляем строки боевых логов
+        if (txt.includes('Побед:')) {
+            el.innerHTML = el.innerHTML.replace(/Побед:\s*\d+/, `Побед: ${wins}`);
+        }
+        if (txt.includes('Проигравшей:')) {
+            el.innerHTML = el.innerHTML.replace(/Проигравшей:\s*\d+/, `Проигравшей: ${losses}`);
+        }
+        if (txt.includes('Награбил (серебро):')) {
+            el.innerHTML = el.innerHTML.replace(/Награбил \(серебро\):\s*\d+/, `Награбил (серебро): ${earnedSilver}`);
+        }
+        if (txt.includes('Потерял (серебро):')) {
+            el.innerHTML = el.innerHTML.replace(/Потерял \(серебро\):\s*\d+/, `Потерял (серебро): ${lostSilver}`);
+        }
+        if (txt.includes('Награбил (кристаллы):')) {
+            el.innerHTML = el.innerHTML.replace(/Награбил \(кристаллы\):\s*\d+/, `Награбил (кристаллы): ${crystals}`);
+        }
     });
 });
 </script>
+</body>
+</html>
